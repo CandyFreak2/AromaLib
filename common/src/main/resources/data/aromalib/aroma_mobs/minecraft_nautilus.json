@@ -1,0 +1,8 @@
+{
+  "entity_type": "minecraft:nautilus",
+  "scent_id": "marine",
+  "fallback_name": "Nautilus",
+  "color_html": "#C0A56E",
+  "range": 3,
+  "priority": "MEDLOW"
+}

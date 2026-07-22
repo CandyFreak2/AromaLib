@@ -1,0 +1,8 @@
+{
+  "entity_type": "minecraft:breeze",
+  "scent_id": "winter",
+  "fallback_name": "Breeze",
+  "color_html": "#C1C1C1",
+  "range": 6,
+  "priority": "MEDLOW"
+}

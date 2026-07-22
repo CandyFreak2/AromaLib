@@ -1,0 +1,185 @@
+package com.ovrtechnology.trigger.client;
+
+import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.tracking.ActiveTrackingState;
+import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+/**
+ * Fullscreen scent mask overlay for active path tracking.
+ * Triggered once per path scent puff (initial + recurring pulses).
+ */
+public final class PathTrackingMaskOverlay {
+
+    private static final Map<String, Identifier> SCENT_MASKS = new HashMap<>();
+
+    private static final long PULSE_DURATION_MS = 2800L;
+    private static final long FADE_IN_MS = 90L;
+    private static final long FADE_OUT_MS = 1400L;
+    private static final float MIN_VISIBLE_ALPHA = 0.28f;
+
+    private static boolean initialized = false;
+
+    private static Identifier activeMask = null;
+    private static long pulseStartMs = 0L;
+    private static double lastPuffIntensity = 0.5;
+
+    static {
+        register("winter", "winterlayermask");
+        register("barnyard", "barnyardlayermask");
+        register("sweet", "sweetlayermask");
+        register("floral", "flowerlayermask");
+        register("beach", "beachlayermask");
+        register("kindred", "kindredlayermask");
+        register("petrichor", "rainlayermask");
+        register("marine", "marinelayermask");
+        register("evergreen", "forestlayermask");
+        register("terra silva", "terrasilvalayermask");
+        register("citrus", "citruslayermask");
+        register("desert", "desertlayermask");
+        register("savory spice", "savoryspicelayermask");
+        register("timber", "timberlayermask");
+        register("smoky", "smokylayermask");
+        register("machina", "diesellayermask");
+    }
+
+    private PathTrackingMaskOverlay() {
+    }
+
+    public static void init() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
+
+        // Draw the scent mask BEFORE the HUD so the border/vignette sits behind
+        // the hotbar, health, hunger, etc. instead of covering them. Returning
+        // true lets the vanilla GUI render proceed (returning false would cancel
+        // the entire HUD render).
+        RenderCallback.Gui.BEFORE.register((graphics, window) -> {
+            render(graphics);
+            return true;
+        });
+        AromaLib.LOGGER.info("PathTrackingMaskOverlay initialized");
+    }
+
+    public static void onPathScentPuff(String scentName, double intensity) {
+        if (scentName == null || scentName.isBlank()) {
+            return;
+        }
+        Identifier mask = resolveMask(scentName);
+        if (mask == null) {
+            AromaLib.LOGGER.debug("No mask mapping for scent '{}'", scentName);
+            return;
+        }
+
+        activeMask = mask;
+        pulseStartMs = System.currentTimeMillis();
+        lastPuffIntensity = clamp01(intensity);
+    }
+
+    private static void render(GuiGraphicsExtractor graphics) {
+        Minecraft mc = Minecraft.getInstance();
+        if (activeMask == null || mc.player == null || mc.isPaused() || false) {
+            return;
+        }
+
+        ActiveTrackingState.TrackingStatus status = ActiveTrackingState.getStatus();
+        if (status != ActiveTrackingState.TrackingStatus.SEARCHING
+                && status != ActiveTrackingState.TrackingStatus.TRACKING) {
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        long elapsed = now - pulseStartMs;
+        if (elapsed < 0 || elapsed > PULSE_DURATION_MS) {
+            return;
+        }
+
+        float pulseAlpha = computePulseAlpha(elapsed);
+        if (pulseAlpha <= 0.001f) {
+            return;
+        }
+
+        float distanceAlpha = computeDistanceAlpha(ActiveTrackingState.getDistance());
+        float intensityAlpha = (float) (0.75 + lastPuffIntensity * 0.25);
+        float rawAlpha = pulseAlpha * distanceAlpha * intensityAlpha;
+        float finalAlpha = clamp01f(Math.max(MIN_VISIBLE_ALPHA * pulseAlpha, rawAlpha));
+        if (finalAlpha <= 0.01f) {
+            return;
+        }
+
+        int width = mc.getWindow().getGuiScaledWidth();
+        int height = mc.getWindow().getGuiScaledHeight();
+
+        int tint = ARGB.color(finalAlpha, 0xFFFFFF);
+        graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                activeMask,
+                0,
+                0,
+                0.0f,
+                0.0f,
+                width,
+                height,
+                width,
+                height,
+                width,
+                height,
+                tint
+        );
+    }
+
+    private static float computePulseAlpha(long elapsedMs) {
+        if (elapsedMs < FADE_IN_MS) {
+            return clamp01f((float) elapsedMs / FADE_IN_MS);
+        }
+        long fadeOutStart = PULSE_DURATION_MS - FADE_OUT_MS;
+        if (elapsedMs >= fadeOutStart) {
+            return clamp01f((float) (PULSE_DURATION_MS - elapsedMs) / FADE_OUT_MS);
+        }
+        return 1.0f;
+    }
+
+    /**
+     * Distance-based opacity for active tracking:
+     * closer = stronger visual hint.
+     */
+    private static float computeDistanceAlpha(int distance) {
+        if (distance < 0) return 0.70f;
+        if (distance <= 12) return 1.00f;
+        if (distance <= 32) return 0.92f;
+        if (distance <= 64) return 0.86f;
+        if (distance <= 128) return 0.78f;
+        if (distance <= 256) return 0.70f;
+        return 0.62f;
+    }
+
+    private static Identifier resolveMask(String scentName) {
+        String key = scentName.toLowerCase(Locale.ROOT).trim();
+        return SCENT_MASKS.get(key);
+    }
+
+    private static void register(String scentName, String maskFileStem) {
+        SCENT_MASKS.put(
+                scentName.toLowerCase(Locale.ROOT),
+                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "textures/masks/" + maskFileStem + ".png")
+        );
+    }
+
+    private static double clamp01(double value) {
+        return Math.max(0.0, Math.min(1.0, value));
+    }
+
+    private static float clamp01f(float value) {
+        return Math.max(0.0f, Math.min(1.0f, value));
+    }
+}

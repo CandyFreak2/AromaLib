@@ -1,0 +1,8 @@
+dependencies {
+    implementation(libs.balmNeoForge) {
+        changing = libs.versions.balm.get().contains("SNAPSHOT")
+    }
+
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+}

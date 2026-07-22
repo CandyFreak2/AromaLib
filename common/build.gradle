@@ -1,0 +1,68 @@
+plugins {
+    id 'multiloader-common'
+    alias libs.plugins.modDevGradle
+}
+
+neoForge {
+    neoFormVersion = libs.neoForm.get().version
+    // Automatically enable AccessTransformers if the file exists
+    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    // Parchment has no mapping for MC 26.2 yet — disabled on the 26.2 branch (dev-only param names).
+    // parchment.parchmentArtifact = libs.parchment.get().toString()
+}
+
+dependencies {
+    compileOnly libs.mixin
+}
+
+apply from: rootProject.file('repositories.gradle')
+apply from: 'dependencies.gradle'
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonGeneratedResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+sourceSets {
+    generated {
+        resources {
+            srcDir 'src/generated/resources'
+        }
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+    commonGeneratedResources sourceSets.generated.resources.sourceDirectories.singleFile
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+        exceptionFormat "full"
+    }
+
+    jvmArgs = [
+        '-Xmx512m',
+        '-XX:+EnableDynamicAgentLoading'
+    ]
+}
