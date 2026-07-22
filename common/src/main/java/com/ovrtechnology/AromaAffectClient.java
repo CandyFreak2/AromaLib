@@ -1,6 +1,10 @@
 package com.ovrtechnology;
 
 import com.ovrtechnology.client.ClientHooks;
+import com.ovrtechnology.trigger.ScentTriggerHandler;
+import com.ovrtechnology.trigger.client.PassiveModeHud;
+import com.ovrtechnology.trigger.client.PathTrackingMaskOverlay;
+import com.ovrtechnology.trigger.client.ScentPuffOverlay;
 import com.ovrtechnology.websocket.OvrWebSocketClient;
 import com.ovrtechnology.websocket.WebSocketConfig;
 import lombok.experimental.UtilityClass;
@@ -32,6 +36,23 @@ public final class AromaAffectClient {
 
         ClientHooks.init();
 
+        // Initialize scent trigger handler
+        ScentTriggerHandler.init();
+
+        // Initialize passive mode HUD overlay
+        PassiveModeHud.init();
+
+        // Initialize tracking HUD (Arrived! notifications + global state tick)
+        //TrackingHud.init();
+
+        // Initialize active-tracking scent mask overlay (fullscreen pulse on each path puff)
+        PathTrackingMaskOverlay.init();
+
+        // Initialize general scent puff overlay (Omara Device, etc.)
+        ScentPuffOverlay.init();
+
+        // Initialize OVR WebSocket client for scent hardware integration
+        // The connection is optional - the mod works without it
         initWebSocketClient();
 
         // TODO: Initialize other client systems
