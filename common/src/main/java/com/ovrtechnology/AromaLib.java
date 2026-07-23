@@ -2,8 +2,10 @@ package com.ovrtechnology;
 
 import com.ovrtechnology.biome.BiomeDefinitionLoader;
 import com.ovrtechnology.block.BlockDefinitionLoader;
+import com.ovrtechnology.command.AromaTestCommand;
 import com.ovrtechnology.data.ResourceManagerDataSource;
 import com.ovrtechnology.flower.FlowerDefinitionLoader;
+import com.ovrtechnology.hooks.ServerHooks;
 import com.ovrtechnology.lookup.LookupManager;
 import com.ovrtechnology.mob.MobDefinitionLoader;
 import com.ovrtechnology.network.ScentEventNetworking;
@@ -45,7 +47,6 @@ public final class AromaLib {
         FlowerDefinitionLoader.loadAllFlowers();
         StructureDefinitionLoader.loadAllStructures();
         MobDefinitionLoader.loadAllMobs();
-        ScentTriggerConfigLoader.init();
         ScentTriggerManager.init();
 
         // === Phase 6 — networking  ===================
@@ -54,6 +55,7 @@ public final class AromaLib {
         // === Event-trigger scent system =====================================
         EventTriggersConfig.getInstance();
         ServerEventBusHandler.init();
+        ServerHooks.register();
         // Trackable content + event definitions live in per-file directories and
         // are enumerated via the ResourceManager, so they load on server-data reload
         // (world load + /reload). This is what picks up modpack datapack additions.
@@ -77,7 +79,7 @@ public final class AromaLib {
         //ActivePathManager.init();
         //AbilityHandler.init();
         StructureSyncHandler.init();
-        //AromaTestCommand.init();
+        AromaTestCommand.init();
 
         LOGGER.info("Aroma Affect initialized successfully!");
     }

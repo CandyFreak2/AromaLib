@@ -1,6 +1,6 @@
 package com.ovrtechnology;
 
-import com.ovrtechnology.client.ClientHooks;
+import com.ovrtechnology.hooks.ClientHooks;
 import com.ovrtechnology.trigger.ScentTriggerHandler;
 import com.ovrtechnology.trigger.client.PassiveModeHud;
 import com.ovrtechnology.trigger.client.PathTrackingMaskOverlay;

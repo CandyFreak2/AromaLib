@@ -85,15 +85,7 @@ public final class ScentTriggerConfigLoader {
             }
             settings.validate();
 
-            // Load item triggers from dedicated file
-            loadItemTriggers();
-
-            // Build trigger maps from per-category loaders
-            buildBiomeTriggers();
-            buildBlockTriggers();
-            buildFlowerTriggers();
-            buildStructureTriggers();
-            buildMobTriggers();
+            rebuild();
 
             int total = itemTriggerMap.size() + biomeTriggerMap.size()
                     + blockTriggerMap.size() + mobTriggerMap.size()
@@ -133,6 +125,18 @@ public final class ScentTriggerConfigLoader {
             AromaLib.LOGGER.error("Error reading trigger settings: {}", e.getMessage());
             return null;
         }
+    }
+
+    public static void rebuild() {
+        // Load item triggers from dedicated file
+        loadItemTriggers();
+
+        // Build trigger maps from per-category loaders
+        buildBiomeTriggers();
+        buildBlockTriggers();
+        buildFlowerTriggers();
+        buildStructureTriggers();
+        buildMobTriggers();
     }
 
     /**

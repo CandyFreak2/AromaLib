@@ -1,4 +1,4 @@
-package com.ovrtechnology.client;
+package com.ovrtechnology.hooks;
 
 import com.ovrtechnology.AromaLib;
 import com.ovrtechnology.config.ModpackConfig;
