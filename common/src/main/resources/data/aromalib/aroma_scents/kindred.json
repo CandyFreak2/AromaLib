@@ -2,5 +2,6 @@
   "id": "kindred",
   "fallback_name": "Kindred",
   "color": "#FFB6C1",
+  "mask": "aromalib:textures/mask/kindred",
   "description": "The warmth of human connection with gentle notes of baby powder and soothing lavender"
 }

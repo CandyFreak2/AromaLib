@@ -2,5 +2,6 @@
   "id": "winter",
   "fallback_name": "Winter",
   "color": "#A8D8EA",
+  "mask": "aromalib:textures/mask/winter",
   "description": "Breathing in cold air, soft snowstorm, notes of cool mint, ozone, and watery melon"
 }

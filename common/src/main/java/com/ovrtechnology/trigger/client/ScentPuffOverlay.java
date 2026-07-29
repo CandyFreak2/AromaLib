@@ -1,6 +1,8 @@
 package com.ovrtechnology.trigger.client;
 
 import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.scent.ScentDefinition;
+import com.ovrtechnology.scent.ScentRegistry;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -20,9 +22,6 @@ import java.util.Map;
  * tracking session.</p>
  */
 public final class ScentPuffOverlay {
-
-    private static final Map<String, Identifier> SCENT_MASKS = new HashMap<>();
-
     private static final long PULSE_DURATION_MS = 2000L;
     private static final long FADE_IN_MS = 90L;
     private static final long FADE_OUT_MS = 800L;
@@ -33,25 +32,6 @@ public final class ScentPuffOverlay {
     private static Identifier activeMask = null;
     private static long pulseStartMs = 0L;
     private static double lastPuffIntensity = 0.5;
-
-    static {
-        register("winter", "winterlayermask");
-        register("barnyard", "barnyardlayermask");
-        register("sweet", "sweetlayermask");
-        register("floral", "flowerlayermask");
-        register("beach", "beachlayermask");
-        register("kindred", "kindredlayermask");
-        register("petrichor", "rainlayermask");
-        register("marine", "marinelayermask");
-        register("evergreen", "forestlayermask");
-        register("terra silva", "terrasilvalayermask");
-        register("citrus", "citruslayermask");
-        register("desert", "desertlayermask");
-        register("savory spice", "savoryspicelayermask");
-        register("timber", "timberlayermask");
-        register("smoky", "smokylayermask");
-        register("machina", "diesellayermask");
-    }
 
     private ScentPuffOverlay() {
     }
@@ -83,6 +63,7 @@ public final class ScentPuffOverlay {
         if (scentName == null || scentName.isBlank()) {
             return;
         }
+
         Identifier mask = resolveMask(scentName);
         if (mask == null) {
             AromaLib.LOGGER.debug("No mask mapping for scent '{}' (ScentPuffOverlay)", scentName);
@@ -151,15 +132,15 @@ public final class ScentPuffOverlay {
     }
 
     private static Identifier resolveMask(String scentName) {
-        String key = scentName.toLowerCase(Locale.ROOT).trim();
-        return SCENT_MASKS.get(key);
-    }
+        var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
+        ScentDefinition scent;
 
-    private static void register(String scentName, String maskFileStem) {
-        SCENT_MASKS.put(
-                scentName.toLowerCase(Locale.ROOT),
-                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "textures/masks/" + maskFileStem + ".png")
-        );
+        if (scentDef.isPresent()) {
+            scent = scentDef.get();
+            return Identifier.parse(scent.getMask() + ".png");
+        }
+
+        return null;
     }
 
     private static double clamp01(double value) {

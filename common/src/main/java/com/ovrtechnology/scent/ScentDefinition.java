@@ -58,6 +58,9 @@ public class ScentDefinition {
      */
     @SerializedName("color")
     private String color;
+
+    @SerializedName("mask")
+    private String mask;
     
     /**
      * Default constructor for GSON deserialization.

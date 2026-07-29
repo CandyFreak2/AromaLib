@@ -2,5 +2,6 @@
   "id": "beach",
   "fallback_name": "Beach",
   "color": "#F9E076",
+  "mask": "aromalib:textures/mask/beach",
   "description": "Relaxing in the sand with hints of sunscreen and coconut"
 }

@@ -10,6 +10,7 @@ import com.ovrtechnology.lookup.LookupManager;
 import com.ovrtechnology.mob.MobDefinitionLoader;
 import com.ovrtechnology.network.ScentEventNetworking;
 import com.ovrtechnology.registry.ModSounds;
+import com.ovrtechnology.scent.ScentDefinitionLoader;
 import com.ovrtechnology.scent.ScentRegistry;
 import com.ovrtechnology.structure.StructureDefinitionLoader;
 import com.ovrtechnology.trigger.ScentTriggerManager;
@@ -42,6 +43,7 @@ public final class AromaLib {
 
         // === Pure JSON loaders (no registry / no events) =====================
         ScentRegistry.init();
+        ScentDefinitionLoader.loadAllScents();
         BiomeDefinitionLoader.loadAllBiomes();
         BlockDefinitionLoader.loadAllBlocks();
         FlowerDefinitionLoader.loadAllFlowers();
@@ -66,6 +68,7 @@ public final class AromaLib {
                                 (net.minecraft.server.packs.resources.ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
                                     ScentRegistry.reload(ds);
+                                    ScentDefinitionLoader.loadAllScents(ds);
                                     BiomeDefinitionLoader.loadAllBiomes(ds);
                                     BlockDefinitionLoader.loadAllBlocks(ds);
                                     FlowerDefinitionLoader.loadAllFlowers(ds);
@@ -73,6 +76,8 @@ public final class AromaLib {
                                     MobDefinitionLoader.loadAllMobs(ds);
                                     EventDefinitionLoader.loadAllEvents(ds);
                                 }));
+
+
 
         // === Phase 5 — event listeners  ===============
         LookupManager.init();

@@ -2,5 +2,6 @@
   "id": "smoky",
   "fallback_name": "Smoky",
   "color": "#696969",
+  "mask": "aromalib:textures/mask/smoky",
   "description": "The crackling of a campfire with creosote and cedarwood"
 }
