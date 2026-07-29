@@ -2,6 +2,7 @@ package com.ovrtechnology;
 
 import com.ovrtechnology.biome.BiomeDefinitionLoader;
 import com.ovrtechnology.block.BlockDefinitionLoader;
+import com.ovrtechnology.category.CategoryDefinitionLoader;
 import com.ovrtechnology.command.AromaTestCommand;
 import com.ovrtechnology.data.ResourceManagerDataSource;
 import com.ovrtechnology.flower.FlowerDefinitionLoader;
@@ -49,6 +50,7 @@ public final class AromaLib {
         FlowerDefinitionLoader.loadAllFlowers();
         StructureDefinitionLoader.loadAllStructures();
         MobDefinitionLoader.loadAllMobs();
+        CategoryDefinitionLoader.loadAllCategories();
         ScentTriggerManager.init();
 
         // === Phase 6 — networking  ===================
@@ -75,6 +77,7 @@ public final class AromaLib {
                                     StructureDefinitionLoader.loadAllStructures(ds);
                                     MobDefinitionLoader.loadAllMobs(ds);
                                     EventDefinitionLoader.loadAllEvents(ds);
+                                    CategoryDefinitionLoader.loadAllCategories(ds);
                                 }));
 
 
