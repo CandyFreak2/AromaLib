@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:monument",
+  "id": "minecraft:monument",
   "image": "structure/monument",
   "fallback_name": "Ocean Monument",
-  "color_html": "#00CED1",
+  "color": "#00CED1",
   "scent_id": "marine",
   "blocks": [
     "minecraft:prismarine",

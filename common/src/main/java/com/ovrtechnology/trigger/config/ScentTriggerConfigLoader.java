@@ -187,21 +187,21 @@ public final class ScentTriggerConfigLoader {
             String scentName = resolveScentName(biome.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' for biome '{}'",
-                        biome.getScentId(), biome.getBiomeId());
+                        biome.getScentId(), biome.getId());
                 continue;
             }
 
             BiomeTriggerDefinition trigger = new BiomeTriggerDefinition();
-            trigger.setBiomeId(biome.getBiomeId());
+            trigger.setBiomeId(biome.getId());
             trigger.setScentName(scentName);
             trigger.setMode(biome.getMode());
             trigger.setPriority(biome.getPriority());
             trigger.setIntensity(biome.getIntensity());
 
-            validateScentName(scentName, "biome", biome.getBiomeId());
-            biomeTriggerMap.put(biome.getBiomeId(), trigger);
+            validateScentName(scentName, "biome", biome.getId());
+            biomeTriggerMap.put(biome.getId(), trigger);
             AromaLib.LOGGER.debug("Registered biome trigger: {} -> {}",
-                    biome.getBiomeId(), scentName);
+                    biome.getId(), scentName);
         }
     }
 
@@ -216,22 +216,22 @@ public final class ScentTriggerConfigLoader {
             String scentName = resolveScentName(block.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' for block '{}'",
-                        block.getScentId(), block.getBlockId());
+                        block.getScentId(), block.getId());
                 continue;
             }
 
             BlockTriggerDefinition trigger = new BlockTriggerDefinition();
-            trigger.setBlockId(block.getBlockId());
+            trigger.setBlockId(block.getId());
             trigger.setScentName(scentName);
             trigger.setTriggerOn(block.getTriggerOn());
             trigger.setRange(block.getRange());
             trigger.setPriority(block.getPriority());
             trigger.setIntensity(block.getIntensity());
 
-            validateScentName(scentName, "block", block.getBlockId());
-            blockTriggerMap.put(block.getBlockId(), trigger);
+            validateScentName(scentName, "block", block.getId());
+            blockTriggerMap.put(block.getId(), trigger);
             AromaLib.LOGGER.debug("Registered block trigger: {} -> {}",
-                    block.getBlockId(), scentName);
+                    block.getId(), scentName);
         }
     }
 
@@ -245,23 +245,23 @@ public final class ScentTriggerConfigLoader {
             String scentName = resolveScentName(flower.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' for flower '{}'",
-                        flower.getScentId(), flower.getBlockId());
+                        flower.getScentId(), flower.getId());
                 continue;
             }
 
             // Flowers are blocks at runtime
             BlockTriggerDefinition trigger = new BlockTriggerDefinition();
-            trigger.setBlockId(flower.getBlockId());
+            trigger.setBlockId(flower.getId());
             trigger.setScentName(scentName);
             trigger.setTriggerOn(flower.getTriggerOn());
             trigger.setRange(flower.getRange());
             trigger.setPriority(flower.getPriority());
             trigger.setIntensity(flower.getIntensity());
 
-            validateScentName(scentName, "flower", flower.getBlockId());
-            blockTriggerMap.put(flower.getBlockId(), trigger);
+            validateScentName(scentName, "flower", flower.getId());
+            blockTriggerMap.put(flower.getId(), trigger);
             AromaLib.LOGGER.debug("Registered flower trigger: {} -> {}",
-                    flower.getBlockId(), scentName);
+                    flower.getId(), scentName);
         }
     }
 
@@ -276,22 +276,22 @@ public final class ScentTriggerConfigLoader {
             String scentName = resolveScentName(structure.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' for structure '{}'",
-                        structure.getScentId(), structure.getStructureId());
+                        structure.getScentId(), structure.getId());
                 continue;
             }
 
             StructureTriggerDefinition trigger = new StructureTriggerDefinition();
-            trigger.setStructureId(structure.getStructureId());
+            trigger.setStructureId(structure.getId());
             trigger.setScentName(scentName);
             trigger.setMode(structure.getMode());
             trigger.setRange(structure.getRange());
             trigger.setPriority(structure.getPriority());
             trigger.setIntensity(structure.getIntensity());
 
-            validateScentName(scentName, "structure", structure.getStructureId());
-            structureTriggerMap.put(structure.getStructureId(), trigger);
+            validateScentName(scentName, "structure", structure.getId());
+            structureTriggerMap.put(structure.getId(), trigger);
             AromaLib.LOGGER.debug("Registered structure trigger: {} -> {}",
-                    structure.getStructureId(), scentName);
+                    structure.getId(), scentName);
         }
     }
 
@@ -306,21 +306,21 @@ public final class ScentTriggerConfigLoader {
             String scentName = resolveScentName(mob.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' for mob '{}'",
-                        mob.getScentId(), mob.getEntityType());
+                        mob.getScentId(), mob.getId());
                 continue;
             }
 
             MobTriggerDefinition trigger = new MobTriggerDefinition();
-            trigger.setEntityType(mob.getEntityType());
+            trigger.setEntityType(mob.getId());
             trigger.setScentName(scentName);
             trigger.setRange(mob.getRange());
             trigger.setPriority(mob.getPriority());
             trigger.setIntensity(mob.getIntensity());
 
-            validateScentName(scentName, "mob", mob.getEntityType());
-            mobTriggerMap.put(mob.getEntityType(), trigger);
+            validateScentName(scentName, "mob", mob.getId());
+            mobTriggerMap.put(mob.getId(), trigger);
             AromaLib.LOGGER.debug("Registered mob trigger: {} -> {}",
-                    mob.getEntityType(), scentName);
+                    mob.getId(), scentName);
         }
     }
 

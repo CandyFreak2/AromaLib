@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:sunflower",
+  "id": "minecraft:sunflower",
   "scent_id": "floral",
   "fallback_name": "Sunflower",
-  "color_html": "#FFEC4F",
+  "color": "#FFEC4F",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

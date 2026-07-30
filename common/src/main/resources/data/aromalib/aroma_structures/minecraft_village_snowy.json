@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:village_snowy",
+  "id": "minecraft:village_snowy",
   "image": "structure/village",
   "fallback_name": "Snowy Village",
-  "color_html": "#E0FFFF",
+  "color": "#E0FFFF",
   "scent_id": "winter",
   "blocks": [
     "minecraft:snow_block",

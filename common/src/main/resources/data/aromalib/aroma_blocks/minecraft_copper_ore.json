@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:copper_ore",
-  "color_html": "#E67E22",
+  "id": "minecraft:copper_ore",
+  "color": "#E67E22",
   "scent_id": "terra_silva",
   "fallback_name": "Copper Ore",
   "range": 4,

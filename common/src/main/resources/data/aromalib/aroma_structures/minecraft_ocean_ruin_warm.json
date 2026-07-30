@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:ocean_ruin_warm",
+  "id": "minecraft:ocean_ruin_warm",
   "image": "structure/ocean_ruin",
   "fallback_name": "Warm Ocean Ruins",
-  "color_html": "#F4A460",
+  "color": "#F4A460",
   "scent_id": "marine",
   "range": 25,
   "blocks": [

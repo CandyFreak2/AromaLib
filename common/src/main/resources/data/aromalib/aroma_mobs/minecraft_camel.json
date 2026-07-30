@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:camel",
+  "id": "minecraft:camel",
   "scent_id": "savory_spice",
   "fallback_name": "Camel",
-  "color_html": "#FACB73",
+  "color": "#FACB73",
   "range": 6,
   "priority": "MEDLOW"
 }

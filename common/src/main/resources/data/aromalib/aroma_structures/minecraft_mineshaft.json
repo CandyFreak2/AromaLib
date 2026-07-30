@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:mineshaft",
+  "id": "minecraft:mineshaft",
   "image": "structure/mineshaft",
   "fallback_name": "Mineshaft",
-  "color_html": "#6B4423",
+  "color": "#6B4423",
   "scent_id": "terra_silva",
   "range": 30,
   "blocks": [

@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:deepslate_copper_ore",
-  "color_html": "#D35400",
+  "id": "minecraft:deepslate_copper_ore",
+  "color": "#D35400",
   "scent_id": "terra_silva",
   "fallback_name": "Deepslate Copper Ore",
   "range": 4,

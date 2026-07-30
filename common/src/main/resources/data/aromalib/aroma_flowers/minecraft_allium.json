@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:allium",
+  "id": "minecraft:allium",
   "scent_id": "floral",
   "fallback_name": "Allium",
-  "color_html": "#B878ED",
+  "color": "#B878ED",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

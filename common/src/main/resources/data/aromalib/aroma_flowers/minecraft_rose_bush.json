@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:rose_bush",
+  "id": "minecraft:rose_bush",
   "scent_id": "floral",
   "fallback_name": "Rose Bush",
-  "color_html": "#ED1C24",
+  "color": "#ED1C24",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

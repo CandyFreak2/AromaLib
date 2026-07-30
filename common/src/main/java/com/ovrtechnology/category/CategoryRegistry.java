@@ -95,7 +95,7 @@ public final class CategoryRegistry {
 
     public static String getCategoryColorHtml(String id) {
         CategoryDefinition def = categoryDefinitions.get(id);
-        return def != null ? def.getColorHtml() : CategoryDefinition.DEFAULT_COLOR;
+        return def != null ? def.getColorHtml() : CategoryDefinition.getColor(def);
     }
 
     public static List<String> validateCategoryIds(List<String> ids) {

@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:mansion",
+  "id": "minecraft:mansion",
   "image": "structure/mansion",
   "fallback_name": "Woodland Mansion",
-  "color_html": "#4A3728",
+  "color": "#4A3728",
   "scent_id": "timber",
   "range": 60,
   "blocks": [

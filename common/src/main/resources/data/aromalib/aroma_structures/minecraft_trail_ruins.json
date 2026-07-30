@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:trail_ruins",
+  "id": "minecraft:trail_ruins",
   "image": "structure/trail_ruins",
   "fallback_name": "Trail Ruins",
-  "color_html": "#A0522D",
+  "color": "#A0522D",
   "scent_id": "terra_silva",
   "range": 25,
   "blocks": [

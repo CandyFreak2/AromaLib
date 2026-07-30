@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:mineshaft_mesa",
+  "id": "minecraft:mineshaft_mesa",
   "image": "structure/mineshaft",
   "fallback_name": "Mesa Mineshaft",
-  "color_html": "#CD853F",
+  "color": "#CD853F",
   "scent_id": "desert",
   "range": 30,
   "blocks": [

@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:fortress",
+  "id": "minecraft:fortress",
   "image": "structure/fortress",
   "fallback_name": "Nether Fortress",
-  "color_html": "#4A0000",
+  "color": "#4A0000",
   "scent_id": "smoky",
   "blocks": [
     "minecraft:nether_bricks",

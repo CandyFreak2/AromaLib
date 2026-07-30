@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:village_savanna",
+  "id": "minecraft:village_savanna",
   "image": "structure/village",
   "fallback_name": "Savanna Village",
-  "color_html": "#BDB76B",
+  "color": "#BDB76B",
   "scent_id": "savory_spice",
   "blocks": [
     "minecraft:acacia_log",

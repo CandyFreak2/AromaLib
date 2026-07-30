@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:shipwreck",
+  "id": "minecraft:shipwreck",
   "image": "structure/shipwreck",
   "fallback_name": "Shipwreck",
-  "color_html": "#8B4513",
+  "color": "#8B4513",
   "scent_id": "marine",
   "range": 30,
   "blocks": [

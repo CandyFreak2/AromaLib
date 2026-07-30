@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:drowned",
+  "id": "minecraft:drowned",
   "scent_id": "marine",
   "fallback_name": "Drowned",
-  "color_html": "#FACB73",
+  "color": "#FACB73",
   "range": 6,
   "priority": "MEDLOW"
 }

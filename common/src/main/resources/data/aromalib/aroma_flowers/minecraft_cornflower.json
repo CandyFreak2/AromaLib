@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:cornflower",
+  "id": "minecraft:cornflower",
   "scent_id": "floral",
   "fallback_name": "Cornflower",
-  "color_html": "#466AEB",
+  "color": "#466AEB",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

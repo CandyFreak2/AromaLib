@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:rabbit",
+  "id": "minecraft:rabbit",
   "scent_id": "floral",
   "fallback_name": "Rabbit",
-  "color_html": "#995F40",
+  "color": "#995F40",
   "range": 3,
   "priority": "MEDLOW"
 }

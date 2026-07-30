@@ -95,7 +95,7 @@ public final class StructureRegistry {
      * @param definition The structure definition to register
      */
     private static void registerStructure(StructureDefinition definition) {
-        String structureId = definition.getStructureId();
+        String structureId = definition.getId();
         
         if (structureDefinitions.containsKey(structureId)) {
             AromaLib.LOGGER.warn("Duplicate structure ID in registry: {}, skipping...", structureId);
@@ -272,7 +272,7 @@ public final class StructureRegistry {
      */
     public static String getStructureColorHtml(String structureId) {
         StructureDefinition structure = structureDefinitions.get(structureId);
-        return structure != null ? structure.getColorHtml() : StructureDefinition.DEFAULT_COLOR;
+        return structure != null ? structure.getColorHtml() : StructureDefinition.getColor(structure);
     }
     
     /**

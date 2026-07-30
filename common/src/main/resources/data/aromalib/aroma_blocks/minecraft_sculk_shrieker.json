@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:sculk_shrieker",
-  "color_html": "#042931",
+  "id": "minecraft:sculk_shrieker",
+  "color": "#042931",
   "scent_id": "machina",
   "fallback_name": "Sculk Shrieker",
   "range": 8

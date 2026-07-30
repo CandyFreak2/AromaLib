@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:dolphin",
+  "id": "minecraft:dolphin",
   "scent_id": "marine",
   "fallback_name": "Dolphin",
-  "color_html": "#7B9CAA",
+  "color": "#7B9CAA",
   "range": 6,
   "priority": "MEDLOW"
 }

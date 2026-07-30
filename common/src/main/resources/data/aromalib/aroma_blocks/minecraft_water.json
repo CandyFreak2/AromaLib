@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:water",
-  "color_html": "#3498DB",
+  "id": "minecraft:water",
+  "color": "#3498DB",
   "scent_id": "marine",
   "fallback_name": "Water",
   "track_cost": 5

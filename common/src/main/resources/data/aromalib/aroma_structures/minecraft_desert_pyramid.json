@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:desert_pyramid",
+  "id": "minecraft:desert_pyramid",
   "image": "structure/desert_pyramid",
   "fallback_name": "Desert Pyramid",
-  "color_html": "#D2691E",
+  "color": "#D2691E",
   "scent_id": "desert",
   "range": 40,
   "blocks": [

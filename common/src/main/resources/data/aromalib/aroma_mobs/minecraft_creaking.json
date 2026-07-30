@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:creaking",
+  "id": "minecraft:creaking",
   "scent_id": "timber",
   "fallback_name": "Creaking",
-  "color_html": "#FACB73",
+  "color": "#FACB73",
   "range": 6,
   "priority": "MEDLOW"
 }

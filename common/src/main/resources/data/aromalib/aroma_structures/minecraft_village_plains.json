@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:village_plains",
+  "id": "minecraft:village_plains",
   "image": "structure/village",
   "fallback_name": "Plains Village",
-  "color_html": "#8B7355",
+  "color": "#8B7355",
   "scent_id": "kindred",
   "blocks": [
     "minecraft:hay_block",

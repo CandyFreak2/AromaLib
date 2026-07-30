@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:panda",
+  "id": "minecraft:panda",
   "scent_id": "citrus",
   "fallback_name": "Panda",
-  "color_html": "#E7E7E7",
+  "color": "#E7E7E7",
   "range": 5,
   "priority": "MEDLOW"
 }

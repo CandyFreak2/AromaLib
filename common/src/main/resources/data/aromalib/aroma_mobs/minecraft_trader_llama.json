@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:trader_llama",
+  "id": "minecraft:trader_llama",
   "scent_id": "savory_spice",
   "fallback_name": "Trader Llama",
-  "color_html": "#C09E7B",
+  "color": "#C09E7B",
   "range": 5,
   "priority": "MEDLOW"
 }

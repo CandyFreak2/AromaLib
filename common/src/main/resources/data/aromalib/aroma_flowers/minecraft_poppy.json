@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:poppy",
+  "id": "minecraft:poppy",
   "scent_id": "floral",
   "fallback_name": "Poppy",
-  "color_html": "#ED1C24",
+  "color": "#ED1C24",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

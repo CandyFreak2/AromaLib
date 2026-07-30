@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:jungle_pyramid",
+  "id": "minecraft:jungle_pyramid",
   "image": "structure/jungle_pyramid",
   "fallback_name": "Jungle Temple",
-  "color_html": "#556B2F",
+  "color": "#556B2F",
   "scent_id": "citrus",
   "range": 35,
   "blocks": [

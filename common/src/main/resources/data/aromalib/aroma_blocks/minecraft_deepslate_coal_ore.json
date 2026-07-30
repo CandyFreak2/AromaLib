@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:deepslate_coal_ore",
-  "color_html": "#1A252F",
+  "id": "minecraft:deepslate_coal_ore",
+  "color": "#1A252F",
   "scent_id": "smoky",
   "fallback_name": "Deepslate Coal Ore",
   "range": 3,

@@ -1,8 +1,8 @@
 {
-  "entity_type": "minecraft:elder_guardian",
+  "id": "minecraft:elder_guardian",
   "scent_id": "marine",
   "fallback_name": "Elder Guardian",
-  "color_html": "#CECCBA",
+  "color": "#CECCBA",
   "range": 25,
   "priority": "MEDIUM",
   "intensity": 0.6

@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:ancient_debris",
-  "color_html": "#8B4513",
+  "id": "minecraft:ancient_debris",
+  "color": "#8B4513",
   "scent_id": "smoky",
   "fallback_name": "Ancient Debris",
   "range": 6,

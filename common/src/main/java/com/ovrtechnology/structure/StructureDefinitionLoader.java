@@ -133,7 +133,7 @@ public class StructureDefinitionLoader {
             return;
         }
         
-        String structureId = structure.getStructureId();
+        String structureId = structure.getId();
         
         // Check for duplicate IDs
         if (loadedIds.contains(structureId)) {
@@ -156,19 +156,19 @@ public class StructureDefinitionLoader {
      * @param structure The structure to validate
      */
     private static void validateStructure(StructureDefinition structure) {
-        String structureId = structure.getStructureId();
+        String structureId = structure.getId();
         
         // Validate structure_id format (namespace:path)
-        if (!structure.hasValidStructureIdFormat()) {
+        if (!structure.hasValidIDFormat()) {
             addWarning("[" + structureId + "] Invalid structure_id format - should be 'namespace:path' (e.g., 'minecraft:stronghold')");
         }
         
         // Validate HTML color format
         String rawColor = structure.getRawColorHtml();
         if (rawColor == null || rawColor.isEmpty()) {
-            addWarning("[" + structureId + "] No color_html defined, using default: " + StructureDefinition.DEFAULT_COLOR);
+            addWarning("[" + structureId + "] No color_html defined, using default: " + StructureDefinition.getColor(structure));
         } else if (!StructureDefinition.isValidHtmlColor(rawColor)) {
-            addWarning("[" + structureId + "] Invalid color_html format '" + rawColor + "', using default: " + StructureDefinition.DEFAULT_COLOR);
+            addWarning("[" + structureId + "] Invalid color_html format '" + rawColor + "', using default: " + StructureDefinition.getColor(structure));
         }
         
         // Validate scent_id reference
@@ -189,7 +189,7 @@ public class StructureDefinitionLoader {
         // Validate image path
         String rawImage = structure.getRawImage();
         if (rawImage == null || rawImage.isEmpty()) {
-            AromaLib.LOGGER.debug("[{}] No image defined, using default: {}", structureId, StructureDefinition.DEFAULT_IMAGE);
+            AromaLib.LOGGER.debug("[{}] No image defined, using default: {}", structureId, StructureDefinition.getDefaultImage(structure));
         }
     }
     
@@ -254,7 +254,7 @@ public class StructureDefinitionLoader {
      */
     public static StructureDefinition getStructureById(String structureId) {
         for (StructureDefinition structure : loadedStructures) {
-            if (structure.getStructureId().equals(structureId)) {
+            if (structure.getId().equals(structureId)) {
                 return structure;
             }
         }

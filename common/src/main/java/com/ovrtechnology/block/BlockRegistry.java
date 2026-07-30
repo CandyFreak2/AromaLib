@@ -90,7 +90,7 @@ public final class BlockRegistry {
      * @param definition The block definition to register
      */
     private static void registerBlock(BlockDefinition definition) {
-        String blockId = definition.getBlockId();
+        String blockId = definition.getId();
         
         if (blockDefinitions.containsKey(blockId)) {
             AromaLib.LOGGER.warn("Duplicate block ID in registry: {}, skipping...", blockId);
@@ -221,7 +221,7 @@ public final class BlockRegistry {
      */
     public static String getBlockColorHtml(String blockId) {
         BlockDefinition block = blockDefinitions.get(blockId);
-        return block != null ? block.getColorHtml() : BlockDefinition.DEFAULT_COLOR;
+        return block != null ? block.getColorHtml() : BlockDefinition.getColor(block);
     }
     
     /**

@@ -130,7 +130,7 @@ public class BiomeDefinitionLoader {
             return;
         }
         
-        String biomeId = biome.getBiomeId();
+        String biomeId = biome.getId();
         
         // Check for duplicate IDs
         if (loadedIds.contains(biomeId)) {
@@ -153,19 +153,19 @@ public class BiomeDefinitionLoader {
      * @param biome The biome to validate
      */
     private static void validateBiome(BiomeDefinition biome) {
-        String biomeId = biome.getBiomeId();
+        String biomeId = biome.getId();
         
         // Validate biome_id format (namespace:path)
-        if (!biome.hasValidBiomeIdFormat()) {
+        if (!biome.hasValidIDFormat()) {
             addWarning("[" + biomeId + "] Invalid biome_id format - should be 'namespace:path' (e.g., 'minecraft:jungle')");
         }
         
         // Validate HTML color format
         String rawColor = biome.getRawColorHtml();
         if (rawColor == null || rawColor.isEmpty()) {
-            addWarning("[" + biomeId + "] No color_html defined, using default: " + BiomeDefinition.DEFAULT_COLOR);
+            addWarning("[" + biomeId + "] No color_html defined, using default: " + BiomeDefinition.getColor(biome));
         } else if (!BiomeDefinition.isValidHtmlColor(rawColor)) {
-            addWarning("[" + biomeId + "] Invalid color_html format '" + rawColor + "', using default: " + BiomeDefinition.DEFAULT_COLOR);
+            addWarning("[" + biomeId + "] Invalid color_html format '" + rawColor + "', using default: " + BiomeDefinition.getColor(biome));
         }
         
         // Validate scent_id reference
@@ -181,7 +181,7 @@ public class BiomeDefinitionLoader {
         // Validate image path
         String rawImage = biome.getRawImage();
         if (rawImage == null || rawImage.isEmpty()) {
-            AromaLib.LOGGER.debug("[{}] No image defined, using default: {}", biomeId, BiomeDefinition.DEFAULT_IMAGE);
+            AromaLib.LOGGER.debug("[{}] No image defined, using default: {}", biomeId, BiomeDefinition.getDefaultImage(biome));
         }
     }
     
@@ -218,7 +218,7 @@ public class BiomeDefinitionLoader {
      */
     public static BiomeDefinition getBiomeById(String biomeId) {
         for (BiomeDefinition biome : loadedBiomes) {
-            if (biome.getBiomeId().equals(biomeId)) {
+            if (biome.getId().equals(biomeId)) {
                 return biome;
             }
         }

@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:dandelion",
+  "id": "minecraft:dandelion",
   "scent_id": "floral",
   "fallback_name": "Dandelion",
-  "color_html": "#FFEC4F",
+  "color": "#FFEC4F",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

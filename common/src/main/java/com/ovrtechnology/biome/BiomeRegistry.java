@@ -95,7 +95,7 @@ public final class BiomeRegistry {
      * @param definition The biome definition to register
      */
     private static void registerBiome(BiomeDefinition definition) {
-        String biomeId = definition.getBiomeId();
+        String biomeId = definition.getId();
         
         if (biomeDefinitions.containsKey(biomeId)) {
             AromaLib.LOGGER.warn("Duplicate biome ID in registry: {}, skipping...", biomeId);
@@ -272,7 +272,7 @@ public final class BiomeRegistry {
      */
     public static String getBiomeColorHtml(String biomeId) {
         BiomeDefinition biome = biomeDefinitions.get(biomeId);
-        return biome != null ? biome.getColorHtml() : BiomeDefinition.DEFAULT_COLOR;
+        return biome != null ? biome.getColorHtml() : BiomeDefinition.getColor(biome);
     }
     
     /**

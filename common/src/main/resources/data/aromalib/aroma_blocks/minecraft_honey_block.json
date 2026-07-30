@@ -1,6 +1,6 @@
 {
-  "block_id": "minecraft:honey_block",
-  "color_html": "#EB9B0F",
+  "id": "minecraft:honey_block",
+  "color": "#EB9B0F",
   "scent_id": "sweet",
   "fallback_name": "Honey Block",
   "range": 3,

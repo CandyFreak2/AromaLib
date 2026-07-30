@@ -1,8 +1,8 @@
 {
-  "structure_id": "minecraft:stronghold",
+  "id": "minecraft:stronghold",
   "image": "structure/stronghold",
   "fallback_name": "Stronghold",
-  "color_html": "#4A4A4A",
+  "color": "#4A4A4A",
   "scent_id": "terra_silva",
   "range": 40,
   "blocks": [

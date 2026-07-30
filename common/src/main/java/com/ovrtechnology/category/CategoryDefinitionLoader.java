@@ -89,9 +89,9 @@ public class CategoryDefinitionLoader {
         // Validate HTML color format
         String rawColor = cat.getRawColorHtml();
         if (rawColor == null || rawColor.isEmpty()) {
-            addWarning("[" + blockId + "] No color_html defined, using default: " + CategoryDefinition.DEFAULT_COLOR);
+            addWarning("[" + blockId + "] No color_html defined, using default: " + CategoryDefinition.getColor(cat));
         } else if (!CategoryDefinition.isValidHtmlColor(rawColor)) {
-            addWarning("[" + blockId + "] Invalid color_html format '" + rawColor + "', using default: " + CategoryDefinition.DEFAULT_COLOR);
+            addWarning("[" + blockId + "] Invalid color_html format '" + rawColor + "', using default: " + CategoryDefinition.getColor(cat));
         }
         
         // Validate block_id format (should be namespace:path)

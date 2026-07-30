@@ -1,8 +1,8 @@
 {
-  "block_id": "minecraft:red_tulip",
+  "id": "minecraft:red_tulip",
   "scent_id": "floral",
   "fallback_name": "Red Tulip",
-  "color_html": "#ED1C24",
+  "color": "#ED1C24",
   "trigger_on": "PROXIMITY",
   "range": 3,
   "priority": "MEDIUM",

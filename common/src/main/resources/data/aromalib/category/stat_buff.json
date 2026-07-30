@@ -1,6 +1,6 @@
 {
   "id": "STAT_BUFF",
-  "color_html": "#5DECF5",
+  "color": "#5DECF5",
   "fallback_name": "Stat Buff",
   "mask": "aromalib:textures/mask/citrus/stat_buff"
 }

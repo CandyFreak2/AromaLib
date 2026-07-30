@@ -128,7 +128,7 @@ public class BlockDefinitionLoader {
             return;
         }
         
-        String blockId = block.getBlockId();
+        String blockId = block.getId();
         
         // Check for duplicate IDs
         if (loadedIds.contains(blockId)) {
@@ -151,14 +151,14 @@ public class BlockDefinitionLoader {
      * @param block The block to validate
      */
     private static void validateBlock(BlockDefinition block) {
-        String blockId = block.getBlockId();
+        String blockId = block.getId();
         
         // Validate HTML color format
         String rawColor = block.getRawColorHtml();
         if (rawColor == null || rawColor.isEmpty()) {
-            addWarning("[" + blockId + "] No color_html defined, using default: " + BlockDefinition.DEFAULT_COLOR);
+            addWarning("[" + blockId + "] No color_html defined, using default: " + BlockDefinition.getColor(block));
         } else if (!BlockDefinition.isValidHtmlColor(rawColor)) {
-            addWarning("[" + blockId + "] Invalid color_html format '" + rawColor + "', using default: " + BlockDefinition.DEFAULT_COLOR);
+            addWarning("[" + blockId + "] Invalid color_html format '" + rawColor + "', using default: " + BlockDefinition.getColor(block));
         }
         
         // Validate scent_id reference
@@ -210,7 +210,7 @@ public class BlockDefinitionLoader {
      */
     public static BlockDefinition getBlockById(String blockId) {
         for (BlockDefinition block : loadedBlocks) {
-            if (block.getBlockId().equals(blockId)) {
+            if (block.getId().equals(blockId)) {
                 return block;
             }
         }
