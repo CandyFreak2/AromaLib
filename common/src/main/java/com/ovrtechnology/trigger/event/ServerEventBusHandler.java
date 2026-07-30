@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -22,18 +23,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.JukeboxBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
-/**
- * Dispatch hub for server-side event-trigger scents.
- *
- * <p>On Balm (26.1) there is no free-registration event API like Architectury's
- * {@code BlockEvent.BREAK}. Detection is therefore done via mixins
- * (Block/Living/Craft/Smelt/Advancement/AnimalTame) that call the public
- * {@code on*} handlers here. The matching/cooldown/packet-dispatch logic is the
- * same as the Architectury branches.</p>
- */
 public final class ServerEventBusHandler {
 
     public static final String TT_BLOCK_BROKEN = "BLOCK_BROKEN";
@@ -48,10 +42,17 @@ public final class ServerEventBusHandler {
     public static final String TT_ANVIL_USED = "ANVIL_USED";
     public static final String TT_SNIFFER_DUG = "SNIFFER_DUG";
     public static final String TT_FLINT_USED = "FLINT_USED";
+    public static final String TT_FIREWORK_USED_ON = "FIREWORK_USED_ON";
+    public static final String TT_FIREWORK_USED = "FIREWORK_USED";
     public static final String TT_SEED_PLANTED = "SEED_PLANTED";
     public static final String TT_DISC_JUKEBOX = "DISC_JUKEBOX";
     public static final String TT_TOTEM_USE = "TOTEM_USE";
     public static final String TT_ENTITY_RIDE_SHOULDER = "RIDE_SHOULDER";
+    public static final String TT_PLAYER_DEATH = "PLAYER_DEATH";
+    public static final String TT_COOKING_STARTED = "COOKING_STARTED";
+    public static final String TT_COPPER_OXIDIZE = "COPPER_OXIDIZE";
+    public static final String TT_SCULK_SHRIEK = "SCULK_SHRIEK";
+    public static final String TT_MINECART_OVERLAP_POWERED_RAIL = "MINECART_OVERLAP_POWERED_RAIL";
 
     /** Seed/crop items whose placement counts as "planting" (in a regular class, so safe to init). */
     private static final Set<Item> SEED_ITEMS = Set.of(
@@ -167,10 +168,47 @@ public final class ServerEventBusHandler {
         fireSimpleEvent(player, TT_SEED_PLANTED);
     }
 
+    public static void onCopperOxidize(ServerPlayer player) {
+        if (player == null) return;
+        fireSimpleEvent(player, TT_COPPER_OXIDIZE);
+    }
+
+    public static void onSculkShriek(ServerPlayer player) {
+        if (player == null) return;
+
+        fireSimpleEvent(player, TT_SCULK_SHRIEK);
+    }
+
     public static void onTotemUse(ServerPlayer player, ItemStack stack) {
         if (stack == null || stack.isEmpty()) return;
 
         fireSimpleEvent(player, TT_TOTEM_USE);
+    }
+
+    /**
+     * The player started cooking on a campfire (placed food onto it). Fires COOKING_STARTED
+     * (→ Smoky) — the "process begins" scent. The furnace take-result events (Savory Spice /
+     * Terra Silva) are a separate, later moment and are unaffected.
+     */
+    public static void onCampfireCook(ServerPlayer player) {
+        fireSimpleEvent(player, TT_COOKING_STARTED);
+    }
+
+    /** Radius (blocks) around an igniting furnace within which players receive the scent. */
+    private static final double FURNACE_IGNITE_RADIUS = 16.0;
+
+    /**
+     * A furnace / blast furnace / smoker just ignited (transitioned to lit). Block entities have
+     * no owner,the scent goes to every nearby player. Called at most once per
+     * ignition (see {@code FurnaceIgniteServerMixin}); the per-player event cooldown in
+     * {@link #dispatch} collapses the re-ignitions between items within one cook session.
+     */
+    public static void onFurnaceIgnited(Level level, BlockPos pos) {
+        if (level == null || level.isClientSide() || pos == null) return;
+        AABB area = new AABB(pos).inflate(FURNACE_IGNITE_RADIUS);
+        for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, area)) {
+            fireSimpleEvent(player, TT_COOKING_STARTED);
+        }
     }
 
     public static void fireSimpleEvent(ServerPlayer player, String triggerType) {
@@ -214,6 +252,10 @@ public final class ServerEventBusHandler {
 
     public static void onLivingDeath(LivingEntity entity, DamageSource source) {
         if (entity == null || source == null) return;
+
+        if (entity instanceof ServerPlayer victim) {
+            fireSimpleEvent(victim, TT_PLAYER_DEATH);
+        }
 
         ServerPlayer killer = resolvePlayerSource(source);
         if (killer == null) return;

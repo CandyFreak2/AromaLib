@@ -1,6 +1,7 @@
 package com.ovrtechnology.definition;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.regex.Pattern;
@@ -33,6 +34,10 @@ public abstract class Definition {
      */
     @SerializedName("fallback_name")
     protected String fallbackName;
+
+    @SerializedName("perception")
+    @Getter
+    protected String perceptionVisual;
 
     /**
      * Default constructor for GSON deserialization.

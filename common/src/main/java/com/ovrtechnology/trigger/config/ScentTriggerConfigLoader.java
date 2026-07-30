@@ -155,8 +155,8 @@ public final class ScentTriggerConfigLoader {
                 if (root != null && root.getItemTriggers() != null) {
                     for (ItemTriggerDefinition trigger : root.getItemTriggers()) {
                         if (trigger.isValid()) {
-                            validateScentName(trigger.getScentName(), "item", trigger.getItemId());
-                            itemTriggerMap.put(trigger.getItemId(), trigger);
+                            validateScentName(trigger.getScentName(), "item", trigger.getId());
+                            itemTriggerMap.put(trigger.getId(), trigger);
                         }
                     }
                 }
@@ -192,7 +192,7 @@ public final class ScentTriggerConfigLoader {
             }
 
             BiomeTriggerDefinition trigger = new BiomeTriggerDefinition();
-            trigger.setBiomeId(biome.getId());
+            trigger.setId(biome.getId());
             trigger.setScentName(scentName);
             trigger.setMode(biome.getMode());
             trigger.setPriority(biome.getPriority());
@@ -221,7 +221,7 @@ public final class ScentTriggerConfigLoader {
             }
 
             BlockTriggerDefinition trigger = new BlockTriggerDefinition();
-            trigger.setBlockId(block.getId());
+            trigger.setId(block.getId());
             trigger.setScentName(scentName);
             trigger.setTriggerOn(block.getTriggerOn());
             trigger.setRange(block.getRange());
@@ -251,7 +251,7 @@ public final class ScentTriggerConfigLoader {
 
             // Flowers are blocks at runtime
             BlockTriggerDefinition trigger = new BlockTriggerDefinition();
-            trigger.setBlockId(flower.getId());
+            trigger.setId(flower.getId());
             trigger.setScentName(scentName);
             trigger.setTriggerOn(flower.getTriggerOn());
             trigger.setRange(flower.getRange());
@@ -281,7 +281,7 @@ public final class ScentTriggerConfigLoader {
             }
 
             StructureTriggerDefinition trigger = new StructureTriggerDefinition();
-            trigger.setStructureId(structure.getId());
+            trigger.setId(structure.getId());
             trigger.setScentName(scentName);
             trigger.setMode(structure.getMode());
             trigger.setRange(structure.getRange());
@@ -311,7 +311,7 @@ public final class ScentTriggerConfigLoader {
             }
 
             MobTriggerDefinition trigger = new MobTriggerDefinition();
-            trigger.setEntityType(mob.getId());
+            trigger.setId(mob.getId());
             trigger.setScentName(scentName);
             trigger.setRange(mob.getRange());
             trigger.setPriority(mob.getPriority());

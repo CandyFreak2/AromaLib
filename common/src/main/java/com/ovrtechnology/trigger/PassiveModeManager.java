@@ -414,7 +414,7 @@ public final class PassiveModeManager {
         for (BlockTriggerDefinition trigger : ScentTriggerConfigLoader.getAllBlockTriggers()) {
             if (!trigger.isProximityTrigger() || !trigger.isValid()) continue;
             try {
-                Identifier loc = Identifier.parse(trigger.getBlockId());
+                Identifier loc = Identifier.parse(trigger.getId());
                 level.registryAccess().lookupOrThrow(Registries.BLOCK)
                     .getOptional(loc)
                     .ifPresent(block -> triggersByBlock.put(block, trigger));
@@ -449,13 +449,14 @@ public final class PassiveModeManager {
 
                         ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
                             trigger.getScentName(),
+                            trigger.getPerceptionVisual(),
                             ScentPriority.MEDIUM,
                             -1,
                             intensity
                         );
 
-                        String source = "block:" + trigger.getBlockId();
-                        String displayName = getBlockDisplayName(level, trigger.getBlockId());
+                        String source = "block:" + trigger.getId();
+                        String displayName = getBlockDisplayName(level, trigger.getId());
 
                         bestCandidate = new TriggerCandidate(scentTrigger, source, displayName,
                             TriggerType.BLOCK, (int) activationRange, distance);
@@ -479,7 +480,7 @@ public final class PassiveModeManager {
                 continue;
             }
 
-            String entityTypeId = trigger.getEntityType();
+            String entityTypeId = trigger.getId();
 
             Optional<Entity> foundEntity = findNearbyMob(level, player, entityTypeId, searchRange);
 
@@ -496,6 +497,7 @@ public final class PassiveModeManager {
                     // Mobs use HIGH priority for player safety
                     ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
                         trigger.getScentName(),
+                        trigger.getPerceptionVisual(),
                         ScentPriority.HIGH,
                         -1,
                         intensity
@@ -601,10 +603,11 @@ public final class PassiveModeManager {
         // Find the matching trigger definition for scent name and priority
         for (StructureTriggerDefinition trigger : ScentTriggerConfigLoader.getAllStructureTriggers()) {
             if (!trigger.isProximityTrigger() || !trigger.isValid()) continue;
-            if (!trigger.getStructureId().equals(currentStructureId)) continue;
+            if (!trigger.getId().equals(currentStructureId)) continue;
 
             ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
                 trigger.getScentName(),
+                trigger.getPerceptionVisual(),
                 ScentPriority.MEDLOW,
                 -1,
                 1.0
@@ -653,6 +656,7 @@ public final class PassiveModeManager {
 
             ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
                 trigger.getScentName(),
+                trigger.getPerceptionVisual(),
                 trigger.getPriority(),
                 -1,
                 intensity
@@ -698,7 +702,7 @@ public final class PassiveModeManager {
 
         // Show border overlay if setting is enabled
         if (triggered && ClientConfig.getInstance().isPassivePuffOverlay()) {
-            ScentPuffOverlay.onScentPuff(candidate.trigger.scentName(), candidate.trigger.intensity());
+            ScentPuffOverlay.onScentPuff(candidate.trigger.scentName(), candidate.trigger.perceptionVisual(), candidate.trigger.intensity());
         }
 
         if (DEV_MODE) {

@@ -5,6 +5,7 @@ import com.ovrtechnology.biome.BiomeDefinition;
 import com.ovrtechnology.biome.BiomeRegistry;
 import com.ovrtechnology.block.BlockDefinition;
 import com.ovrtechnology.block.BlockRegistry;
+import com.ovrtechnology.category.CategoryRegistry;
 import com.ovrtechnology.structure.StructureDefinition;
 import com.ovrtechnology.structure.StructureRegistry;
 import net.blay09.mods.balm.platform.event.callback.ServerLifecycleCallback;
@@ -64,6 +65,9 @@ public final class RegistryValidator {
      */
     @Getter
     private static final Set<String> invalidBlockIds = new HashSet<>();
+
+    @Getter
+    private static final Set<String> invalidCategoryIds = new HashSet<>();
     
     /**
      * Whether validation has been performed.
@@ -101,6 +105,7 @@ public final class RegistryValidator {
         invalidStructureIds.clear();
         invalidBiomeIds.clear();
         invalidBlockIds.clear();
+        invalidCategoryIds.clear();
         errorCount = 0;
         validated = false;
         
@@ -129,7 +134,7 @@ public final class RegistryValidator {
             logValidationSummary();
         }
     }
-    
+
     /**
      * Validates all block definitions against Minecraft's block registry.
      */

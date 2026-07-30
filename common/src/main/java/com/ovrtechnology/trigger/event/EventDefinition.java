@@ -31,6 +31,9 @@ public class EventDefinition {
     @SerializedName("event_id")
     private String eventId;
 
+    @SerializedName("perception")
+    protected String perceptionVisual;
+
     @SerializedName("category")
     private String category;
 

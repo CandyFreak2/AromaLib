@@ -148,7 +148,7 @@ public final class PlayerStateTickHandler {
 
         ScentTrigger trigger =
                 ScentTrigger.create(
-                        scentName, def.resolveSource(), def.getPriority(), -1, def.getIntensity());
+                        scentName,def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), -1, def.getIntensity());
 
         boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
         if (fired) {
@@ -336,6 +336,7 @@ public final class PlayerStateTickHandler {
                     ScentTrigger trigger =
                             ScentTrigger.create(
                                     scentName,
+                                    def.getPerceptionVisual(),
                                     def.resolveSource(),
                                     def.getPriority(),
                                     1,
@@ -425,7 +426,7 @@ public final class PlayerStateTickHandler {
 
             ScentTrigger trigger =
                     ScentTrigger.create(
-                            scentName, def.resolveSource(), def.getPriority(), 1, intensity);
+                            scentName, def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), 1, intensity);
             boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
             if (fired) {
                 lastFiredAtMs.put(def.getEventId(), now);

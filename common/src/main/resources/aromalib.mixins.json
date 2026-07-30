@@ -4,8 +4,37 @@
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "client": [
+    "AbstractContainerScreenAccessor",
+    "LocalPlayerCompleteUseItemMixin"
   ],
   "mixins": [
-  ]
+    "AnvilOnTakeMixin",
+    "FishingHookRetrieveMixin",
+    "MerchantNotifyTradeMixin",
+    "BlockBreakServerMixin",
+    "LivingDeathServerMixin",
+    "CraftResultServerMixin",
+    "SmeltResultServerMixin",
+    "AnimalTameServerMixin",
+    "AdvancementServerMixin",
+    "FlintUseServerMixin",
+    "FireworkRocketUseServerMixin",
+    "TotemTriggerServerMixin",
+    "JukeboxUseServerMixin",
+    "ItemEquippedServerMixin",
+    "SeedPlantServerMixin",
+    "ShoulderRidingServerMixin",
+    "CampfireCookServerMixin",
+    "FurnaceIgniteServerMixin",
+    "ServerPlayerDeathServerMixin",
+    "CopperWeatherMixin",
+    "SculkShriekServerMixin",
+    "MinecartBehaviorServerMixin",
+    "OldMinecartBehaviorServerMixin",
+    "NewMinecartBehaviorServerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
 

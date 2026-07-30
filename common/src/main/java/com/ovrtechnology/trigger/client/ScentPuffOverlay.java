@@ -1,6 +1,9 @@
 package com.ovrtechnology.trigger.client;
 
 import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.category.CategoryDefinition;
+import com.ovrtechnology.category.CategoryDefinitionLoader;
+import com.ovrtechnology.category.CategoryRegistry;
 import com.ovrtechnology.scent.ScentDefinition;
 import com.ovrtechnology.scent.ScentRegistry;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
@@ -59,12 +62,12 @@ public final class ScentPuffOverlay {
      * @param scentName the scent name (used to resolve the mask texture)
      * @param intensity the scent intensity (0.0 to 1.0)
      */
-    public static void onScentPuff(String scentName, double intensity) {
+    public static void onScentPuff(String scentName, String visualCategory, double intensity) {
         if (scentName == null || scentName.isBlank()) {
             return;
         }
 
-        Identifier mask = resolveMask(scentName);
+        Identifier mask = resolveMask(scentName, visualCategory);
         if (mask == null) {
             AromaLib.LOGGER.debug("No mask mapping for scent '{}' (ScentPuffOverlay)", scentName);
             return;
@@ -131,13 +134,20 @@ public final class ScentPuffOverlay {
         return 1.0f;
     }
 
-    private static Identifier resolveMask(String scentName) {
-        var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
-        ScentDefinition scent;
+    private static Identifier resolveMask(String scentName, String categoryID) {
+        CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
 
-        if (scentDef.isPresent()) {
-            scent = scentDef.get();
-            return Identifier.parse(scent.getMask() + ".png");
+        if (category != null) {
+            return Identifier.parse(category.getMask() + ".png");
+        }
+        else {
+            var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
+            ScentDefinition scent;
+
+            if (scentDef.isPresent()) {
+                scent = scentDef.get();
+                return Identifier.parse(scent.getMask() + ".png");
+            }
         }
 
         return null;
