@@ -6,6 +6,7 @@ import com.ovrtechnology.category.CategoryDefinitionLoader;
 import com.ovrtechnology.category.CategoryRegistry;
 import com.ovrtechnology.scent.ScentDefinition;
 import com.ovrtechnology.scent.ScentRegistry;
+import com.ovrtechnology.util.ColorHelper;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -35,6 +36,7 @@ public final class ScentPuffOverlay {
     private static Identifier activeMask = null;
     private static long pulseStartMs = 0L;
     private static double lastPuffIntensity = 0.5;
+    private static String categoryColor;
 
     private ScentPuffOverlay() {
     }
@@ -105,7 +107,7 @@ public final class ScentPuffOverlay {
         int width = mc.getWindow().getGuiScaledWidth();
         int height = mc.getWindow().getGuiScaledHeight();
 
-        int tint = ARGB.color(finalAlpha, 0xFFFFFF);
+        int tint = ARGB.color(finalAlpha, ColorHelper.getColorAsInt(categoryColor));
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 activeMask,
@@ -138,11 +140,13 @@ public final class ScentPuffOverlay {
         CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
 
         if (category != null) {
+            categoryColor = category.getColorHtml();
             return Identifier.parse(category.getMask() + ".png");
         }
         else {
             var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
             ScentDefinition scent;
+            categoryColor = "#FFFFFF";
 
             if (scentDef.isPresent()) {
                 scent = scentDef.get();

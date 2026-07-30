@@ -1,0 +1,6 @@
+{
+  "id": "aromalib:deep_dark",
+  "color": "#5DECF5",
+  "fallback_name": "Stat Buff",
+  "mask": "aromalib:textures/mask/citrus/stat_buff"
+}

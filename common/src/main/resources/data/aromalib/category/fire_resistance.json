@@ -1,0 +1,6 @@
+{
+  "id": "aromalib:fire_resistance",
+  "color": "#C0C0C0",
+  "fallback_name": "Fire Resistance",
+  "mask": "aromalib:textures/mask/template"
+}

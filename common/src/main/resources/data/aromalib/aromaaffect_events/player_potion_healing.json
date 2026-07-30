@@ -3,6 +3,7 @@
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_POTION_DRUNK",
   "scent_id": "beach",
+  "perception": "aromalib:healing",
   "intensity": 1.0,
   "priority": "MEDIUM",
   "duration_mode": "ONE_SHOT",
