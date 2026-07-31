@@ -3,7 +3,6 @@
   "category": "PLAYER_STATE",
   "trigger_type": "TOTEM_USE",
   "scent_id": "beach",
-  "perception": "aromalib:submerged",
   "intensity": 1.0,
   "priority": "HIGH",
   "duration_mode": "CONTINUOUS",

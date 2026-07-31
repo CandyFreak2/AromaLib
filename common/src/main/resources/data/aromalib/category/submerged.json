@@ -1,6 +1,0 @@
-{
-  "id": "aromalib:submerged",
-  "color": "#FFFFFF",
-  "fallback_name": "Submerged",
-  "mask": "aromalib:textures/mask/beach/water_buff"
-}

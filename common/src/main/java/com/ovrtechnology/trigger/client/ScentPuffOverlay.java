@@ -140,21 +140,19 @@ public final class ScentPuffOverlay {
         CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
 
         if (category != null) {
-            categoryColor = category.getColorHtml();
+            if (category.getColorHtml() != null) {
+                categoryColor = category.getColorHtml();
+            }
+
+            if (category.getMask() == null) {
+                return getScentMask(scentName);
+            }
+
             return Identifier.parse(category.getMask() + ".png");
         }
-        else {
-            var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
-            ScentDefinition scent;
-            categoryColor = "#FFFFFF";
 
-            if (scentDef.isPresent()) {
-                scent = scentDef.get();
-                return Identifier.parse(scent.getMask() + ".png");
-            }
-        }
-
-        return null;
+        categoryColor = "#FFFFFF";
+        return getScentMask(scentName);
     }
 
     private static double clamp01(double value) {
@@ -163,5 +161,17 @@ public final class ScentPuffOverlay {
 
     private static float clamp01f(float value) {
         return Math.max(0.0f, Math.min(1.0f, value));
+    }
+
+    private static Identifier getScentMask(String scentName) {
+        var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
+        ScentDefinition scent;
+
+        if (scentDef.isPresent()) {
+            scent = scentDef.get();
+            return Identifier.parse(scent.getMask() + ".png");
+        }
+
+        return null;
     }
 }

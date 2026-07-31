@@ -7,6 +7,7 @@
   "priority": "MEDIUM",
   "duration_mode": "ONE_SHOT",
   "cooldown_ms": 8000,
+  "perception": "aromalib:water_buff",
   "conditions": {
     "effect_ids": [
       "minecraft:water_breathing",

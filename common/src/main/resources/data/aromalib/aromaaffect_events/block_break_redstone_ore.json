@@ -3,6 +3,7 @@
   "category": "BLOCK_BREAK",
   "trigger_type": "BLOCK_BROKEN",
   "scent_id": "machina",
+  "perception": "aromalib:redstone",
   "intensity": 0.85,
   "priority": "MEDIUM",
   "duration_mode": "ONE_SHOT",
