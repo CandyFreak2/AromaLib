@@ -6,11 +6,6 @@ import com.ovrtechnology.scent.ScentRegistry;
 import com.ovrtechnology.trigger.ScentTrigger;
 import com.ovrtechnology.trigger.ScentTriggerManager;
 import com.ovrtechnology.trigger.ScentTriggerSource;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -18,6 +13,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.level.Level;
+
+import java.util.*;
 
 public final class PlayerStateTickHandler {
 
@@ -34,6 +31,7 @@ public final class PlayerStateTickHandler {
     public static final String TT_PLAYER_POTION_DRUNK = "PLAYER_POTION_DRUNK";
     public static final String TT_PLAYER_SLEPT = "PLAYER_SLEPT";
     public static final String TT_PLAYER_DIMENSION_CHANGE = "PLAYER_DIMENSION_CHANGE";
+    public static final String TT_PLAYER_TEMP = "PLAYER_TEMP";
 
     private static final int CHECK_INTERVAL_TICKS = 20;
 
@@ -49,7 +47,8 @@ public final class PlayerStateTickHandler {
 
     private static boolean wasSleeping = false;
 
-    private PlayerStateTickHandler() {}
+    private PlayerStateTickHandler() {
+    }
 
     public static void tick(LocalPlayer player) {
         if (player == null) return;
@@ -79,6 +78,7 @@ public final class PlayerStateTickHandler {
 
         evaluateLevelUp(player, config);
         evaluateDimensionChange(player, config);
+        evaluateTemperatureChange(player, config);
         evaluateSleep(player, config);
     }
 
@@ -148,7 +148,7 @@ public final class PlayerStateTickHandler {
 
         ScentTrigger trigger =
                 ScentTrigger.create(
-                        scentName,def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), -1, def.getIntensity());
+                        scentName, def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), -1, def.getIntensity());
 
         boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
         if (fired) {
@@ -382,6 +382,38 @@ public final class PlayerStateTickHandler {
                     },
                     -1.0);
         }
+    }
+
+    private static void evaluateTemperatureChange(LocalPlayer player, EventTriggersConfig config) {
+        float currentTemp = player.level().getBiome(player.blockPosition()).value().getBaseTemperature();
+
+        fireOneShotByTriggerType(
+                TT_PLAYER_TEMP,
+                config,
+                def -> {
+                    String comparison_type =
+                            def.getConditions().has("comparison_type")
+                                    ? def.getConditions().get("comparison_type").getAsString()
+                                    : null;
+
+                    float temp = def.getConditions().has("temp")
+                            ? def.getConditions().get("temp").getAsFloat()
+                            : 0.5f;
+                    if (comparison_type == null || temp == -1) return false;
+
+                    return switch (comparison_type) {
+                        case ">" -> currentTemp > temp;
+                        case ">=" -> currentTemp >= temp;
+                        case "<" -> currentTemp < temp;
+                        case "<=" -> currentTemp <= temp;
+                        case "=" -> currentTemp == temp;
+                        default -> {
+                            AromaLib.LOGGER.error("Does not recognize comparison type for temp check");
+                            yield false;
+                        }
+                    };
+                },
+                -1.0);
     }
 
     private static void evaluateSleep(LocalPlayer player, EventTriggersConfig config) {
