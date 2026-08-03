@@ -18,14 +18,14 @@ public final class EventDebugLog {
         // setting — mirrors the proximity-trigger UX so events are observable
         // without OVR hardware.
         if (ClientConfig.getInstance().isPassivePuffOverlay()) {
-            ScentPuffOverlay.onScentPuff(scentName, def.perceptionVisual, intensity);
+            ScentPuffOverlay.onScentPuff(scentName, def.getPerceptionVisual(), intensity);
         }
 
         boolean debugChat = ClientConfig.getInstance().isDebugScentMessages();
         if (!debugChat) {
             AromaLib.LOGGER.debug(
                     "[Events] FIRED {} -> {} ({}%, {})",
-                    def.getEventId(),
+                    def.getId(),
                     scentName,
                     (int) Math.round(intensity * 100),
                     def.getDurationMode());
@@ -34,7 +34,7 @@ public final class EventDebugLog {
 
         AromaLib.LOGGER.info(
                 "[Events] FIRED {} -> {} ({}%, {} · {} · {})",
-                def.getEventId(),
+                def.getId(),
                 scentName,
                 (int) Math.round(intensity * 100),
                 def.getCategory(),
@@ -49,31 +49,31 @@ public final class EventDebugLog {
         String message =
                 String.format(
                         "§a[Event] §e%s §7→ §b%s §8[%d%% · %s · %s]",
-                        def.getEventId(), scentName, intensityPercent, def.getCategory(), modeTag);
+                        def.getId(), scentName, intensityPercent, def.getCategory(), modeTag);
         player.sendSystemMessage(Texts.lit(message));
     }
 
     public static void stopped(EventDefinition def, String scentName) {
         if (def == null) return;
         if (!ClientConfig.getInstance().isDebugScentMessages()) {
-            AromaLib.LOGGER.debug("[Events] STOPPED {} (was {})", def.getEventId(), scentName);
+            AromaLib.LOGGER.debug("[Events] STOPPED {} (was {})", def.getId(), scentName);
             return;
         }
-        AromaLib.LOGGER.info("[Events] STOPPED {} (was {})", def.getEventId(), scentName);
+        AromaLib.LOGGER.info("[Events] STOPPED {} (was {})", def.getId(), scentName);
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
         String message =
-                String.format("§7[Event] §8stopped §7%s §8(%s)", def.getEventId(), scentName);
+                String.format("§7[Event] §8stopped §7%s §8(%s)", def.getId(), scentName);
         player.sendSystemMessage(Texts.lit(message));
     }
 
     public static void suppressed(EventDefinition def, String reason) {
         if (def == null) return;
         if (!ClientConfig.getInstance().isDebugScentMessages()) {
-            AromaLib.LOGGER.debug("[Events] suppressed {} ({})", def.getEventId(), reason);
+            AromaLib.LOGGER.debug("[Events] suppressed {} ({})", def.getId(), reason);
             return;
         }
-        AromaLib.LOGGER.debug("[Events] suppressed {} ({})", def.getEventId(), reason);
+        AromaLib.LOGGER.debug("[Events] suppressed {} ({})", def.getId(), reason);
     }
 }

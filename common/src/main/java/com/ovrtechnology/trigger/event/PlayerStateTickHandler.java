@@ -101,7 +101,7 @@ public final class PlayerStateTickHandler {
         } catch (Exception e) {
             AromaLib.LOGGER.warn(
                     "Failed to evaluate condition for event {}: {}",
-                    def.getEventId(),
+                    def.getId(),
                     e.getMessage());
             conditionMet = false;
         }
@@ -121,8 +121,8 @@ public final class PlayerStateTickHandler {
     private static void fireContinuous(EventDefinition def, EventTriggersConfig config) {
         long now = System.currentTimeMillis();
         long cooldown = effectiveCooldownMs(def, config);
-        Long lastTime = lastFiredAtMs.get(def.getEventId());
-        boolean alreadyActive = activeContinuous.contains(def.getEventId());
+        Long lastTime = lastFiredAtMs.get(def.getId());
+        boolean alreadyActive = activeContinuous.contains(def.getId());
 
         String scentName = ScentRegistry.getDisplayName(def.getScentId());
         if (scentName == null || "Unknown Scent".equals(scentName)) {
@@ -130,7 +130,7 @@ public final class PlayerStateTickHandler {
         }
 
         if (alreadyActive && !managerStillOwnsContinuous(def, scentName)) {
-            activeContinuous.remove(def.getEventId());
+            activeContinuous.remove(def.getId());
             alreadyActive = false;
         }
 
@@ -152,8 +152,8 @@ public final class PlayerStateTickHandler {
 
         boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
         if (fired) {
-            lastFiredAtMs.put(def.getEventId(), now);
-            activeContinuous.add(def.getEventId());
+            lastFiredAtMs.put(def.getId(), now);
+            activeContinuous.add(def.getId());
             EventDebugLog.fired(def, scentName, def.getIntensity());
         }
     }
@@ -173,7 +173,7 @@ public final class PlayerStateTickHandler {
     }
 
     private static void stopContinuous(EventDefinition def) {
-        if (!activeContinuous.remove(def.getEventId())) return;
+        if (!activeContinuous.remove(def.getId())) return;
 
         String scentName = ScentRegistry.getDisplayName(def.getScentId());
         if (scentName == null) return;
@@ -327,7 +327,7 @@ public final class PlayerStateTickHandler {
         if (currentLevel > lastObservedLevel) {
             long now = System.currentTimeMillis();
             long cooldown = effectiveCooldownMs(def, config);
-            Long lastTime = lastFiredAtMs.get(def.getEventId());
+            Long lastTime = lastFiredAtMs.get(def.getId());
             if (lastTime == null || (now - lastTime) >= cooldown) {
                 String scentName = ScentRegistry.getDisplayName(def.getScentId());
                 if (scentName != null
@@ -343,7 +343,7 @@ public final class PlayerStateTickHandler {
                                     def.getIntensity());
                     boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
                     if (fired) {
-                        lastFiredAtMs.put(def.getEventId(), now);
+                        lastFiredAtMs.put(def.getId(), now);
                         EventDebugLog.fired(def, scentName, def.getIntensity());
                     }
                 }
@@ -443,7 +443,7 @@ public final class PlayerStateTickHandler {
             if (!matcher.test(def)) continue;
 
             long cooldown = effectiveCooldownMs(def, config);
-            Long lastTime = lastFiredAtMs.get(def.getEventId());
+            Long lastTime = lastFiredAtMs.get(def.getId());
             if (lastTime != null && (now - lastTime) < cooldown) return false;
 
             String scentName = ScentRegistry.getDisplayName(def.getScentId());
@@ -461,7 +461,7 @@ public final class PlayerStateTickHandler {
                             scentName, def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), 1, intensity);
             boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
             if (fired) {
-                lastFiredAtMs.put(def.getEventId(), now);
+                lastFiredAtMs.put(def.getId(), now);
                 EventDebugLog.fired(def, scentName, intensity);
             }
             return fired;

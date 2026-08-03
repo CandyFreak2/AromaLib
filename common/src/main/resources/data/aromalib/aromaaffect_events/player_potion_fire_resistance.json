@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_potion_fire_resistance",
+  "id": "aromalib:player_potion_fire_resistance",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_POTION_DRUNK",
   "scent_id": "smoky",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:item_smelted_metal",
+  "id": "aromalib:item_smelted_metal",
   "category": "CRAFT_INTERACT",
   "trigger_type": "ITEM_SMELTED",
   "scent_id": "terra_silva",

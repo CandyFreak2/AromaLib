@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:ride_over_powered_rail",
+  "id": "aromalib:ride_over_powered_rail",
   "category": "PLAYER_ACTION",
   "trigger_type": "MINECART_OVERLAP_POWERED_RAIL",
   "perception": "aromalib:powered_rail_minecart",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_food_sweet",
+  "id": "aromalib:player_food_sweet",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_FOOD_EATEN",
   "scent_id": "sweet",

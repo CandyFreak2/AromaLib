@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:mob_killed_undead",
+  "id": "aromalib:mob_killed_undead",
   "category": "COMBAT",
   "trigger_type": "MOB_KILLED",
   "scent_id": "smoky",

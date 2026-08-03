@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:item_equipped_pumpkin",
+  "id": "aromalib:item_equipped_pumpkin",
   "category": "PLAYER_ACTION",
   "trigger_type": "ITEM_EQUIPPED",
   "scent_id": "sweet",

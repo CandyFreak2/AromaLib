@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:flint_use",
+  "id": "aromalib:flint_use",
   "category": "PLAYER_ACTION",
   "trigger_type": "FLINT_USED",
   "scent_id": "smoky",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_low_hunger",
+  "id": "aromalib:player_low_hunger",
   "category": "PLAYER_STATE",
   "trigger_type": "PLAYER_HUNGER_THRESHOLD",
   "scent_id": "savory_spice",

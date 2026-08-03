@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:totem_use",
+  "id": "aromalib:totem_use",
   "category": "PLAYER_STATE",
   "trigger_type": "TOTEM_USE",
   "scent_id": "beach",

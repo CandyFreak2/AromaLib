@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_negative_status",
+  "id": "aromalib:player_negative_status",
   "category": "PLAYER_STATE",
   "trigger_type": "PLAYER_NEGATIVE_EFFECT",
   "scent_id": "smoky",

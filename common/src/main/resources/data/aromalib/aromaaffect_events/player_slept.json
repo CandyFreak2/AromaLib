@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_slept",
+  "id": "aromalib:player_slept",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_SLEPT",
   "scent_id": "floral",

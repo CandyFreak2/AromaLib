@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:block_break_metal_ore",
+  "id": "aromalib:block_break_metal_ore",
   "category": "BLOCK_BREAK",
   "trigger_type": "BLOCK_BROKEN",
   "scent_id": "terra_silva",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_food_terra_silva",
+  "id": "aromalib:player_food_terra_silva",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_FOOD_EATEN",
   "scent_id": "terra_silva",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_temp_cold",
+  "id": "aromalib:player_temp_cold",
   "category": "WEATHER",
   "trigger_type": "PLAYER_TEMP",
   "scent_id": "winter",

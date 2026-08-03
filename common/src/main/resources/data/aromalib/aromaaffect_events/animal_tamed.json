@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:animal_tamed",
+  "id": "aromalib:animal_tamed",
   "category": "PLAYER_ACTION",
   "trigger_type": "ANIMAL_TAMED",
   "scent_id": "kindred",

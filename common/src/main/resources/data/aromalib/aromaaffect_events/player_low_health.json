@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_low_health",
+  "id": "aromalib:player_low_health",
   "category": "PLAYER_STATE",
   "trigger_type": "PLAYER_HEALTH_THRESHOLD",
   "scent_id": "machina",

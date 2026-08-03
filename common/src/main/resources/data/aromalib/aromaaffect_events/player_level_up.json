@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_level_up",
+  "id": "aromalib:player_level_up",
   "category": "PLAYER_PROGRESS",
   "trigger_type": "PLAYER_LEVEL_UP",
   "scent_id": "sweet",

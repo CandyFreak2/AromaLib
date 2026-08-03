@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_submerged",
+  "id": "aromalib:player_submerged",
   "category": "PLAYER_STATE",
   "trigger_type": "PLAYER_EYES_IN_WATER",
   "scent_id": "marine",

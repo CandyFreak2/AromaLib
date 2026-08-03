@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_dimension_nether",
+  "id": "aromalib:player_dimension_nether",
   "category": "DIMENSION",
   "trigger_type": "PLAYER_DIMENSION_CHANGE",
   "scent_id": "smoky",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:copper_oxidize",
+  "id": "aromalib:copper_oxidize",
   "category": "WEATHER",
   "trigger_type": "COPPER_OXIDIZE",
   "scent_id": "machina",

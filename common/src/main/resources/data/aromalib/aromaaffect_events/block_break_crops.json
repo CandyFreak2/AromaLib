@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:block_break_crops",
+  "id": "aromalib:block_break_crops",
   "category": "BLOCK_BREAK",
   "trigger_type": "BLOCK_BROKEN",
   "scent_id": "sweet",

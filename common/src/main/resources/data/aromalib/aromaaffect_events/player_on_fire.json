@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:player_on_fire",
+  "id": "aromalib:player_on_fire",
   "category": "PLAYER_STATE",
   "trigger_type": "PLAYER_ON_FIRE",
   "scent_id": "smoky",

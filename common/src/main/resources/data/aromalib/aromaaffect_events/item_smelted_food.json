@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:item_smelted_food",
+  "id": "aromalib:item_smelted_food",
   "category": "CRAFT_INTERACT",
   "trigger_type": "ITEM_SMELTED",
   "scent_id": "savory_spice",

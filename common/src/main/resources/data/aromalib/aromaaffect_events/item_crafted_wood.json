@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:item_crafted_wood",
+  "id": "aromalib:item_crafted_wood",
   "category": "CRAFT_INTERACT",
   "trigger_type": "ITEM_CRAFTED",
   "scent_id": "timber",

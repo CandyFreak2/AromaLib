@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:trade_completed",
+  "id": "aromalib:trade_completed",
   "category": "PLAYER_ACTION",
   "trigger_type": "TRADE_COMPLETED",
   "scent_id": "kindred",

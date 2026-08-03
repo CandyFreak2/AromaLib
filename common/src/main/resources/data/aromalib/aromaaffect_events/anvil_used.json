@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:anvil_used",
+  "id": "aromalib:anvil_used",
   "category": "CRAFT_INTERACT",
   "trigger_type": "ANVIL_USED",
   "scent_id": "machina",

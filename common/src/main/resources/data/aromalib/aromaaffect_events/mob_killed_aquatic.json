@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:mob_killed_aquatic",
+  "id": "aromalib:mob_killed_aquatic",
   "category": "COMBAT",
   "trigger_type": "MOB_KILLED",
   "scent_id": "marine",

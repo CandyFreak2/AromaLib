@@ -83,7 +83,7 @@ public final class EventDefinitionLoader {
             return;
         }
 
-        String eventId = event.getEventId();
+        String eventId = event.getId();
 
         if (loadedIds.contains(eventId)) {
             addWarning("Duplicate event_id '" + eventId + "' found, skipping...");
@@ -107,9 +107,9 @@ public final class EventDefinitionLoader {
     }
 
     private static void validateEvent(EventDefinition event) {
-        String eventId = event.getEventId();
+        String eventId = event.getId();
 
-        if (!event.hasValidEventIdFormat()) {
+        if (!event.hasValidIDFormat()) {
             addWarning(
                     "["
                             + eventId

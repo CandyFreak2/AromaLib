@@ -1,5 +1,5 @@
 {
-  "event_id": "aromalib:fishing_pulled",
+  "id": "aromalib:fishing_pulled",
   "category": "PLAYER_ACTION",
   "trigger_type": "FISHING_PULLED",
   "scent_id": "marine",
