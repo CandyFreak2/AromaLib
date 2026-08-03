@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:weather_rain",
+  "event_id": "aromalib:weather_rain",
   "category": "WEATHER",
   "trigger_type": "WEATHER_RAINING",
   "scent_id": "petrichor",

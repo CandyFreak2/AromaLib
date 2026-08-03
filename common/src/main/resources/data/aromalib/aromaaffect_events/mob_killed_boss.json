@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:mob_killed_boss",
+  "event_id": "aromalib:mob_killed_boss",
   "category": "COMBAT",
   "trigger_type": "MOB_KILLED",
   "scent_id": "machina",

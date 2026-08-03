@@ -1,7 +1,7 @@
 package com.ovrtechnology.fabric.client;
 
 import com.ovrtechnology.AromaLib;
-import com.ovrtechnology.AromaAffectClient;
+import com.ovrtechnology.AromaLibClient;
 import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.fabric.platform.runtime.FabricLoadContext;
 import net.fabricmc.api.ClientModInitializer;
@@ -9,7 +9,7 @@ import net.fabricmc.api.ClientModInitializer;
 public final class ExampleModFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BalmClient.initializeMod(AromaLib.MOD_ID, FabricLoadContext.INSTANCE, AromaAffectClient::initialize);
+        BalmClient.initializeMod(AromaLib.MOD_ID, FabricLoadContext.INSTANCE, AromaLibClient::initialize);
 
         // Fabric-only renderers that have no Balm wrapper:
         //  - NoseRenderingFabric: Fabric ArmorRenderer hook for the 3D NoseMaskModel

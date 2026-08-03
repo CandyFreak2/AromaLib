@@ -15,7 +15,7 @@
     "discord": "https://discord.com/invite/ovr-omara"
   },
   "license": "${license}",
-  "icon": "assets/aromaaffect/icon.png",
+  "icon": "assets/aromalib/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:plant_seeds",
+  "event_id": "aromalib:plant_seeds",
   "category": "PLAYER_ACTION",
   "trigger_type": "SEED_PLANTED",
   "scent_id": "terra_silva",

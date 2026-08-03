@@ -56,7 +56,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = 'aromaaffect'
+rootProject.name = 'aromalib'
 
 includeBuild('build-logic')
 include('common')

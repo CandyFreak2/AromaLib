@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:sculk_shriek",
+  "event_id": "aromalib:sculk_shriek",
   "category": "PLAYER_ACTION",
   "trigger_type": "SCULK_SHRIEK",
   "scent_id": "terra_silva",

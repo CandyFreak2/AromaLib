@@ -18,7 +18,7 @@ import net.blay09.mods.balm.client.BalmClientRegistrars;
  * from each platform client entry point.</p>
  */
 @UtilityClass
-public final class AromaAffectClient {
+public final class AromaLibClient {
 
     private static boolean initialized = false;
 
@@ -28,7 +28,7 @@ public final class AromaAffectClient {
      */
     public static void initialize(BalmClientRegistrars registrars) {
         if (initialized) {
-            AromaLib.LOGGER.warn("AromaAffectClient.initialize() called multiple times!");
+            AromaLib.LOGGER.warn("AromaLibClient.initialize() called multiple times!");
             return;
         }
         

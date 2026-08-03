@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:sniffer_dug",
+  "event_id": "aromalib:sniffer_dug",
   "category": "PLAYER_ACTION",
   "trigger_type": "SNIFFER_DUG",
   "scent_id": "floral",

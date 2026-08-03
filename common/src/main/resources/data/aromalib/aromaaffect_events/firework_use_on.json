@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:firework_use_on",
+  "event_id": "aromalib:firework_use_on",
   "category": "PLAYER_ACTION",
   "trigger_type": "FIREWORK_USED_ON",
   "scent_id": "smoky",

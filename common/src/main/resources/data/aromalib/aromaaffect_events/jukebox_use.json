@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:disc_jukebox",
+  "event_id": "aromalib:disc_jukebox",
   "category": "PLAYER_ACTION",
   "trigger_type": "DISC_JUKEBOX",
   "scent_id": "sweet",

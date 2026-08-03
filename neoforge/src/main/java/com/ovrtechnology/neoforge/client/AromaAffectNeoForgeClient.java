@@ -1,6 +1,6 @@
 package com.ovrtechnology.neoforge.client;
 
-import com.ovrtechnology.AromaAffectClient;
+import com.ovrtechnology.AromaLibClient;
 import com.ovrtechnology.AromaLib;
 import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
@@ -14,7 +14,7 @@ import net.neoforged.fml.common.Mod;
  *
  * <p>Most client wiring (model layers, entity renderers, menu screens, key
  * mappings, HUD overlays, OVR WebSocket) goes through Balm via
- * {@link AromaAffectClient#initialize}. The hooks that have no Balm wrapper
+ * {@link AromaLibClient#initialize}. The hooks that have no Balm wrapper
  * (NeoForge {@code IClientItemExtensions} for armor model providers and the
  * {@code RenderLevelStageEvent.AfterTranslucentBlocks} listener for the path
  * trail / block outline overlays) are wired below.</p>
@@ -23,7 +23,7 @@ import net.neoforged.fml.common.Mod;
 public final class AromaAffectNeoForgeClient {
 
     public AromaAffectNeoForgeClient(ModContainer modContainer, IEventBus modEventBus) {
-        BalmClient.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), AromaAffectClient::initialize);
+        BalmClient.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), AromaLibClient::initialize);
 
         //modEventBus.addListener(this::onRegisterClientExtensions);
 

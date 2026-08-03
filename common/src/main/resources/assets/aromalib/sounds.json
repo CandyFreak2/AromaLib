@@ -1,16 +1,16 @@
 {
   "sniff": {
-    "subtitle": "subtitles.aromaaffect.sniff",
+    "subtitle": "subtitles.aromalib.sniff",
     "sounds": [
-      "aromaaffect:sniff/sniff1",
-      "aromaaffect:sniff/sniff2",
-      "aromaaffect:sniff/sniff3"
+      "aromalib:sniff/sniff1",
+      "aromalib:sniff/sniff2",
+      "aromalib:sniff/sniff3"
     ]
   },
   "omara_puff": {
-    "subtitle": "subtitles.aromaaffect.omara_puff",
+    "subtitle": "subtitles.aromalib.omara_puff",
     "sounds": [
-      "aromaaffect:puff/puff1"
+      "aromalib:puff/puff1"
     ]
   }
 }

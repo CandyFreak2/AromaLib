@@ -67,7 +67,7 @@
     ],
     "scentBase": {
       "enabled": true,
-      "item": "aromaaffect:scent_base",
+      "item": "aromalib:scent_base",
       "min": 1,
       "max": 5
     },
@@ -84,15 +84,15 @@
   "dimensionalScents": {
     "overworld": {
       "enabled": true,
-      "item": "aromaaffect:overworld_scent"
+      "item": "aromalib:overworld_scent"
     },
     "nether": {
       "enabled": true,
-      "item": "aromaaffect:nether_scent"
+      "item": "aromalib:nether_scent"
     },
     "end": {
       "enabled": true,
-      "item": "aromaaffect:end_scent"
+      "item": "aromalib:end_scent"
     }
   }
 }

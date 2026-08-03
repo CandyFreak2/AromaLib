@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:player_temp_hot",
+  "event_id": "aromalib:player_temp_hot",
   "category": "WEATHER",
   "trigger_type": "PLAYER_TEMP",
   "scent_id": "desert",

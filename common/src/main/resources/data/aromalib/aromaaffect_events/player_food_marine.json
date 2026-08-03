@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:player_food_marine",
+  "event_id": "aromalib:player_food_marine",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_FOOD_EATEN",
   "scent_id": "marine",

@@ -1,5 +1,5 @@
 {
-  "event_id": "aromaaffect:player_food_savory",
+  "event_id": "aromalib:player_food_savory",
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_FOOD_EATEN",
   "scent_id": "savory_spice",

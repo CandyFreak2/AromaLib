@@ -1,7 +1,7 @@
 {
   "item_triggers": [
     {
-      "item_id": "aromaaffect:winter_scent",
+      "item_id": "aromalib:winter_scent",
       "scent_name": "Winter",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -9,7 +9,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:barnyard_scent",
+      "item_id": "aromalib:barnyard_scent",
       "scent_name": "Barnyard",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -17,7 +17,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:sweet_scent",
+      "item_id": "aromalib:sweet_scent",
       "scent_name": "Sweet",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -25,7 +25,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:floral_scent",
+      "item_id": "aromalib:floral_scent",
       "scent_name": "Floral",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -33,7 +33,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:beach_scent",
+      "item_id": "aromalib:beach_scent",
       "scent_name": "Beach",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -41,7 +41,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:kindred_scent",
+      "item_id": "aromalib:kindred_scent",
       "scent_name": "Kindred",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -49,7 +49,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:petrichor_scent",
+      "item_id": "aromalib:petrichor_scent",
       "scent_name": "Petrichor",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -57,7 +57,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:marine_scent",
+      "item_id": "aromalib:marine_scent",
       "scent_name": "Marine",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -65,7 +65,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:evergreen_scent",
+      "item_id": "aromalib:evergreen_scent",
       "scent_name": "Evergreen",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -73,7 +73,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:terra_silva_scent",
+      "item_id": "aromalib:terra_silva_scent",
       "scent_name": "Terra Silva",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -81,7 +81,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:citrus_scent",
+      "item_id": "aromalib:citrus_scent",
       "scent_name": "Citrus",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -89,7 +89,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:desert_scent",
+      "item_id": "aromalib:desert_scent",
       "scent_name": "Desert",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -97,7 +97,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:savory_spice_scent",
+      "item_id": "aromalib:savory_spice_scent",
       "scent_name": "Savory Spice",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -105,7 +105,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:timber_scent",
+      "item_id": "aromalib:timber_scent",
       "scent_name": "Timber",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -113,7 +113,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:smoky_scent",
+      "item_id": "aromalib:smoky_scent",
       "scent_name": "Smoky",
       "trigger_on": "USE",
       "duration_ticks": 200,
@@ -121,7 +121,7 @@
       "cooldown_ms": 5000
     },
     {
-      "item_id": "aromaaffect:machina_scent",
+      "item_id": "aromalib:machina_scent",
       "scent_name": "Machina",
       "trigger_on": "USE",
       "duration_ticks": 200,
