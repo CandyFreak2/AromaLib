@@ -47,7 +47,6 @@
  * @since 1.0.0
  * @see com.ovrtechnology.block.BlockRegistry
  * @see com.ovrtechnology.scent.ScentRegistry
- * @see com.ovrtechnology.nose.NoseRegistry
  */
 package com.ovrtechnology.block;
 

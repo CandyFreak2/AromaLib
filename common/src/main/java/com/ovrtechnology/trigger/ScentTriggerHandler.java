@@ -10,13 +10,13 @@ import net.blay09.mods.balm.client.platform.event.callback.ClientTickCallback;
  * <p>This class registers event listeners using Architectury's cross-platform
  * event system and delegates to the appropriate trigger logic.</p>
  * 
- * <h3>Currently Implemented:</h3>
+ * Currently Implemented:
  * <ul>
  *   <li>Client tick processing for scent durations</li>
  *   <li>Passive-mode detection (proximity-based triggers when hardware connected and no nose equipped)</li>
  * </ul>
  * 
- * <h3>Future Implementations (Placeholders):</h3>
+ * Future Implementations (Placeholders):
  * <ul>
  *   <li>Biome change detection</li>
  *   <li>Mob proximity detection</li>

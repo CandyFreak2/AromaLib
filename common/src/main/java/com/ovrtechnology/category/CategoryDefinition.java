@@ -11,12 +11,6 @@ import java.util.regex.Pattern;
 
 
 /**
- *
- *
- * <p>
- *
- * </p>
- *
  * <p>Example JSON entry:</p>
  * <pre>
  * {

@@ -10,7 +10,7 @@ import lombok.With;
  * <p>This class is immutable and uses a builder pattern for construction.
  * All values have sensible defaults for connecting to OVR's local bridge.</p>
  * 
- * <h3>Default Configuration:</h3>
+ * Default Configuration:
  * <ul>
  *   <li>Host: localhost</li>
  *   <li>Port: 8080</li>

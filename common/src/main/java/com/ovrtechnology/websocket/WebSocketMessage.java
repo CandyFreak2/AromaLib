@@ -13,7 +13,7 @@ import java.util.UUID;
  * <p>Messages have a type identifier and a payload. The type helps route
  * messages to appropriate handlers, while the payload contains the actual data.</p>
  * 
- * <h3>Common Message Types:</h3>
+ * Common Message Types:
  * <ul>
  *   <li><b>scent</b> - Trigger a scent emission</li>
  *   <li><b>stop</b> - Stop current scent emission</li>

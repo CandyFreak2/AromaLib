@@ -60,7 +60,6 @@
  * @see com.ovrtechnology.structure.StructureRegistry
  * @see com.ovrtechnology.scent.ScentRegistry
  * @see com.ovrtechnology.block.BlockRegistry
- * @see com.ovrtechnology.nose.NoseRegistry
  */
 package com.ovrtechnology.structure;
 

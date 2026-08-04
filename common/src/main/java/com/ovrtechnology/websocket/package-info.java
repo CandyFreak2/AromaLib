@@ -8,7 +8,6 @@
  * 
  * <h2>Key Components</h2>
  * <ul>
- *   <li>{@link com.ovrtechnology.websocket.WebSocketClient} - Main client managing connection lifecycle</li>
  *   <li>{@link com.ovrtechnology.websocket.WebSocketConfig} - Connection configuration (host, port, etc.)</li>
  *   <li>{@link com.ovrtechnology.websocket.WebSocketMessage} - Message wrapper for send/receive</li>
  *   <li>{@link com.ovrtechnology.websocket.ConnectionState} - Connection state enum</li>
