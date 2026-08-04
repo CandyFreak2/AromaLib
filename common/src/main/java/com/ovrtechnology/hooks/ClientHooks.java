@@ -85,11 +85,11 @@ public class ClientHooks {
 
         Component prefix;
         if (connected) {
-            prefix = Component.translatable("aromaaffect.bridge.connected");
+            prefix = Component.translatable("aromalib.bridge.connected");
         } else if (reconnecting) {
-            prefix = Component.translatable("aromaaffect.bridge.reconnecting");
+            prefix = Component.translatable("aromalib.bridge.reconnecting");
         } else {
-            prefix = Component.translatable("aromaaffect.bridge.ready");
+            prefix = Component.translatable("aromalib.bridge.ready");
         }
 
         String deviceName = DEFAULT_DEVICE_NAME;
@@ -128,7 +128,7 @@ public class ClientHooks {
 
     private static void renderInfoTooltip(Font font, GuiGraphicsExtractor graphics, int mouseX, int mouseY,
                                           int screenW, int screenH) {
-        Component info = Component.translatable("aromaaffect.bridge.info");
+        Component info = Component.translatable("aromalib.bridge.info");
         List<FormattedCharSequence> lines = font.split(info, TOOLTIP_MAX_WIDTH);
 
         int textW = 0;

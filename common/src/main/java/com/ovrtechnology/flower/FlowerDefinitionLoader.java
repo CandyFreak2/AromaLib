@@ -26,7 +26,7 @@ public class FlowerDefinitionLoader {
             .setPrettyPrinting()
             .create();
 
-    public static final String FLOWERS_DIR = "aroma_flowers";
+    public static final String FLOWERS_DIR = "flowers";
 
     @Getter
     private static List<FlowerDefinition> loadedFlowers = new ArrayList<>();

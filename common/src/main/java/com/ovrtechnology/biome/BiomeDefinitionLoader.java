@@ -53,7 +53,7 @@ public class BiomeDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String BIOMES_DIR = "aroma_biomes";
+    public static final String BIOMES_DIR = "biomes";
     
     /**
      * Cached list of loaded biome definitions

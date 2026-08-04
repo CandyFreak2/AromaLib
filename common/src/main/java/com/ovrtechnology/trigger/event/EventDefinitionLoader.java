@@ -20,7 +20,7 @@ import net.minecraft.resources.Identifier;
 
 public final class EventDefinitionLoader {
 
-    public static final String EVENTS_DIR = "aromaaffect_events";
+    public static final String EVENTS_DIR = "events";
 
     private static final Gson GSON = new GsonBuilder().setLenient().create();
 

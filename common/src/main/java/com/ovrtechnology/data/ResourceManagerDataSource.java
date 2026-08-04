@@ -48,6 +48,7 @@ public final class ResourceManagerDataSource implements DataSource {
         String prefix = directory + "/";
         Map<Identifier, Resource> found = resourceManager.listResources(directory,
                 loc -> loc.getPath().endsWith(".json"));
+
         Map<Identifier, JsonElement> result = new LinkedHashMap<>();
         for (Map.Entry<Identifier, Resource> entry : found.entrySet()) {
             Identifier loc = entry.getKey();

@@ -26,14 +26,6 @@ import net.minecraft.core.registries.Registries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Main entry point for the Aroma Affect mod.
- * This mod integrates OVR's scent hardware into Minecraft through the "Nose"
- * system.
- *
- * <p>Invoked via {@code Balm.initializeMod(MOD_ID, loadContext, AromaAffect::initialize)}
- * from each platform entry point.</p>
- */
 @UtilityClass
 public final class AromaLib {
     public static final String MOD_ID = "aromalib";
@@ -69,23 +61,21 @@ public final class AromaLib {
                                 MOD_ID + "_data_reload",
                                 (net.minecraft.server.packs.resources.ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
-                                    ScentRegistry.reload(ds);
-                                    ScentDefinitionLoader.loadAllScents(ds);
-                                    BiomeDefinitionLoader.loadAllBiomes(ds);
-                                    BlockDefinitionLoader.loadAllBlocks(ds);
-                                    FlowerDefinitionLoader.loadAllFlowers(ds);
-                                    StructureDefinitionLoader.loadAllStructures(ds);
-                                    MobDefinitionLoader.loadAllMobs(ds);
-                                    EventDefinitionLoader.loadAllEvents(ds);
-                                    CategoryDefinitionLoader.loadAllCategories(ds);
+//                                    ScentRegistry.reload(ds);
+//                                    ScentDefinitionLoader.loadAllScents(ds);
+//                                    BiomeDefinitionLoader.loadAllBiomes(ds);
+//                                    BlockDefinitionLoader.loadAllBlocks(ds);
+//                                    FlowerDefinitionLoader.loadAllFlowers(ds);
+//                                    StructureDefinitionLoader.loadAllStructures(ds);
+//                                    MobDefinitionLoader.loadAllMobs(ds);
+//                                    EventDefinitionLoader.loadAllEvents(ds);
+//                                    CategoryDefinitionLoader.loadAllCategories(ds);
                                 }));
 
 
 
         // === Phase 5 — event listeners  ===============
         LookupManager.init();
-        //ActivePathManager.init();
-        //AbilityHandler.init();
         StructureSyncHandler.init();
         AromaTestCommand.init();
 

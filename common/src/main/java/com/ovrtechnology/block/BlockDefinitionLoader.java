@@ -52,7 +52,7 @@ public class BlockDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String BLOCKS_DIR = "aroma_blocks";
+    public static final String BLOCKS_DIR = "blocks";
     
     /**
      * Cached list of loaded block definitions

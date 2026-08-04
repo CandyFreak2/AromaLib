@@ -26,7 +26,7 @@ public class MobDefinitionLoader {
             .setPrettyPrinting()
             .create();
 
-    public static final String MOBS_DIR = "aroma_mobs";
+    public static final String MOBS_DIR = "mobs";
 
     @Getter
     private static List<MobDefinition> loadedMobs = new ArrayList<>();

@@ -1,6 +1,0 @@
-{
-  "sniffer_nose": "aromalib:enhanced_sniffer_nose",
-  "always": [
-    { "item": "aromalib:scent_base", "count": { "min": 1, "max": 5 } }
-  ]
-}
