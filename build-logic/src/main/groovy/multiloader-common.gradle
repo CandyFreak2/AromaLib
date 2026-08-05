@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'java'
     id 'maven-publish'
 }
 
@@ -115,13 +116,11 @@ processResources {
 }
 
 publishing {
-//    publications {
-//        register('mavenJava', MavenPublication) {
-//            version = project.version
-//            artifactId = "${mod_id.replace('_', '-')}-${project.name}"
-//            from components.java
-//        }
-//    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
