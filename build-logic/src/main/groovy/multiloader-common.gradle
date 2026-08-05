@@ -135,15 +135,11 @@ publishing {
         if (System.getenv("CI")) {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/candyfreak2/aromalib")
+                url = "https://maven.pkg.github.com/" + (System.getenv("GITHUB_REPOSITORY") ?: "CandyFreak2/AromaLib")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
                 }
-            }
-        } else {
-            maven {
-                url "file://" + System.getenv("LOCAL_MAVEN")
             }
         }
     }
