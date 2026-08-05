@@ -72,6 +72,20 @@ jobs:
         run: |
           echo "fabric=fabric/build/libs/${{ steps.mod_data.outputs.mod_id }}-fabric-${{ steps.mod_data.outputs.mod_version }}+${{ steps.mod_data.outputs.minecraft_version }}-signed.jar" >> "$GITHUB_OUTPUT"
           echo "neoforge=neoforge/build/libs/${{ steps.mod_data.outputs.mod_id }}-neoforge-${{ steps.mod_data.outputs.mod_version }}+${{ steps.mod_data.outputs.minecraft_version }}-signed.jar" >> "$GITHUB_OUTPUT"
+      - name: Create Changelog Files
+        run: |
+          echo "" > CHANGELOG.txt
+          echo "### Technical Changelog:" >> RELEASE_BODY.md
+          tag_count=$(git tag --merged | wc -l)
+          if [ "$tag_count" -ge 2 ]; then
+            latest_tag=$(git describe --tags --abbrev=0)
+            previous_tag=$(git describe --tags --abbrev=0 --exclude=$latest_tag)
+            git log "$previous_tag..$latest_tag^" --oneline --pretty="- %s (%H)" >> RELEASE_BODY.md
+            git log "$previous_tag..$latest_tag^" --oneline --pretty="%s" >> CHANGELOG.txt
+          else
+            echo "No changes"
+          fi
+          echo "### Download:" >> RELEASE_BODY.md
       - name: Publish to GitHub Packages
         env:
           GITHUB_ACTOR: ${{ github.actor }}
