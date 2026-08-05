@@ -117,7 +117,9 @@ processResources {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        register('mavenJava', MavenPublication) {
+            groupId = 'com.ovrtechnology'
+            artifactId = 'aromalib-common'
             from components.java
         }
     }
