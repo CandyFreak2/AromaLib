@@ -4,7 +4,7 @@ plugins {
 }
 
 allprojects {
-    version = "${mod_version}+MC${minecraft_version}"
+    version = "${mod_version}-${minecraft_version}"
     group = rootProject.group
 }
 
