@@ -9,7 +9,9 @@ on:
     types: [ opened, synchronize ]
 
 permissions:
+  contents: read
   packages: write
+
 
 jobs:
   publish:
@@ -33,5 +35,6 @@ jobs:
       - name: Publish package
         run: ./gradlew publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
