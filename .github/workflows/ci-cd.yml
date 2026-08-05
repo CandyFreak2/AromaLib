@@ -74,8 +74,8 @@ jobs:
           echo "neoforge=neoforge/build/libs/${{ steps.mod_data.outputs.mod_id }}-neoforge-${{ steps.mod_data.outputs.mod_version }}+${{ steps.mod_data.outputs.minecraft_version }}-signed.jar" >> "$GITHUB_OUTPUT"
       - name: Publish to GitHub Packages
         env:
-          GITHUB_ACTOR: "CandyFreak2"
-          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew publish
       - name: Stop Gradle
         run: ./gradlew --stop
