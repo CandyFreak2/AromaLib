@@ -135,7 +135,7 @@ publishing {
         if (System.getenv("CI")) {
             maven {
                 name = "GitHubPackages"
-                url = "https://github.com/candyfreak2/aromalib"
+                url = "https://github.com"
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")

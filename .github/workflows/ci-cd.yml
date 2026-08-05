@@ -51,19 +51,19 @@ jobs:
       - name: Build (Common)
         env:
           GITHUB_ACTOR: "CandyFreak2"
-          GPR_KEY: ${{ secrets.BUILD_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
           TARGET_LOADER: "common"
         run: ./gradlew :common:build
       - name: Build (Fabric)
         env:
           GITHUB_ACTOR: "CandyFreak2"
-          GPR_KEY: ${{ secrets.BUILD_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
           TARGET_LOADER: "fabric"
         run: ./gradlew :fabric:build
       - name: Build (NeoForge)
         env:
           GITHUB_ACTOR: "CandyFreak2"
-          GPR_KEY: ${{ secrets.BUILD_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
           TARGET_LOADER: "neoforge"
         run: ./gradlew :neoforge:build
       - name: Construct artifact files
