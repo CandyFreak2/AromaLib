@@ -115,13 +115,13 @@ processResources {
 }
 
 publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            version = project.version
-            artifactId = "${mod_id.replace('_', '-')}-${project.name}"
-            from components.java
-        }
-    }
+//    publications {
+//        register('mavenJava', MavenPublication) {
+//            version = project.version
+//            artifactId = "${mod_id.replace('_', '-')}-${project.name}"
+//            from components.java
+//        }
+//    }
     repositories {
         maven {
             name = "GitHubPackages"
