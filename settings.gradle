@@ -56,13 +56,18 @@ dependencyResolutionManagement {
     }
 }
 
+def includeModloader(String name) {
+    // If building with Github Actions, only include loader we want!
+    String targetLoader = Boolean.getBoolean("CI") ?: System.getenv("TARGET_LOADER")
+    if(targetLoader == null || targetLoader == name) {
+        include(name)
+    }
+}
+
 rootProject.name = 'aromalib'
 
 includeBuild('build-logic')
-include('common')
-if (include_fabric == "true") {
-    include('fabric')
-}
-if (include_neoforge == "true") {
-    include('neoforge')
-}
+
+include("common")
+includeModloader("fabric")
+includeModloader("neoforge")
