@@ -107,6 +107,20 @@ public abstract class Definition {
         return 0xFFFFFF; // Default white
     }
 
+    public int[] getColorRGB() {
+        String color = getColorHtml();
+        if (color == null || color.isEmpty()) {
+            return new int[] {255, 255, 255};
+        }
+        try {
+            String hex = color.startsWith("#") ? color.substring(1) : color;
+            int rgb = Integer.parseInt(hex, 16);
+            return new int[] {(rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF};
+        } catch (NumberFormatException e) {
+            return new int[] {255, 255, 255};
+        }
+    }
+
     /**
      * Get the color components as float array [r, g, b] in range 0.0-1.0.
      *
