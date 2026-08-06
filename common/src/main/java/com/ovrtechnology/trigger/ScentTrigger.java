@@ -42,14 +42,14 @@ public record ScentTrigger(
      */
     public static ScentTrigger create(
             String scentName,
-            String percepVisual,
+            String visual,
             ScentTriggerSource source,
             ScentPriority priority,
             int durationTicks,
             double intensity) {
         return new ScentTrigger(
             Objects.requireNonNull(scentName, "scentName cannot be null"),
-            percepVisual,
+            visual,
             Objects.requireNonNull(source, "source cannot be null"),
             Objects.requireNonNull(priority, "priority cannot be null"),
             durationTicks,
@@ -74,6 +74,15 @@ public record ScentTrigger(
             ScentPriority priority,
             int durationTicks) {
         return create(scentName, visual, source, priority, durationTicks, DEFAULT_INTENSITY);
+    }
+
+    public static ScentTrigger create(
+            String scentName,
+            ScentTriggerSource source,
+            ScentPriority priority,
+            int durationTicks,
+            double intensity) {
+        return create(scentName, null, source, priority, durationTicks, intensity);
     }
     
     /**
@@ -107,8 +116,8 @@ public record ScentTrigger(
      * @param intensity     Scent intensity (0.0 to 1.0)
      * @return a new ScentTrigger for Omara Device
      */
-    public static ScentTrigger fromOmaraDevice(String scentName, String visual, int durationTicks, double intensity) {
-        return create(scentName, visual, ScentTriggerSource.OMARA_DEVICE, ScentPriority.HIGH, durationTicks, intensity);
+    public static ScentTrigger fromOmaraDevice(String scentName, int durationTicks, double intensity) {
+        return create(scentName, null, ScentTriggerSource.OMARA_DEVICE, ScentPriority.HIGH, durationTicks, intensity);
     }
 
     /**

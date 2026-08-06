@@ -80,12 +80,8 @@ public abstract class ScentedDefinition extends Definition {
         return scentId != null && !scentId.isEmpty();
     }
 
-    protected int getTrackCost() {
+    public int getTrackCost() {
         return trackCost != null && trackCost > 0 ? trackCost : 10;
-    }
-
-    public RequiredItem getRequiredItem() {
-        return requiredItem;
     }
 
     protected int getDefaultRange() {

@@ -80,6 +80,10 @@ public final class ScentPuffOverlay {
         lastPuffIntensity = clamp01(intensity);
     }
 
+    public static void onScentPuff(String scentName, double intensity) {
+        onScentPuff(scentName, null, intensity);
+    }
+
     private static void render(GuiGraphicsExtractor graphics) {
         Minecraft mc = Minecraft.getInstance();
         if (activeMask == null || mc.player == null || mc.isPaused() || false) {
