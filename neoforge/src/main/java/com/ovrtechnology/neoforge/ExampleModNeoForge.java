@@ -1,6 +1,6 @@
 package com.ovrtechnology.neoforge;
 
-import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.aromalib.AromaLib;
 // CURIOS DISABLED (no 26.2 release) — restore these imports + wiring below when Curios publishes for 26.2.
 // import com.ovrtechnology.neoforge.accessory.CuriosIntegration;
 // import com.ovrtechnology.neoforge.accessory.NoseSlotEnforcer;

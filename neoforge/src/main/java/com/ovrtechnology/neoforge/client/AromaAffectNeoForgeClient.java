@@ -1,7 +1,7 @@
 package com.ovrtechnology.neoforge.client;
 
-import com.ovrtechnology.AromaLibClient;
-import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.aromalib.AromaLibClient;
+import com.ovrtechnology.aromalib.AromaLib;
 import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
 import net.neoforged.api.distmarker.Dist;

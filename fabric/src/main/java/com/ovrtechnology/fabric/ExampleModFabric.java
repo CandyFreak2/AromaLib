@@ -1,6 +1,6 @@
 package com.ovrtechnology.fabric;
 
-import com.ovrtechnology.AromaLib;
+import com.ovrtechnology.aromalib.AromaLib;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.fabric.platform.runtime.FabricLoadContext;
 import net.fabricmc.api.ModInitializer;

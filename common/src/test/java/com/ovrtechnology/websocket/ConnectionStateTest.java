@@ -1,5 +1,6 @@
 package com.ovrtechnology.websocket;
 
+import com.ovrtechnology.aromalib.websocket.ConnectionState;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

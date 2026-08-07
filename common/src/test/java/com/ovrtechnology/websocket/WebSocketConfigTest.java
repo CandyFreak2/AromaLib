@@ -1,5 +1,6 @@
 package com.ovrtechnology.websocket;
 
+import com.ovrtechnology.aromalib.websocket.WebSocketConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
