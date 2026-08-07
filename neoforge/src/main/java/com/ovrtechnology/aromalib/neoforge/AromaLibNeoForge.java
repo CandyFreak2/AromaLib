@@ -1,4 +1,4 @@
-package com.ovrtechnology.neoforge;
+package com.ovrtechnology.aromalib.neoforge;
 
 import com.ovrtechnology.aromalib.AromaLib;
 // CURIOS DISABLED (no 26.2 release) — restore these imports + wiring below when Curios publishes for 26.2.
@@ -11,8 +11,8 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
 @Mod(AromaLib.MOD_ID)
-public final class ExampleModNeoForge {
-    public ExampleModNeoForge(ModContainer modContainer, IEventBus modEventBus) {
+public final class AromaLibNeoForge {
+    public AromaLibNeoForge(ModContainer modContainer, IEventBus modEventBus) {
         Balm.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), AromaLib::initialize);
 
         // CURIOS DISABLED (no 26.2 release): noses work via the vanilla HEAD slot through
