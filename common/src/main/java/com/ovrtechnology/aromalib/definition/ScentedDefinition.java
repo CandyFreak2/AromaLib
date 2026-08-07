@@ -84,6 +84,8 @@ public abstract class ScentedDefinition extends Definition {
         return trackCost != null && trackCost > 0 ? trackCost : 10;
     }
 
+    public RequiredItem getRequiredItem() { return requiredItem; }
+
     protected int getDefaultRange() {
         return 5;
     }
