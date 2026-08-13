@@ -11,7 +11,7 @@ package com.ovrtechnology.aromalib.websocket;
  * <pre>{@code
  * client.addMessageHandler(message -> {
  *     if (message.isScent()) {
- *         // Trigger visual/audio feedback for scent
+ *         // Trigger perception/audio feedback for scent
  *         ScentEffectRenderer.play(message.getPayload());
  *     }
  * });

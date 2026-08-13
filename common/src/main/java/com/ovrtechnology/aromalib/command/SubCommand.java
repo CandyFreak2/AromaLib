@@ -12,7 +12,6 @@ import net.minecraft.commands.CommandSourceStack;
  *   <li>Create a class implementing this interface</li>
  *   <li>Return the subcommand name from {@link #getName()}</li>
  *   <li>Build the command structure in {@link #build(LiteralArgumentBuilder)}</li>
- *   <li>Register it in {@link AromaTestCommand#SUB_COMMANDS}</li>
  * </ol>
  */
 public interface SubCommand {

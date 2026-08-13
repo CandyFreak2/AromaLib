@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
 /**
- * Registry for custom sound events used by Aroma Affect.
+ * Registry for custom sound events used by Aroma Lib.
  *
  * <p>Registered through {@code registrars.registrar(Registries.SOUND_EVENT, ModSounds::register)}
  * from {@link AromaLib#initialize(net.blay09.mods.balm.core.BalmRegistrars)}.</p>

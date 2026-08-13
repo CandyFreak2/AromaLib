@@ -10,7 +10,11 @@ public final class Ids {
     private Ids() {}
 
     public static Identifier mod(String path) {
-        return Identifier.fromNamespaceAndPath(MOD_NAMESPACE, path);
+        return mod(MOD_NAMESPACE, path);
+    }
+
+    public static Identifier mod(String namespace, String path) {
+        return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
     public static Identifier of(String namespace, String path) {

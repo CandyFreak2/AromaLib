@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.*;
 
 /**
- * Central registry for all trackable structure definitions in Aroma Affect.
+ * Central registry for all trackable structure definitions in Aroma Lib.
  * 
  * <p>This class provides the main API for other systems to access structure information.
  * Structures define which Minecraft structures can be tracked by the Nose system, along with
@@ -277,7 +277,6 @@ public final class StructureRegistry {
     
     /**
      * Validate that all structure IDs in a list are registered.
-     * Useful for validating nose definitions that reference structures.
      * 
      * @param structureIds List of structure IDs to validate
      * @return List of invalid (unregistered) structure IDs

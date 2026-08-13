@@ -62,7 +62,7 @@ public class EventTestSubCommand implements SubCommand {
         CommandSourceStack source = context.getSource();
         var events = EventDefinitionLoader.getLoadedEvents();
         source.sendSuccess(
-                () -> Texts.lit("§6[Aroma Affect] §7Loaded " + events.size() + " events:"), false);
+                () -> Texts.lit("§6[Aroma Lib] §7Loaded " + events.size() + " events:"), false);
         for (EventDefinition def : events) {
             source.sendSuccess(
                     () ->
@@ -90,7 +90,7 @@ public class EventTestSubCommand implements SubCommand {
         source.sendSuccess(
                 () ->
                         Texts.lit(
-                                "§6[Aroma Affect] §7Throttle: §e"
+                                "§6[Aroma Lib] §7Throttle: §e"
                                         + current
                                         + "§7 / §e"
                                         + limit
@@ -105,12 +105,12 @@ public class EventTestSubCommand implements SubCommand {
 
         EventDefinition def = EventDefinitionLoader.getById(eventId).orElse(null);
         if (def == null) {
-            source.sendFailure(Texts.lit("§c[Aroma Affect] Unknown event_id: " + eventId));
+            source.sendFailure(Texts.lit("§c[Aroma Lib] Unknown event_id: " + eventId));
             return 0;
         }
 
         if (!(source.getEntity() instanceof ServerPlayer player)) {
-            source.sendFailure(Texts.lit("§c[Aroma Affect] Must be run by a player"));
+            source.sendFailure(Texts.lit("§c[Aroma Lib] Must be run by a player"));
             return 0;
         }
 
@@ -118,7 +118,7 @@ public class EventTestSubCommand implements SubCommand {
         source.sendSuccess(
                 () ->
                         Texts.lit(
-                                "§a[Aroma Affect] Sent event §e"
+                                "§a[Aroma Lib] Sent event §e"
                                         + eventId
                                         + " §a("
                                         + def.getScentId()

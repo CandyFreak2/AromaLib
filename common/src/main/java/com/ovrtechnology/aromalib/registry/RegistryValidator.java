@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Validates Aroma Affect registry entries against Minecraft's actual registries.
+ * Validates Aroma Lib registry entries against Minecraft's actual registries.
  * 
  * <p>This class performs post-load validation after the server has started,
  * when all mods have registered their content and the world's registry access
@@ -98,7 +98,7 @@ public final class RegistryValidator {
      * At this point, all mods have registered their content and the world is loaded.
      */
     private static void onServerStarted(MinecraftServer server) {
-        AromaLib.LOGGER.info("Validating Aroma Affect registries against Minecraft registries...");
+        AromaLib.LOGGER.info("Validating Aroma Lib registries against Minecraft registries...");
         
         // Clear previous validation state
         invalidStructureIds.clear();

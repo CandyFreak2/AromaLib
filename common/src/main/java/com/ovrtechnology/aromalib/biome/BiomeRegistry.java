@@ -8,10 +8,10 @@ import lombok.Getter;
 import java.util.*;
 
 /**
- * Central registry for all trackable biome definitions in Aroma Affect.
+ * Central registry for all trackable biome definitions in Aroma Lib.
  * 
  * <p>This class provides the main API for other systems to access biome information.
- * Biomes define which Minecraft biomes can be tracked by the Nose system, along with
+ * Biomes define which Minecraft biomes can be tracked, along with
  * their associated scents and display colors.</p>
  * 
  * <h2>Initialization Order</h2>
@@ -277,7 +277,6 @@ public final class BiomeRegistry {
     
     /**
      * Validate that all biome IDs in a list are registered.
-     * Useful for validating nose definitions that reference biomes.
      * 
      * @param biomeIds List of biome IDs to validate
      * @return List of invalid (unregistered) biome IDs

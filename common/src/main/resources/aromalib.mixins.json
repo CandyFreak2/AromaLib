@@ -23,6 +23,7 @@
     "JukeboxUseServerMixin",
     "ItemEquippedServerMixin",
     "SeedPlantServerMixin",
+    "CakeEatServerMixin",
     "ShoulderRidingServerMixin",
     "CampfireCookServerMixin",
     "FurnaceIgniteServerMixin",

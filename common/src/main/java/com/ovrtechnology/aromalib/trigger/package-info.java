@@ -1,5 +1,5 @@
 /**
- * Scent Trigger System for Aroma Affect.
+ * Scent Trigger System for Aroma Lib.
  * 
  * <p>This package provides a centralized system for triggering scents to OVR hardware
  * based on in-game events such as item use, biome changes, block interactions, etc.</p>

@@ -3,5 +3,6 @@
   "color": "#042931",
   "scent_id": "machina",
   "fallback_name": "Sculk Sensor",
+  "perception": "aromalib:deep_dark",
   "range": 6
 }

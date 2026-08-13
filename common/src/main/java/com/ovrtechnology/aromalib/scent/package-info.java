@@ -1,5 +1,5 @@
 /**
- * Scent system for Aroma Affect.
+ * Scent system for Aroma Lib.
  * 
  * <p>This package contains all classes related to scent definitions and management.
  * Scents represent the different aromas that can be emitted through OVR Technology's

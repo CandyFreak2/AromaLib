@@ -1,5 +1,10 @@
 {
   "id": "aromalib:water_buff",
   "color": "#A78CFF",
-  "fallback_name": "Water Buff"
+  "fallback_name": "Water Buff",
+  "sound": {
+    "id": "minecraft:block.amethyst_block.resonate",
+    "volume": 1.5,
+    "pitch": 1.0
+  }
 }

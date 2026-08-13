@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-
 /**
  * <p>Example JSON entry:</p>
  * <pre>

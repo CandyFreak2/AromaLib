@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.*;
 
 /**
- * Central registry for all scent definitions in Aroma Affect.
+ * Central registry for all scent definitions in Aroma Lib.
  * 
  * <p>This class provides the main API for other systems to access scent information.
  * It handles:</p>

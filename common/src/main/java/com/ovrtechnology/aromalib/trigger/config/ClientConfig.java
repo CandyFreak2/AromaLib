@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Persistent client configuration for Aroma Affect settings.
+ * Persistent client configuration for Aroma Lib settings.
  * Saves and loads from aromaaffect_client.json in the config directory.
  */
 public final class ClientConfig {

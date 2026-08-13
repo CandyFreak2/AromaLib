@@ -1,5 +1,5 @@
 /**
- * Structure tracking system for Aroma Affect.
+ * Structure tracking system for Aroma Lib.
  * 
  * <p>This package contains all classes related to trackable structure definitions.
  * Structures define which Minecraft structures (villages, strongholds, dungeons, etc.)

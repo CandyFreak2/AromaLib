@@ -2,6 +2,7 @@ package com.ovrtechnology.aromalib.definition.trigger;
 
 import com.google.gson.annotations.SerializedName;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
+import com.ovrtechnology.aromalib.util.SoundRef;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,7 +28,13 @@ public abstract class DefinitionTrigger {
      *
      */
     @SerializedName("perception")
-    protected String perceptionVisual;
+    protected String perception;
+
+    /**
+     *
+     */
+    @SerializedName("sound")
+    protected SoundRef sound;
 
     /**
      * Default range for proximity triggers (in blocks).

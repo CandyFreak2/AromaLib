@@ -1,5 +1,10 @@
 {
   "id": "aromalib:deep_dark",
   "color": "#042A2A",
-  "fallback_name": "Deep Dark"
+  "fallback_name": "Deep Dark",
+  "sound": {
+    "id": "minecraft:entity.allay.hurt",
+    "volume": 1.0,
+    "pitch": 1.0
+  }
 }

@@ -12,7 +12,7 @@ import lombok.experimental.UtilityClass;
 import net.blay09.mods.balm.client.BalmClientRegistrars;
 
 /**
- * Client-side initialization for the Aroma Affect mod.
+ * Client-side initialization for the Aroma Lib mod.
  * This handles all client-only systems like menus, rendering, and keybindings.
  *
  * <p>Invoked via {@code BalmClient.initializeMod(MOD_ID, loadContext, AromaAffectClient::initialize)}
@@ -33,7 +33,7 @@ public final class AromaLibClient {
             return;
         }
         
-        AromaLib.LOGGER.info("Initializing Aroma Affect client...");
+        AromaLib.LOGGER.info("Initializing Aroma Lib client...");
 
         ClientHooks.init();
 
@@ -61,7 +61,7 @@ public final class AromaLibClient {
         // - Sound manager
         
         initialized = true;
-        AromaLib.LOGGER.info("Aroma Affect client initialized successfully!");
+        AromaLib.LOGGER.info("Aroma Lib client initialized successfully!");
     }
 
     /**

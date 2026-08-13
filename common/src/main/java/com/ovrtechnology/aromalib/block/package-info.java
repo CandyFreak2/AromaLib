@@ -1,5 +1,5 @@
 /**
- * Block tracking system for Aroma Affect.
+ * Block tracking system for Aroma Lib.
  * 
  * <p>This package contains all classes related to trackable block definitions.
  * Blocks define which Minecraft blocks can be detected by the Nose system,

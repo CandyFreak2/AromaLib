@@ -10,7 +10,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 
 /**
- * NeoForge-specific client initialization for Aroma Affect.
+ * NeoForge-specific client initialization for Aroma Lib.
  *
  * <p>Most client wiring (model layers, entity renderers, menu screens, key
  * mappings, HUD overlays, OVR WebSocket) goes through Balm via

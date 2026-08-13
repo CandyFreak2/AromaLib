@@ -1,5 +1,10 @@
 {
   "id": "aromalib:enderman",
   "color": "#370F44",
-  "fallback_name": "Enderman"
+  "fallback_name": "Enderman",
+  "sound": {
+    "id": "minecraft:entity.enderman.ambient",
+    "volume": 1.0,
+    "pitch": 3.0
+  }
 }

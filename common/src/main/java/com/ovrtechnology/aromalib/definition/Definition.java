@@ -1,6 +1,7 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
+import com.ovrtechnology.aromalib.util.SoundRef;
 import lombok.Getter;
 
 import java.util.regex.Pattern;
@@ -36,7 +37,11 @@ public abstract class Definition {
 
     @SerializedName("perception")
     @Getter
-    protected String perceptionVisual;
+    protected String perception;
+
+    @SerializedName("sound")
+    @Getter
+    protected SoundRef sound;
 
     /**
      * Default constructor for GSON deserialization.

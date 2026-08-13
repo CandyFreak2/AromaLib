@@ -134,7 +134,7 @@ public class LookupSubCommand implements SubCommand {
     
     private int showUsage(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
-        source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §7Lookup usage:"), false);
+        source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §7Lookup usage:"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest lookup biome <biome_id> [radius]"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest lookup structure <structure_id> [radius]"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest lookup block <block_id> [radius]"), false);
@@ -165,7 +165,7 @@ public class LookupSubCommand implements SubCommand {
         
         // Send "searching" message
         source.sendSuccess(() -> Component.literal(
-                "§6[Aroma Affect] §7Searching for §e" + type.getId() + " §7'§f" + resourceId + "§7'..."
+                "§6[Aroma Lib] §7Searching for §e" + type.getId() + " §7'§f" + resourceId + "§7'..."
         ), false);
         
         // Execute async lookup
@@ -191,7 +191,7 @@ public class LookupSubCommand implements SubCommand {
             int yLevel = LookupManager.getInstance().findYLevel(serverLevel, pos.getX(), pos.getZ(), result.target().type());
 
             // Build result message with position
-            source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §aFound! "), false);
+            source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aFound! "), false);
             source.sendSuccess(() -> Component.literal(
                     String.format("§7  Position: §aX: %d§7, §aY: %d§7, §aZ: %d", 
                             pos.getX(), yLevel, pos.getZ())
@@ -231,7 +231,7 @@ public class LookupSubCommand implements SubCommand {
             };
             
             source.sendFailure(Component.literal(
-                    "§6[Aroma Affect] §c" + reason + ": §7" + result.target().resourceId()
+                    "§6[Aroma Lib] §c" + reason + ": §7" + result.target().resourceId()
             ));
         }
     }

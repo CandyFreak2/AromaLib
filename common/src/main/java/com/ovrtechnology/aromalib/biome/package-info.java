@@ -1,5 +1,5 @@
 /**
- * Biome tracking system for Aroma Affect.
+ * Biome tracking system for Aroma Lib.
  * 
  * <p>This package contains all classes related to trackable biome definitions.
  * Biomes define which Minecraft biomes can be detected by the Nose system,

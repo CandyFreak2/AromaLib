@@ -148,7 +148,7 @@ public final class PlayerStateTickHandler {
 
         ScentTrigger trigger =
                 ScentTrigger.create(
-                        scentName, def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), -1, def.getIntensity());
+                        scentName, def.getPerception(), def.getSound(), def.resolveSource(), def.getPriority(), -1, def.getIntensity());
 
         boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
         if (fired) {
@@ -336,7 +336,8 @@ public final class PlayerStateTickHandler {
                     ScentTrigger trigger =
                             ScentTrigger.create(
                                     scentName,
-                                    def.getPerceptionVisual(),
+                                    def.getPerception(),
+                                    def.getSound(),
                                     def.resolveSource(),
                                     def.getPriority(),
                                     1,
@@ -418,7 +419,7 @@ public final class PlayerStateTickHandler {
 
     private static void evaluateSleep(LocalPlayer player, EventTriggersConfig config) {
         boolean nowSleeping = player.isSleeping();
-        if (wasSleeping && !nowSleeping) {
+        if (!wasSleeping && nowSleeping) {
             fireOneShotByTriggerType(TT_PLAYER_SLEPT, config, def -> true, -1.0);
         }
         wasSleeping = nowSleeping;
@@ -458,7 +459,7 @@ public final class PlayerStateTickHandler {
 
             ScentTrigger trigger =
                     ScentTrigger.create(
-                            scentName, def.getPerceptionVisual(), def.resolveSource(), def.getPriority(), 1, intensity);
+                            scentName, def.getPerception(), def.getSound(),def.resolveSource(), def.getPriority(), 1, intensity);
             boolean fired = ScentTriggerManager.getInstance().trigger(trigger);
             if (fired) {
                 lastFiredAtMs.put(def.getId(), now);

@@ -1,5 +1,7 @@
 package com.ovrtechnology.aromalib.trigger;
 
+import com.ovrtechnology.aromalib.util.SoundRef;
+
 import java.util.Objects;
 
 /**
@@ -17,7 +19,8 @@ import java.util.Objects;
  */
 public record ScentTrigger(
     String scentName,
-    String perceptionVisual,
+    String perception,
+    SoundRef sound,
     ScentTriggerSource source,
     ScentPriority priority,
     int durationTicks,
@@ -43,6 +46,7 @@ public record ScentTrigger(
     public static ScentTrigger create(
             String scentName,
             String visual,
+            SoundRef sound,
             ScentTriggerSource source,
             ScentPriority priority,
             int durationTicks,
@@ -50,6 +54,7 @@ public record ScentTrigger(
         return new ScentTrigger(
             Objects.requireNonNull(scentName, "scentName cannot be null"),
             visual,
+            sound,
             Objects.requireNonNull(source, "source cannot be null"),
             Objects.requireNonNull(priority, "priority cannot be null"),
             durationTicks,
@@ -70,19 +75,21 @@ public record ScentTrigger(
     public static ScentTrigger create(
             String scentName,
             String visual,
+            SoundRef sound,
             ScentTriggerSource source,
             ScentPriority priority,
             int durationTicks) {
-        return create(scentName, visual, source, priority, durationTicks, DEFAULT_INTENSITY);
+        return create(scentName, visual, sound, source, priority, durationTicks, DEFAULT_INTENSITY);
     }
 
     public static ScentTrigger create(
             String scentName,
+            SoundRef sound,
             ScentTriggerSource source,
             ScentPriority priority,
             int durationTicks,
             double intensity) {
-        return create(scentName, null, source, priority, durationTicks, intensity);
+        return create(scentName, null, sound, source, priority, durationTicks, intensity);
     }
     
     /**
@@ -93,8 +100,8 @@ public record ScentTrigger(
      * @param intensity     Scent intensity (0.0 to 1.0)
      * @return a new ScentTrigger for item use
      */
-    public static ScentTrigger fromItemUse(String scentName, String visual, int durationTicks, double intensity) {
-        return create(scentName, visual, ScentTriggerSource.ITEM_USE, ScentPriority.HIGH, durationTicks, intensity);
+    public static ScentTrigger fromItemUse(String scentName, String visual, SoundRef sound, int durationTicks, double intensity) {
+        return create(scentName, visual, sound, ScentTriggerSource.ITEM_USE, ScentPriority.HIGH, durationTicks, intensity);
     }
     
     /**
@@ -104,8 +111,8 @@ public record ScentTrigger(
      * @param durationTicks Duration in ticks
      * @return a new ScentTrigger for item use
      */
-    public static ScentTrigger fromItemUse(String scentName, String visual, int durationTicks) {
-        return fromItemUse(scentName, visual, durationTicks, DEFAULT_INTENSITY);
+    public static ScentTrigger fromItemUse(String scentName, String visual, SoundRef sound, int durationTicks) {
+        return fromItemUse(scentName, visual, sound, durationTicks, DEFAULT_INTENSITY);
     }
     
     /**
@@ -117,7 +124,7 @@ public record ScentTrigger(
      * @return a new ScentTrigger for Omara Device
      */
     public static ScentTrigger fromOmaraDevice(String scentName, int durationTicks, double intensity) {
-        return create(scentName, null, ScentTriggerSource.OMARA_DEVICE, ScentPriority.HIGH, durationTicks, intensity);
+        return create(scentName, null, null, ScentTriggerSource.OMARA_DEVICE, ScentPriority.HIGH, durationTicks, intensity);
     }
 
     /**
@@ -129,8 +136,8 @@ public record ScentTrigger(
      * @param intensity     Scent intensity (0.0 to 1.0)
      * @return a new ScentTrigger for passive mode
      */
-    public static ScentTrigger fromPassiveMode(String scentName, String visual, ScentPriority priority, int durationTicks, double intensity) {
-        return create(scentName, visual, ScentTriggerSource.PASSIVE_MODE, priority, durationTicks, intensity);
+    public static ScentTrigger fromPassiveMode(String scentName, String visual, SoundRef sound, ScentPriority priority, int durationTicks, double intensity) {
+        return create(scentName, visual, sound, ScentTriggerSource.PASSIVE_MODE, priority, durationTicks, intensity);
     }
     
     /**
@@ -176,7 +183,8 @@ public record ScentTrigger(
     public String toString() {
         return "ScentTrigger{" +
                 "scentName='" + scentName + '\'' +
-                ", visual=" + perceptionVisual +
+                ", perception=" + perception +
+                ", sound=" + sound +
                 ", source=" + source +
                 ", priority=" + priority +
                 ", durationTicks=" + durationTicks +

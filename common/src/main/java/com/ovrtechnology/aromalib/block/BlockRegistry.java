@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.*;
 
 /**
- * Central registry for all trackable block definitions in Aroma Affect.
+ * Central registry for all trackable block definitions in Aroma Lib.
  * 
  * <p>This class provides the main API for other systems to access block information.
  * Blocks define which Minecraft blocks can be tracked by the Nose system, along with
@@ -226,7 +226,6 @@ public final class BlockRegistry {
     
     /**
      * Validate that all block IDs in a list are registered.
-     * Useful for validating nose definitions that reference blocks.
      * 
      * @param blockIds List of block IDs to validate
      * @return List of invalid (unregistered) block IDs

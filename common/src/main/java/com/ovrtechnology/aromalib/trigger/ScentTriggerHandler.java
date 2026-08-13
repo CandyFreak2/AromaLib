@@ -13,7 +13,7 @@ import net.blay09.mods.balm.client.platform.event.callback.ClientTickCallback;
  * Currently Implemented:
  * <ul>
  *   <li>Client tick processing for scent durations</li>
- *   <li>Passive-mode detection (proximity-based triggers when hardware connected and no nose equipped)</li>
+ *   <li>Passive-mode detection (proximity-based triggers when hardware connected)</li>
  * </ul>
  * 
  * Future Implementations (Placeholders):

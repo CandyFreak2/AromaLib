@@ -28,7 +28,7 @@
   "menu.aromalib.category.flowers.description": "Track flowers and flora in the world",
 
   "menu.aromalib.category.settings": "Settings",
-  "menu.aromalib.category.settings.description": "Configure Aroma Affect and connected devices",
+  "menu.aromalib.category.settings.description": "Configure Aroma Lib and connected devices",
   
   "menu.aromalib.button.config": "Settings",
   "menu.aromalib.button.compass": "Compass",
@@ -36,7 +36,7 @@
   "menu.aromalib.button.passive.off": "Passive Mode: OFF",
   "menu.aromalib.category.locked": "Equip a Nose to unlock",
   
-  "menu.aromalib.config.title": "Aroma Affect Configuration",
+  "menu.aromalib.config.title": "Aroma Lib Configuration",
   "menu.aromalib.config.placeholder": "Configuration options coming soon...",
   "menu.aromalib.config.instructions": "Press ESC to close",
   "menu.aromalib.config.tab.general": "General",
@@ -180,11 +180,11 @@
   "item.aromalib.aroma_guide.distance": "Nearest Village: %s blocks",
   "item.aromalib.aroma_guide.searching": "Searching for villages...",
 
-  "guide.aromalib.title": "Aroma Affect Guide",
+  "guide.aromalib.title": "Aroma Lib Guide",
   "guide.aromalib.subtitle": "Scent-Powered Exploration for Minecraft",
-  "guide.aromalib.command.open": "Opening Aroma Affect Guide...",
+  "guide.aromalib.command.open": "Opening Aroma Lib Guide...",
 
-  "config.aromalib.title": "Aroma Affect Settings",
+  "config.aromalib.title": "Aroma Lib Settings",
   "config.aromalib.section.general": "General",
   "config.aromalib.section.passive": "Passive Mode",
   "config.aromalib.section.events": "Events",
@@ -237,5 +237,5 @@
   "aromalib.bridge.connected": "Connected to",
   "aromalib.bridge.reconnecting": "Reconnecting to",
   "aromalib.bridge.ready": "Ready for",
-  "aromalib.bridge.info": "Omara is an optional scent device that works with Aroma Affect to let you physically smell Minecraft while you play. The mod is fully playable without it."
+  "aromalib.bridge.info": "Omara is an optional scent device that works with Aroma Lib to let you physically smell Minecraft while you play. The mod is fully playable without it."
 }

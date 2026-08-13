@@ -197,6 +197,8 @@ public final class ScentTriggerConfigLoader {
             trigger.setMode(biome.getMode());
             trigger.setPriority(biome.getPriority());
             trigger.setIntensity(biome.getIntensity());
+            trigger.setPerception(biome.getPerception());
+            trigger.setSound(biome.getSound());
 
             validateScentName(scentName, "biome", biome.getId());
             biomeTriggerMap.put(biome.getId(), trigger);
@@ -227,6 +229,8 @@ public final class ScentTriggerConfigLoader {
             trigger.setRange(block.getRange());
             trigger.setPriority(block.getPriority());
             trigger.setIntensity(block.getIntensity());
+            trigger.setPerception(block.getPerception());
+            trigger.setSound(block.getSound());
 
             validateScentName(scentName, "block", block.getId());
             blockTriggerMap.put(block.getId(), trigger);
@@ -257,6 +261,8 @@ public final class ScentTriggerConfigLoader {
             trigger.setRange(flower.getRange());
             trigger.setPriority(flower.getPriority());
             trigger.setIntensity(flower.getIntensity());
+            trigger.setPerception(flower.getPerception());
+            trigger.setSound(flower.getSound());
 
             validateScentName(scentName, "flower", flower.getId());
             blockTriggerMap.put(flower.getId(), trigger);
@@ -287,6 +293,8 @@ public final class ScentTriggerConfigLoader {
             trigger.setRange(structure.getRange());
             trigger.setPriority(structure.getPriority());
             trigger.setIntensity(structure.getIntensity());
+            trigger.setPerception(structure.getPerception());
+            trigger.setSound(structure.getSound());
 
             validateScentName(scentName, "structure", structure.getId());
             structureTriggerMap.put(structure.getId(), trigger);
@@ -316,6 +324,8 @@ public final class ScentTriggerConfigLoader {
             trigger.setRange(mob.getRange());
             trigger.setPriority(mob.getPriority());
             trigger.setIntensity(mob.getIntensity());
+            trigger.setPerception(mob.getPerception());
+            trigger.setSound(mob.getSound());
 
             validateScentName(scentName, "mob", mob.getId());
             mobTriggerMap.put(mob.getId(), trigger);

@@ -15,6 +15,7 @@ import com.ovrtechnology.aromalib.scent.ScentRegistry;
 import com.ovrtechnology.aromalib.structure.StructureDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
+import com.ovrtechnology.aromalib.trigger.event.EventDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
@@ -28,7 +29,7 @@ public final class AromaLib {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static void initialize(BalmRegistrars registrars) {
-        LOGGER.info("Initializing Aroma Affect...");
+        LOGGER.info("Initializing Aroma Lib...");
 
         // === Pure JSON loaders (no registry / no events) =====================
         ScentRegistry.init();
@@ -40,6 +41,7 @@ public final class AromaLib {
         MobDefinitionLoader.loadAllMobs();
         CategoryDefinitionLoader.loadAllCategories();
         ScentTriggerManager.init();
+        EventDefinitionLoader.loadAllEvents();
 
         // === Phase 6 — networking  ===================
         ScentEventNetworking.init();
@@ -65,7 +67,6 @@ public final class AromaLib {
 //                                    StructureDefinitionLoader.loadAllStructures(ds);
 //                                    MobDefinitionLoader.loadAllMobs(ds);
 //                                    EventDefinitionLoader.loadAllEvents(ds);
-//                                    CategoryDefinitionLoader.loadAllCategories(ds);
                                 }));
 
 
@@ -75,6 +76,6 @@ public final class AromaLib {
         StructureSyncHandler.init();
         AromaTestCommand.init();
 
-        LOGGER.info("Aroma Affect initialized successfully!");
+        LOGGER.info("Aroma Lib initialized successfully!");
     }
 }

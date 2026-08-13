@@ -25,7 +25,6 @@ import java.util.List;
  *   <li>{@code /aromatest registry block} - List all registered blocks</li>
  *   <li>{@code /aromatest registry biome} - List all registered biomes</li>
  *   <li>{@code /aromatest registry scent} - List all registered scents</li>
- *   <li>{@code /aromatest registry nose} - List all registered noses</li>
  * </ul>
  */
 public class RegistrySubCommand implements SubCommand {
@@ -37,7 +36,7 @@ public class RegistrySubCommand implements SubCommand {
     
     @Override
     public String getDescription() {
-        return "List registered structures, blocks, biomes, scents, or noses";
+        return "List registered structures, blocks, biomes, or scents";
     }
     
     @Override
@@ -51,19 +50,16 @@ public class RegistrySubCommand implements SubCommand {
                         .executes(ctx -> executeList(ctx, RegistryType.BIOME)))
                 .then(Commands.literal("scent")
                         .executes(ctx -> executeList(ctx, RegistryType.SCENT)))
-                .then(Commands.literal("nose")
-                        .executes(ctx -> executeList(ctx, RegistryType.NOSE)))
                 .executes(this::showUsage);
     }
     
     private int showUsage(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
-        source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §7Registry usage:"), false);
+        source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §7Registry usage:"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest registry structure §8- List structures"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest registry block §8- List blocks"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest registry biome §8- List biomes"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest registry scent §8- List scents"), false);
-        source.sendSuccess(() -> Component.literal("§e  /aromatest registry nose §8- List noses"), false);
         return Command.SINGLE_SUCCESS;
     }
     
@@ -75,14 +71,14 @@ public class RegistrySubCommand implements SubCommand {
         
         if (count == 0) {
             source.sendSuccess(() -> Component.literal(
-                    "§6[Aroma Affect] §7No " + type.getDisplayName() + " registered."
+                    "§6[Aroma Lib] §7No " + type.getDisplayName() + " registered."
             ), false);
             return Command.SINGLE_SUCCESS;
         }
         
         // Header
         source.sendSuccess(() -> Component.literal(
-                "§6[Aroma Affect] §7Registered " + type.getDisplayName() + " §8(§e" + count + "§8):"
+                "§6[Aroma Lib] §7Registered " + type.getDisplayName() + " §8(§e" + count + "§8):"
         ), false);
         
         // List IDs comma-separated
@@ -116,11 +112,6 @@ public class RegistrySubCommand implements SubCommand {
                     ids.add(id);
                 }
             }
-//            case NOSE -> {
-//                for (String id : NoseRegistry.getAllNoseIds()) {
-//                    ids.add(id);
-//                }
-//            }
         }
         
         return ids;
@@ -133,8 +124,7 @@ public class RegistrySubCommand implements SubCommand {
         STRUCTURE("structures"),
         BLOCK("blocks"),
         BIOME("biomes"),
-        SCENT("scents"),
-        NOSE("noses");
+        SCENT("scents");
         
         private final String displayName;
         
