@@ -3,6 +3,7 @@
   "category": "PLAYER_ACTION",
   "trigger_type": "PLAYER_FOOD_EATEN",
   "scent_id": "citrus",
+  "perception": "aromalib:golden",
   "intensity": 1.0,
   "priority": "MEDIUM",
   "duration_mode": "ONE_SHOT",

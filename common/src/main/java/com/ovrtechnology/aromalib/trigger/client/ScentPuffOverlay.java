@@ -6,6 +6,7 @@ import com.ovrtechnology.aromalib.category.CategoryDefinitionLoader;
 import com.ovrtechnology.aromalib.scent.ScentDefinition;
 import com.ovrtechnology.aromalib.scent.ScentRegistry;
 import com.ovrtechnology.aromalib.util.ColorHelper;
+import com.ovrtechnology.aromalib.util.ResourceUtil;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -25,6 +26,10 @@ public final class ScentPuffOverlay {
     private static final long FADE_IN_MS = 90L;
     private static final long FADE_OUT_MS = 800L;
     private static final float MIN_VISIBLE_ALPHA = 0.28f;
+
+    private static final int SHEET_FRAME_W = 160;
+    private static final int SHEET_FRAME_H = 90;
+    private static final long SHEET_FRAME_MS = 120L;
 
     private static boolean initialized = false;
 
@@ -103,19 +108,22 @@ public final class ScentPuffOverlay {
         int height = mc.getWindow().getGuiScaledHeight();
 
         int tint = ARGB.color(finalAlpha, ColorHelper.getColorAsInt(categoryColor));
+        int frames = ResourceUtil.getTextureHeight(activeMask) / SHEET_FRAME_H;
+        int frame = (int) ((elapsed / SHEET_FRAME_MS) % frames);
+
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 activeMask,
                 0,
                 0,
                 0.0f,
-                0.0f,
+                (frame * SHEET_FRAME_H),
                 width,
                 height,
-                width,
-                height,
-                width,
-                height,
+                SHEET_FRAME_W,
+                SHEET_FRAME_H,
+                SHEET_FRAME_W,
+                SHEET_FRAME_H * frames,
                 tint
         );
     }
