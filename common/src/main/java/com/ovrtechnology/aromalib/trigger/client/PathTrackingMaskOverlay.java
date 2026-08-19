@@ -17,6 +17,7 @@ import java.util.Map;
  * Fullscreen scent mask overlay for active path tracking.
  * Triggered once per path scent puff (initial + recurring pulses).
  */
+// @TODO
 public final class PathTrackingMaskOverlay {
 
     private static final Map<String, Identifier> SCENT_MASKS = new HashMap<>();

@@ -1,12 +1,9 @@
 package com.ovrtechnology.aromalib.registry;
 
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.biome.BiomeDefinition;
-import com.ovrtechnology.aromalib.biome.BiomeRegistry;
-import com.ovrtechnology.aromalib.block.BlockDefinition;
-import com.ovrtechnology.aromalib.block.BlockRegistry;
-import com.ovrtechnology.aromalib.structure.StructureDefinition;
-import com.ovrtechnology.aromalib.structure.StructureRegistry;
+import com.ovrtechnology.aromalib.definition.BiomeDefinition;
+import com.ovrtechnology.aromalib.definition.BlockDefinition;
+import com.ovrtechnology.aromalib.definition.StructureDefinition;
 import net.blay09.mods.balm.platform.event.callback.ServerLifecycleCallback;
 import lombok.Getter;
 import net.minecraft.core.Registry;

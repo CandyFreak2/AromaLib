@@ -1,15 +1,13 @@
 package com.ovrtechnology.aromalib.trigger.client;
 
-import com.ovrtechnology.aromalib.category.CategoryDefinition;
-import com.ovrtechnology.aromalib.category.CategoryDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.CategoryDefinition;
+import com.ovrtechnology.aromalib.definition.loader.CategoryDefinitionLoader;
 import com.ovrtechnology.aromalib.util.SoundRef;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.logging.Level;
 
 public final class SoundTrigger {
 

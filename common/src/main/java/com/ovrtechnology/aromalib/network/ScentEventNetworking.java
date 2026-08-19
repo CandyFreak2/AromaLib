@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.network;
 
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.scent.ScentRegistry;
+import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.trigger.ScentTrigger;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.event.EventDebugLog;

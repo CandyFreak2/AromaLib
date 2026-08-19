@@ -1,20 +1,21 @@
 package com.ovrtechnology.aromalib;
 
-import com.ovrtechnology.aromalib.biome.BiomeDefinitionLoader;
-import com.ovrtechnology.aromalib.block.BlockDefinitionLoader;
-import com.ovrtechnology.aromalib.category.CategoryDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.BiomeDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.BlockDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.CategoryDefinitionLoader;
 import com.ovrtechnology.aromalib.command.AromaTestCommand;
 import com.ovrtechnology.aromalib.data.ResourceManagerDataSource;
-import com.ovrtechnology.aromalib.flower.FlowerDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.FlowerDefinitionLoader;
 import com.ovrtechnology.aromalib.hooks.ServerHooks;
 import com.ovrtechnology.aromalib.lookup.LookupManager;
-import com.ovrtechnology.aromalib.mob.MobDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
-import com.ovrtechnology.aromalib.scent.ScentDefinitionLoader;
-import com.ovrtechnology.aromalib.scent.ScentRegistry;
-import com.ovrtechnology.aromalib.structure.StructureDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.ScentDefinitionLoader;
+import com.ovrtechnology.aromalib.registry.ScentRegistry;
+import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
+import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
 import com.ovrtechnology.aromalib.trigger.event.EventDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
@@ -39,9 +40,10 @@ public final class AromaLib {
         FlowerDefinitionLoader.loadAllFlowers();
         StructureDefinitionLoader.loadAllStructures();
         MobDefinitionLoader.loadAllMobs();
+        EventDefinitionLoader.loadAllEvents();
         CategoryDefinitionLoader.loadAllCategories();
         ScentTriggerManager.init();
-        EventDefinitionLoader.loadAllEvents();
+        ScentTriggerConfigLoader.init();
 
         // === Phase 6 — networking  ===================
         ScentEventNetworking.init();

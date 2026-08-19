@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.data.ClasspathDataSource;
 import com.ovrtechnology.aromalib.data.DataSource;
-import com.ovrtechnology.aromalib.scent.ScentRegistry;
+import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

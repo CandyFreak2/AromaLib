@@ -1,10 +1,10 @@
 package com.ovrtechnology.aromalib.trigger.client;
 
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.category.CategoryDefinition;
-import com.ovrtechnology.aromalib.category.CategoryDefinitionLoader;
-import com.ovrtechnology.aromalib.scent.ScentDefinition;
-import com.ovrtechnology.aromalib.scent.ScentRegistry;
+import com.ovrtechnology.aromalib.definition.CategoryDefinition;
+import com.ovrtechnology.aromalib.definition.loader.CategoryDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.ScentDefinition;
+import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.util.ColorHelper;
 import com.ovrtechnology.aromalib.util.ResourceUtil;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;

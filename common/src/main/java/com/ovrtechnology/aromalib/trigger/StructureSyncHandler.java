@@ -1,6 +1,7 @@
 package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.network.PathScentNetworking;
 import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
 import com.ovrtechnology.aromalib.trigger.config.StructureTriggerDefinition;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
@@ -52,8 +53,7 @@ public final class StructureSyncHandler {
 
                 if (!Objects.equals(currentStructure, previous)) {
                     playerStructures.put(player.getUUID(), currentStructure);
-                    // @TODO
-                    //PathScentNetworking.sendStructureSync(player, currentStructure);
+                    PathScentNetworking.sendStructureSync(player, currentStructure);
                     AromaLib.LOGGER.debug("[StructureSync] Player {} structure: {} -> {}",
                             player.getName().getString(), previous, currentStructure);
                 }

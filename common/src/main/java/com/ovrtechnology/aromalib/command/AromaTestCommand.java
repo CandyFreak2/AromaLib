@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.command.sub.EventTestSubCommand;
 import com.ovrtechnology.aromalib.command.sub.LookupSubCommand;
+import com.ovrtechnology.aromalib.command.sub.PathSubCommand;
 import com.ovrtechnology.aromalib.command.sub.PingSubCommand;
 import net.blay09.mods.balm.Balm;
 import net.minecraft.commands.CommandSourceStack;
@@ -35,6 +36,7 @@ public final class AromaTestCommand {
         register(new PingSubCommand());
         register(new LookupSubCommand());
         register(new EventTestSubCommand());
+        register(new PathSubCommand());
     }
     
     private AromaTestCommand() {
