@@ -53,7 +53,7 @@ public class BlockDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String BLOCKS_DIR = "blocks";
+    public static final String DIRECTORY = "blocks";
     
     /**
      * Cached list of loaded block definitions
@@ -94,7 +94,7 @@ public class BlockDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(BLOCKS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 BlockDefinition block = GSON.fromJson(entry.getValue(), BlockDefinition.class);

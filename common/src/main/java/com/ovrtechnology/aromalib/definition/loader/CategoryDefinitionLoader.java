@@ -18,7 +18,7 @@ public class CategoryDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String BLOCKS_DIR = "category";
+    public static final String DIRECTORY = "category";
     
 
     @Getter
@@ -38,7 +38,7 @@ public class CategoryDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(BLOCKS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 CategoryDefinition cat = GSON.fromJson(entry.getValue(), CategoryDefinition.class);

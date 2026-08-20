@@ -37,16 +37,21 @@ public enum ClasspathDataSource implements DataSource {
     @Override
     public Map<Identifier, JsonElement> listJson(String directory) {
         Map<Identifier, JsonElement> result = new LinkedHashMap<>();
-        JsonElement index = read(DataSourceInfo.BASE + "_indexes/" + directory + ".json");
+        String dir = DataSourceInfo.DIRECTORY + directory;
+
+        int split = dir.lastIndexOf('/');
+        String parent = split >= 0 ? dir.substring(0, split + 1) : "";
+        String dirName = split >= 0 ? dir.substring(split + 1) : dir;
+        JsonElement index = read(DataSourceInfo.DATA_ROOT + parent + "_indexes/" + dirName + ".json");
         if (index == null || !index.isJsonArray()) {
             return result;
         }
         JsonArray names = index.getAsJsonArray();
         for (JsonElement nameEl : names) {
             String name = nameEl.getAsString();
-            JsonElement content = read(DataSourceInfo.BASE + directory + "/" + name + ".json");
+            JsonElement content = read(DataSourceInfo.DATA_ROOT + dir + "/" + name + ".json");
             if (content == null) {
-                AromaLib.LOGGER.warn("Indexed resource missing: {}/{}", directory, name);
+                AromaLib.LOGGER.warn("Indexed resource missing: {}/{}", dir, name);
                 continue;
             }
             result.put(Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, name), content);

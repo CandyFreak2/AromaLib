@@ -47,7 +47,7 @@ public class ScentDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String SCENTS_DIR = "scents";
+    public static final String DIRECTORY = "scents";
     
     /**
      * Cached list of loaded scent definitions
@@ -77,7 +77,7 @@ public class ScentDefinitionLoader {
         loadedScents.clear();
         loadedIds.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(SCENTS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 ScentDefinition scent = GSON.fromJson(entry.getValue(), ScentDefinition.class);

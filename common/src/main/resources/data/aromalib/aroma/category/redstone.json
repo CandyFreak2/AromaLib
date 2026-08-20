@@ -1,6 +1,5 @@
 {
   "id": "aromalib:redstone",
-  "color": "#7C4749",
   "fallback_name": "Redstone",
   "mask": "aromalib:textures/mask/machina/redstone",
   "sound": {

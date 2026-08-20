@@ -54,7 +54,7 @@ public class BiomeDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String BIOMES_DIR = "biomes";
+    public static final String DIRECTORY = "biomes";
     
     /**
      * Cached list of loaded biome definitions
@@ -96,7 +96,7 @@ public class BiomeDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(BIOMES_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 BiomeDefinition biome = GSON.fromJson(entry.getValue(), BiomeDefinition.class);

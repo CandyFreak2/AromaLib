@@ -27,7 +27,7 @@ public class FlowerDefinitionLoader {
             .setPrettyPrinting()
             .create();
 
-    public static final String FLOWERS_DIR = "flowers";
+    public static final String DIRECTORY = "flowers";
 
     @Getter
     private static List<FlowerDefinition> loadedFlowers = new ArrayList<>();
@@ -46,7 +46,7 @@ public class FlowerDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(FLOWERS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 FlowerDefinition flower = GSON.fromJson(entry.getValue(), FlowerDefinition.class);

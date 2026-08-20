@@ -10,13 +10,12 @@ import com.ovrtechnology.aromalib.hooks.ServerHooks;
 import com.ovrtechnology.aromalib.lookup.LookupManager;
 import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
-import com.ovrtechnology.aromalib.definition.loader.ScentDefinitionLoader;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
 import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
-import com.ovrtechnology.aromalib.trigger.event.EventDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.EventDefinitionLoader;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
@@ -34,7 +33,6 @@ public final class AromaLib {
 
         // === Pure JSON loaders (no registry / no events) =====================
         ScentRegistry.init();
-        ScentDefinitionLoader.loadAllScents();
         BiomeDefinitionLoader.loadAllBiomes();
         BlockDefinitionLoader.loadAllBlocks();
         FlowerDefinitionLoader.loadAllFlowers();
@@ -42,8 +40,8 @@ public final class AromaLib {
         MobDefinitionLoader.loadAllMobs();
         EventDefinitionLoader.loadAllEvents();
         CategoryDefinitionLoader.loadAllCategories();
-        ScentTriggerManager.init();
         ScentTriggerConfigLoader.init();
+        ScentTriggerManager.init();
 
         // === Phase 6 — networking  ===================
         ScentEventNetworking.init();
@@ -61,14 +59,15 @@ public final class AromaLib {
                                 MOD_ID + "_data_reload",
                                 (net.minecraft.server.packs.resources.ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
-//                                    ScentRegistry.reload(ds);
-//                                    ScentDefinitionLoader.loadAllScents(ds);
-//                                    BiomeDefinitionLoader.loadAllBiomes(ds);
-//                                    BlockDefinitionLoader.loadAllBlocks(ds);
-//                                    FlowerDefinitionLoader.loadAllFlowers(ds);
-//                                    StructureDefinitionLoader.loadAllStructures(ds);
-//                                    MobDefinitionLoader.loadAllMobs(ds);
-//                                    EventDefinitionLoader.loadAllEvents(ds);
+                                    ScentRegistry.reload(ds);
+                                    BiomeDefinitionLoader.loadAllBiomes(ds);
+                                    BlockDefinitionLoader.loadAllBlocks(ds);
+                                    FlowerDefinitionLoader.loadAllFlowers(ds);
+                                    StructureDefinitionLoader.loadAllStructures(ds);
+                                    MobDefinitionLoader.loadAllMobs(ds);
+                                    CategoryDefinitionLoader.loadAllCategories(ds);
+                                    EventDefinitionLoader.loadAllEvents(ds);
+                                    ScentTriggerConfigLoader.rebuild();
                                 }));
 
 

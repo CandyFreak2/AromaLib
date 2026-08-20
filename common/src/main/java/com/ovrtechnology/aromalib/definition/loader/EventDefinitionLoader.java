@@ -1,12 +1,8 @@
-package com.ovrtechnology.aromalib.trigger.event;
+package com.ovrtechnology.aromalib.definition.loader;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.data.ClasspathDataSource;
-import com.ovrtechnology.aromalib.data.DataSource;
-import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,12 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.data.ClasspathDataSource;
+import com.ovrtechnology.aromalib.data.DataSource;
+import com.ovrtechnology.aromalib.definition.EventDefinition;
+import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 
 public final class EventDefinitionLoader {
 
-    public static final String EVENTS_DIR = "events";
+    public static final String DIRECTORY = "events";
 
     private static final Gson GSON = new GsonBuilder().setLenient().create();
 
@@ -47,7 +49,7 @@ public final class EventDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(EVENTS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 EventDefinition event = GSON.fromJson(entry.getValue(), EventDefinition.class);
@@ -114,7 +116,7 @@ public final class EventDefinitionLoader {
                     "["
                             + eventId
                             + "] Invalid event_id format - should be 'namespace:path' (e.g.,"
-                            + " 'aromaaffect:player_low_health')");
+                            + " 'AromaLib:player_low_health')");
         }
 
         if (event.getCategory() == null || event.getCategory().isEmpty()) {

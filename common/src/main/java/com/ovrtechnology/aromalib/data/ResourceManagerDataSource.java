@@ -45,8 +45,10 @@ public final class ResourceManagerDataSource implements DataSource {
 
     @Override
     public Map<Identifier, JsonElement> listJson(String directory) {
-        String prefix = directory + "/";
-        Map<Identifier, Resource> found = resourceManager.listResources(directory,
+        String dir = DataSourceInfo.DIRECTORY + directory;
+        String prefix = dir + "/";
+
+        Map<Identifier, Resource> found = resourceManager.listResources(dir,
                 loc -> loc.getPath().endsWith(".json"));
 
         Map<Identifier, JsonElement> result = new LinkedHashMap<>();

@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
  *   "color_html": "#5DECF5",
  *   "fallback_name": "Stat Buff",
  *   "mask": "aromalib:textures/mask/citrus"
+ *   "loop": false
  * }
  * </pre>
  */
@@ -25,6 +26,14 @@ import lombok.experimental.Accessors;
 public class CategoryDefinition extends Definition {
     @SerializedName("mask")
     private String mask;
+
+    /**
+     * Whether the mask animation restarts once it reaches its last frame. Sheets
+     * authored as a one-shot reveal set this to false: they play through and hold
+     * the final frame instead of snapping back to the start mid-puff.
+     */
+    @SerializedName("loop")
+    private Boolean loop;
 
     public CategoryDefinition() {
     }
@@ -41,6 +50,11 @@ public class CategoryDefinition extends Definition {
     @Override
     protected String getTranslationTitle() {
         return "category";
+    }
+
+    /** Defaults to looping, which is what every sheet but a scripted reveal wants. */
+    public boolean isMaskLooping() {
+        return loop == null || loop;
     }
 }
 

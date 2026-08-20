@@ -2,6 +2,8 @@ package com.ovrtechnology.aromalib.trigger.event;
 
 import com.google.gson.JsonObject;
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.definition.EventDefinition;
+import com.ovrtechnology.aromalib.definition.loader.EventDefinitionLoader;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -24,8 +27,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.JukeboxBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.advancements.Advancement;
 
@@ -63,6 +68,7 @@ public final class ServerEventBusHandler {
     public static final String TT_COPPER_OXIDIZE = "COPPER_OXIDIZE";
     public static final String TT_SCULK_SHRIEK = "SCULK_SHRIEK";
     public static final String TT_MINECART_OVERLAP_POWERED_RAIL = "MINECART_OVERLAP_POWERED_RAIL";
+    public static final String TT_REDSTONE_ACTIVATED = "REDSTONE_ACTIVATED";
 
     /** Seed/crop items whose placement counts as "planting" (in a regular class, so safe to init). */
     private static final Set<Item> SEED_ITEMS = Set.of(
@@ -202,6 +208,94 @@ public final class ServerEventBusHandler {
     public static void onCopperOxidize(ServerPlayer player) {
         if (player == null) return;
         fireSimpleEvent(player, TT_COPPER_OXIDIZE);
+    }
+
+    /**
+     * A lever was flipped or a button was pressed. Both are the moment redstone
+     * actually switches on, so they share one trigger type; which of the two carried
+     * the signal is irrelevant to the scent.
+     *
+     * <p>Only fires when the switch actually drives something — see
+     * {@link #drivesRedstone}. A decorative button on a wall is not a redstone
+     * moment, and firing on it made the scent meaningless.</p>
+     *
+     * <p>{@code player} is nullable on purpose: buttons can also be pressed by
+     * arrows, and a puff with nobody to smell it is simply dropped.</p>
+     */
+    public static void onRedstoneActivated(Player player, Level level, BlockPos pos, BlockState state) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        if (level == null || pos == null || state == null) return;
+        if (!drivesRedstone(level, pos, state)) return;
+        fireSimpleEvent(serverPlayer, TT_REDSTONE_ACTIVATED);
+    }
+
+    /**
+     * Whether flipping the switch at {@code pos} can reach anything that reacts to
+     * redstone.
+     *
+     * <p>Checks exactly the positions the signal can reach: the switch's own six
+     * neighbors (weak power, e.g. dust running away from it), plus the six
+     * neighbors of the block it is attached to, since a switch strongly powers its
+     * support and a solid support re-emits that to everything touching it. A
+     * non-conducting support (glass, a fence) stops there, so it is skipped.</p>
+     */
+    private static boolean drivesRedstone(Level level, BlockPos pos, BlockState state) {
+        for (Direction dir : Direction.values()) {
+            if (consumesRedstone(level.getBlockState(pos.relative(dir)))) return true;
+        }
+
+        Direction away = connectedDirection(state);
+        if (away == null) return false;
+
+        BlockPos support = pos.relative(away.getOpposite());
+        BlockState supportState = level.getBlockState(support);
+        if (!supportState.isRedstoneConductor(level, support)) return false;
+
+        for (Direction dir : Direction.values()) {
+            BlockPos neighbor = support.relative(dir);
+            if (neighbor.equals(pos)) continue;
+            if (consumesRedstone(level.getBlockState(neighbor))) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Direction a face-attached switch points away from its support, mirroring the
+     * protected {@code FaceAttachedHorizontalDirectionalBlock.getConnectedDirection}.
+     */
+    private static Direction connectedDirection(BlockState state) {
+        if (!state.hasProperty(FaceAttachedHorizontalDirectionalBlock.FACE)) return null;
+        AttachFace face = state.getValue(FaceAttachedHorizontalDirectionalBlock.FACE);
+        if (face == AttachFace.CEILING) return Direction.DOWN;
+        if (face == AttachFace.FLOOR) return Direction.UP;
+        if (!state.hasProperty(HorizontalDirectionalBlock.FACING)) return null;
+        return state.getValue(HorizontalDirectionalBlock.FACING);
+    }
+
+    /**
+     * Whether a block does something when it receives a redstone signal. Matching on
+     * the family classes rather than on ids covers every wood and copper variant at
+     * once, and keeps modded blocks that extend them working for free.
+     */
+    private static boolean consumesRedstone(BlockState state) {
+        Block block = state.getBlock();
+        return block instanceof RedStoneWireBlock
+                || block instanceof DiodeBlock          // repeater + comparator
+                || block instanceof RedstoneTorchBlock  // standing + wall
+                || block instanceof RedstoneLampBlock
+                || block instanceof PistonBaseBlock
+                || block instanceof DispenserBlock      // dispenser + dropper
+                || block instanceof HopperBlock
+                || block instanceof CrafterBlock
+                || block instanceof ObserverBlock
+                || block instanceof NoteBlock
+                || block instanceof TntBlock
+                || block instanceof BellBlock
+                || block instanceof CopperBulbBlock
+                || block instanceof DoorBlock
+                || block instanceof TrapDoorBlock
+                || block instanceof FenceGateBlock
+                || block instanceof BaseRailBlock;
     }
 
     public static void onSculkShriek(ServerPlayer player) {

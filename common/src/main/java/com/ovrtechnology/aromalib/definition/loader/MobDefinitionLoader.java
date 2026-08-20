@@ -27,7 +27,7 @@ public class MobDefinitionLoader {
             .setPrettyPrinting()
             .create();
 
-    public static final String MOBS_DIR = "mobs";
+    public static final String DIRECTORY = "mobs";
 
     @Getter
     private static List<MobDefinition> loadedMobs = new ArrayList<>();
@@ -46,7 +46,7 @@ public class MobDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(MOBS_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 MobDefinition mob = GSON.fromJson(entry.getValue(), MobDefinition.class);

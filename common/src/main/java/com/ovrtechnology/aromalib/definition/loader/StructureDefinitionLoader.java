@@ -56,7 +56,7 @@ public class StructureDefinitionLoader {
             .setPrettyPrinting()
             .create();
     
-    public static final String STRUCTURES_DIR = "structures";
+    public static final String DIRECTORY = "structures";
     
     /**
      * Cached list of loaded structure definitions
@@ -99,7 +99,7 @@ public class StructureDefinitionLoader {
         loadedIds.clear();
         validationWarnings.clear();
 
-        Map<Identifier, JsonElement> files = dataSource.listJson(STRUCTURES_DIR);
+        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
         for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
             try {
                 StructureDefinition structure = GSON.fromJson(entry.getValue(), StructureDefinition.class);

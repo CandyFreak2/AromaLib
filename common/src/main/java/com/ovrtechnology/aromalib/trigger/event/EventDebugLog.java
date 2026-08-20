@@ -1,6 +1,7 @@
 package com.ovrtechnology.aromalib.trigger.event;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.definition.EventDefinition;
 import com.ovrtechnology.aromalib.trigger.client.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.trigger.client.SoundTrigger;
 import com.ovrtechnology.aromalib.trigger.config.ClientConfig;

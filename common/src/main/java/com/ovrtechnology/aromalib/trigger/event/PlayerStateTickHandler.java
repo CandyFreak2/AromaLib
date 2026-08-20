@@ -2,6 +2,8 @@ package com.ovrtechnology.aromalib.trigger.event;
 
 import com.google.gson.JsonObject;
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.definition.EventDefinition;
+import com.ovrtechnology.aromalib.definition.loader.EventDefinitionLoader;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.trigger.ScentTrigger;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;

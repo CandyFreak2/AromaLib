@@ -22,6 +22,7 @@ import net.minecraft.util.ARGB;
  * tracking session.</p>
  */
 public final class ScentPuffOverlay {
+
     private static final long PULSE_DURATION_MS = 2000L;
     private static final long FADE_IN_MS = 90L;
     private static final long FADE_OUT_MS = 800L;
@@ -32,6 +33,7 @@ public final class ScentPuffOverlay {
     private static final long SHEET_FRAME_MS = 120L;
 
     private static boolean initialized = false;
+    private static boolean activeMaskLoops = true;
 
     private static Identifier activeMask = null;
     private static long pulseStartMs = 0L;
@@ -63,6 +65,17 @@ public final class ScentPuffOverlay {
      *
      * @param scentName the scent name (used to resolve the mask texture)
      * @param intensity the scent intensity (0.0 to 1.0)
+     */
+    public static void onScentPuff(String scentName, double intensity) {
+        onScentPuff(scentName, null, intensity);
+    }
+
+    /**
+     * Triggers the scent overlay, preferring an animated frame registered for the event.
+     *
+     * @param scentName the scent name (used to resolve the static mask)
+     * @param intensity the scent intensity (0.0 to 1.0)
+     * @param visualCategory   the firing event id, or null when the puff has no event behind it
      */
     public static void onScentPuff(String scentName, String visualCategory, double intensity) {
         if (scentName == null || scentName.isBlank()) {
@@ -108,8 +121,13 @@ public final class ScentPuffOverlay {
         int height = mc.getWindow().getGuiScaledHeight();
 
         int tint = ARGB.color(finalAlpha, ColorHelper.getColorAsInt(categoryColor));
-        int frames = ResourceUtil.getTextureHeight(activeMask) / SHEET_FRAME_H;
-        int frame = (int) ((elapsed / SHEET_FRAME_MS) % frames);
+        int frames = Math.max(1, ResourceUtil.getTextureHeight(activeMask) / SHEET_FRAME_H);
+        long step = elapsed / SHEET_FRAME_MS;
+        // A one-shot sheet stops on its last frame rather than snapping back to the
+        // start; the puff is fading out by then anyway.
+        int frame = activeMaskLoops
+                ? (int) (step % frames)
+                : (int) Math.min(step, frames - 1L);
 
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
@@ -142,20 +160,25 @@ public final class ScentPuffOverlay {
     private static Identifier resolveMask(String scentName, String categoryID) {
         CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
 
-        if (category != null) {
-            if (category.getColorHtml() != null) {
-                categoryColor = category.getColorHtml();
-            }
-
-            if (category.getMask() == null) {
-                return getScentMask(scentName);
-            }
-
-            return Identifier.parse(category.getMask() + ".png");
+        if (category == null) {
+            categoryColor = "#FFFFFF";
+            return resolveScentMask(scentName);
         }
 
-        categoryColor = "#FFFFFF";
-        return getScentMask(scentName);
+        categoryColor = category.getColorHtml();
+        if (category.getMask() == null || category.getMask().isBlank()) {
+            return resolveScentMask(scentName);
+        }
+
+        return Identifier.tryParse(category.getMask() + ".png");
+    }
+
+    static Identifier resolveScentMask(String scentName) {
+        return ScentRegistry.getScentByName(scentName)
+                .map(ScentDefinition::getMask)
+                .filter(mask -> !mask.isBlank())
+                .map(mask -> Identifier.tryParse(mask + ".png"))
+                .orElse(null);
     }
 
     private static double clamp01(double value) {
@@ -164,17 +187,5 @@ public final class ScentPuffOverlay {
 
     private static float clamp01f(float value) {
         return Math.max(0.0f, Math.min(1.0f, value));
-    }
-
-    private static Identifier getScentMask(String scentName) {
-        var scentDef = ScentRegistry.getScentByName(scentName.toLowerCase());
-        ScentDefinition scent;
-
-        if (scentDef.isPresent()) {
-            scent = scentDef.get();
-            return Identifier.parse(scent.getMask() + ".png");
-        }
-
-        return null;
     }
 }

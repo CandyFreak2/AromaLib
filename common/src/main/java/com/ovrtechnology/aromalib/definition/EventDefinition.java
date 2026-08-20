@@ -1,8 +1,7 @@
-package com.ovrtechnology.aromalib.trigger.event;
+package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.definition.ImageDefinition;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerSource;
 import lombok.AccessLevel;
 import lombok.Getter;
