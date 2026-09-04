@@ -3,10 +3,8 @@ package com.ovrtechnology.resources;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.data.DataSourceInfo;
 import com.ovrtechnology.aromalib.definition.loader.*;
-import com.ovrtechnology.aromalib.definition.loader.EventDefinitionLoader;
+import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Data layout consistency")
 class DataLayoutConsistencyTest {
 
-    private static final String DATA_ROOT = "data/" + AromaLib.MOD_ID;
+    private static final String DATA_ROOT = "data/aromalib/";
 
     private static final List<String> INDEXED_DIRECTORIES = List.of(
             BiomeDefinitionLoader.DIRECTORY,
@@ -43,9 +41,20 @@ class DataLayoutConsistencyTest {
             ScentDefinitionLoader.DIRECTORY,
             StructureDefinitionLoader.DIRECTORY,
             EventDefinitionLoader.DIRECTORY
+//            SnifferLootRegistry.RULES_DIR
     );
 
     private static final List<String> UNINDEXED_DIRECTORIES = List.of(
+            //NoseVariantRegistry.VARIANTS_DIR
+    );
+
+    private static final List<String> SINGLE_FILE_RESOURCES = List.of(
+//            ScentItemDefinitionLoader.SCENT_ITEMS_RESOURCE_PATH,
+//            NoseDefinitionLoader.NOSES_RESOURCE_PATH,
+//            SnifferNoseDefinitionLoader.SNIFFER_NOSES_RESOURCE_PATH,
+            ScentTriggerConfigLoader.ITEM_TRIGGERS_PATH,
+            ScentTriggerConfigLoader.SETTINGS_PATH
+            //AbilityDefinitionLoader.ABILITY_PATH
     );
 
     @Test
@@ -55,6 +64,16 @@ class DataLayoutConsistencyTest {
                 .forEach(directory -> assertThat(resourceUrl(DATA_ROOT + directory))
                         .as("bundled directory %s%s", DATA_ROOT, directory)
                         .isNotNull());
+    }
+
+    @Test
+    @DisplayName("every single-file loader path should resolve to a bundled JSON resource")
+    void singleFileResourcesShouldExist() throws IOException {
+        for (String path : SINGLE_FILE_RESOURCES) {
+            assertThat(path).as("loader path %s is rooted at the data directory", path).startsWith(DATA_ROOT);
+            assertThat(resourceUrl(path)).as("bundled resource %s", path).isNotNull();
+            assertThat(loadJson(path)).as("parsable JSON at %s", path).isNotNull();
+        }
     }
 
     @Test
@@ -105,7 +124,7 @@ class DataLayoutConsistencyTest {
     @Test
     @DisplayName("every mask texture should be 160 wide with a height that is a multiple of 90")
     void maskTexturesShouldMatchFrameGrid() throws IOException, URISyntaxException {
-        URL maskDirectory = resourceUrl(DataSourceInfo.MASK);
+        URL maskDirectory = resourceUrl("assets/aromalib/textures/mask");
         assertThat(maskDirectory).as("bundled mask texture directory").isNotNull();
         assertThat(maskDirectory.getProtocol()).isEqualTo("file");
 
@@ -140,7 +159,7 @@ class DataLayoutConsistencyTest {
                 }
                 assertThat(source)
                         .as("no references to removed textures/masks directory in %s", file.getFileName())
-                        .doesNotContain(DataSourceInfo.MASK_DIRECTORY);
+                        .doesNotContain("textures/masks/");
             }
         }
     }

@@ -9,6 +9,7 @@ import com.ovrtechnology.aromalib.definition.loader.FlowerDefinitionLoader;
 import com.ovrtechnology.aromalib.hooks.ServerHooks;
 import com.ovrtechnology.aromalib.lookup.LookupManager;
 import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
+import com.ovrtechnology.aromalib.network.PathScentNetworking;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
@@ -44,6 +45,7 @@ public final class AromaLib {
         ScentTriggerManager.init();
 
         // === Phase 6 — networking  ===================
+        PathScentNetworking.init();
         ScentEventNetworking.init();
 
         // === Event-trigger scent system =====================================

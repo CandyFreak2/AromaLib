@@ -1,10 +1,10 @@
 {
   "id": "aromalib:deep_dark",
-  "mask": "aromalib:textures/mask/machina/deep_dark",
   "fallback_name": "Deep Dark",
+  "mask": "aromalib:textures/mask/machina/deep_dark",
   "sound": {
     "id": "minecraft:entity.allay.hurt",
-    "volume": 1.0,
+    "volume": 0.25,
     "pitch": 1.0
   }
 }

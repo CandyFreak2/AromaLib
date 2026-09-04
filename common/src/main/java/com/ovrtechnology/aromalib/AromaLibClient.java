@@ -1,5 +1,6 @@
 package com.ovrtechnology.aromalib;
 
+import com.ovrtechnology.aromalib.menu.TrackingHud;
 import com.ovrtechnology.aromalib.websocket.WebSocketConnectionListener;
 import com.ovrtechnology.aromalib.hooks.ClientHooks;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerHandler;
@@ -44,7 +45,7 @@ public final class AromaLibClient {
         PassiveModeHud.init();
 
         // Initialize tracking HUD (Arrived! notifications + global state tick)
-        //TrackingHud.init();
+        TrackingHud.init();
 
         // Initialize active-tracking scent mask overlay (fullscreen pulse on each path puff)
         PathTrackingMaskOverlay.init();
