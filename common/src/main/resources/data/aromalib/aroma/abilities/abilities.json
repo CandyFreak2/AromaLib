@@ -1,0 +1,24 @@
+{
+  "abilities": [
+    {
+      "id": "basic_scent",
+      "type": "passive",
+      "description": "Basic scent detection for water and lava"
+    },
+    {
+      "id": "active_tracking",
+      "type": "passive",
+      "description": "Enhanced active tracking mode for scent detection"
+    },
+    {
+      "id": "structure_compass",
+      "type": "passive",
+      "description": "Detect nearby structures through scent"
+    },
+    {
+      "id": "danger_sense",
+      "type": "passive",
+      "description": "Sense nearby dangers and hostile entities"
+    }
+  ]
+}
