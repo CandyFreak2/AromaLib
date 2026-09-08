@@ -30,7 +30,7 @@ import net.minecraft.world.level.block.Block;
  * @see Ability
  * @see AbilityHandler
  */
-public interface BlockInteractionAbility extends CachedAbility, Ability {
+public interface BlockInteractionAbility extends Ability {
 
     /**
      * Checks if a block is a valid target for this ability.
