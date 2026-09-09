@@ -8,6 +8,7 @@ import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Iterator;
@@ -31,6 +32,11 @@ public final class ActivePathManager {
         BLOCK,
         BIOME,
         STRUCTURE
+    }
+
+    public enum TriggerSource {
+        COMMAND,
+        TRACKER
     }
 
     private static final ActivePathManager INSTANCE = new ActivePathManager();
@@ -86,7 +92,7 @@ public final class ActivePathManager {
      * @param destination the destination position
      */
     public void createPath(ServerPlayer player, net.minecraft.server.level.ServerLevel level, BlockPos destination) {
-        createPath(player, level, destination, null, null);
+        createPath(player, level, destination, null, null, TriggerSource.TRACKER);
     }
 
     /**
@@ -98,16 +104,16 @@ public final class ActivePathManager {
      * @param destination the destination position
      * @param targetType  the type of target being tracked (can be null)
      * @param targetId    the ID of the target (e.g., "minecraft:diamond_ore", can be null)
+     * @param source      the source of the path being created
      */
-    public void createPath(ServerPlayer player, net.minecraft.server.level.ServerLevel level, BlockPos destination,
-                           TargetType targetType, String targetId) {
+    public void createPath(ServerPlayer player, ServerLevel level, BlockPos destination, TargetType targetType, String targetId, TriggerSource source) {
         UUID playerId = player.getUUID();
 
         // Remove any existing path for this player
         activePaths.remove(playerId);
 
         // Create new active path
-        ActivePath path = new ActivePath(playerId, level.dimension().identifier(), destination, targetType, targetId);
+        ActivePath path = new ActivePath(playerId, level.dimension().identifier(), destination, targetType, targetId, source);
         activePaths.put(playerId, path);
 
         AromaLib.LOGGER.debug("Created active path for player {} to {} (target: {} {})",
@@ -157,8 +163,8 @@ public final class ActivePathManager {
                 continue;
             }
 
-            // Check if player still has a nose equipped
-            if (!TrackingItemHelper.hasEquipped(player)) {
+            // Check if player still has a tracker equipped
+            if (path.source != TriggerSource.COMMAND && !TrackingItemHelper.hasEquipped(player)) {
                 PathScentNetworking.sendPathNotFound(player, "Tracker unequipped");
                 iterator.remove();
                 continue;
@@ -246,6 +252,7 @@ public final class ActivePathManager {
             net.minecraft.resources.Identifier dimension,
             BlockPos destination,
             TargetType targetType,
-            String targetId
+            String targetId,
+            TriggerSource source
     ) {}
 }

@@ -1,6 +1,5 @@
 package com.ovrtechnology.aromalib.compat;
 
-import net.blay09.mods.balm.Balm;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -1,6 +1,8 @@
 package com.ovrtechnology.aromalib.tracking;
 
 import com.ovrtechnology.aromalib.registry.ModSounds;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -37,14 +39,29 @@ public final class ActiveTrackingState {
         ERROR
     }
 
+    @Getter
     private static Identifier targetId;
+
+    @Getter
     private static Component displayName;
+
+    @Getter
     private static ItemStack icon;
+
+    @Getter
     private static TrackingCategory category;
+
+    @Getter
+    @Setter
     private static int distance = -1;
+
+    @Getter
     private static BlockPos destination;
 
+    @Getter
     private static TrackingStatus status = TrackingStatus.IDLE;
+
+    @Getter
     private static String statusMessage;
     private static long statusTimestamp;
     private static Identifier lastDimensionId;
@@ -142,7 +159,7 @@ public final class ActiveTrackingState {
      */
     public static void tick() {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.level() != null) {
+        if (mc.player != null) {
             Identifier currentDimensionId = mc.player.level().dimension().identifier();
             if (lastDimensionId != null && !lastDimensionId.equals(currentDimensionId) && status != TrackingStatus.IDLE) {
                 clear();
@@ -161,37 +178,6 @@ public final class ActiveTrackingState {
                 clear();
             }
         }
-    }
-
-    /**
-     * Updates the distance to the tracked target (in blocks).
-     * Called from the client-side network handler when the server sends updates.
-     *
-     * @param blocks distance in blocks, or -1 if unknown
-     */
-    public static void setDistance(int blocks) {
-        distance = blocks;
-    }
-
-    /**
-     * @return distance to target in blocks, or -1 if unknown
-     */
-    public static int getDistance() {
-        return distance;
-    }
-
-    /**
-     * @return the current tracking status
-     */
-    public static TrackingStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * @return optional status message (e.g. failure reason), may be null
-     */
-    public static String getStatusMessage() {
-        return statusMessage;
     }
 
     /**
@@ -215,34 +201,11 @@ public final class ActiveTrackingState {
         return targetId != null && targetId.equals(id);
     }
 
-    public static Identifier getTargetId() {
-        return targetId;
-    }
-
-    public static Component getDisplayName() {
-        return displayName;
-    }
-
-    public static ItemStack getIcon() {
-        return icon;
-    }
-
-    public static TrackingCategory getCategory() {
-        return category;
-    }
-
     /**
      * @return the category ID string of the tracked target, or null
      */
     public static String getCategoryId() {
         return category != null ? category.getId() : null;
-    }
-
-    /**
-     * @return the destination BlockPos, or null if not set
-     */
-    public static BlockPos getDestination() {
-        return destination;
     }
 
     /**

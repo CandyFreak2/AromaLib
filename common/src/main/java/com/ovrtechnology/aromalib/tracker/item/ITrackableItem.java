@@ -30,4 +30,6 @@ public interface ITrackableItem {
     TrackerAbilityResolver.ResolvedAbilities getResolvedAbilities();
 
     EquipmentSlot getSlot();
+
+    float getOffset();
 }

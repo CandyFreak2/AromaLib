@@ -66,6 +66,9 @@ public class TrackerDefinition {
     @SerializedName("slot")
     private String slot;
 
+    @SerializedName("offset")
+    private float yOffset;
+
     // Override getters with defaults
 
     public String getModel() {

@@ -2,6 +2,7 @@ package com.ovrtechnology.aromalib.neoforge;
 
 import com.ovrtechnology.aromalib.AromaLibClient;
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.neoforge.client.BlockOutlineRendererNeoForge;
 import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
 import net.neoforged.api.distmarker.Dist;
@@ -24,5 +25,7 @@ public final class AromaLibNeoForgeClient {
 
     public AromaLibNeoForgeClient(ModContainer modContainer, IEventBus modEventBus) {
         BalmClient.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), AromaLibClient::initialize);
+
+        BlockOutlineRendererNeoForge.init();
     }
 }

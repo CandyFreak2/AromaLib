@@ -155,4 +155,9 @@ public class TrackingItem extends Item implements ITrackableItem {
     public EquipmentSlot getSlot() {
         return slot;
     }
+
+    @Override
+    public float getOffset() {
+        return definition.getYOffset();
+    }
 }

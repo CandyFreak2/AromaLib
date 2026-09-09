@@ -7,27 +7,24 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.definition.BiomeDefinition;
-import com.ovrtechnology.aromalib.definition.loader.BiomeDefinitionLoader;
-import com.ovrtechnology.aromalib.definition.BlockDefinition;
-import com.ovrtechnology.aromalib.definition.loader.BlockDefinitionLoader;
 import com.ovrtechnology.aromalib.command.SubCommand;
 import com.ovrtechnology.aromalib.command.path.ActivePathManager;
+import com.ovrtechnology.aromalib.compat.Accessory;
+import com.ovrtechnology.aromalib.definition.BiomeDefinition;
+import com.ovrtechnology.aromalib.definition.BlockDefinition;
 import com.ovrtechnology.aromalib.definition.FlowerDefinition;
+import com.ovrtechnology.aromalib.definition.StructureDefinition;
+import com.ovrtechnology.aromalib.definition.loader.BiomeDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.loader.BlockDefinitionLoader;
 import com.ovrtechnology.aromalib.definition.loader.FlowerDefinitionLoader;
-import com.ovrtechnology.aromalib.lookup.LookupManager;
-import com.ovrtechnology.aromalib.lookup.LookupResult;
-import com.ovrtechnology.aromalib.lookup.LookupTarget;
-import com.ovrtechnology.aromalib.lookup.LookupType;
-import com.ovrtechnology.aromalib.lookup.StructurePositionRefiner;
+import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
+import com.ovrtechnology.aromalib.lookup.*;
 import com.ovrtechnology.aromalib.network.BlacklistSyncManager;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
-import com.ovrtechnology.aromalib.definition.StructureDefinition;
-import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
-import com.ovrtechnology.aromalib.compat.Accessory;
+import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
 import com.ovrtechnology.aromalib.tracking.RequiredItem;
 import com.ovrtechnology.aromalib.tracking.TrackingConfig;
-import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
+import lombok.Getter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -36,13 +33,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 
 import java.util.Set;
 
@@ -63,58 +60,52 @@ import java.util.Set;
 public class PathSubCommand implements SubCommand {
 
     /**
-     * When true, path search results are printed to the player's chat.
-     * Toggle with {@code /aromatest path verbose}.
-     */
-    private static boolean verbose = false;
-
-    /**
-     * @return true if verbose chat messages are enabled
-     */
-    public static boolean isVerbose() {
-        return verbose;
-    }
-
-    /**
      * Suggestion provider for biome IDs.
      */
-    private static final SuggestionProvider<CommandSourceStack> BIOME_SUGGESTIONS = (context, builder) -> {
-        if (context.getSource().getLevel() != null) {
-            return SharedSuggestionProvider.suggestResource(
-                    context.getSource().getLevel().registryAccess()
+    private static final SuggestionProvider<CommandSourceStack> BIOME_SUGGESTIONS = (ctx, builder) ->
+            SharedSuggestionProvider.suggestResource(
+                    ctx.getSource().getLevel().registryAccess()
                             .lookupOrThrow(Registries.BIOME)
                             .listElementIds()
-                            .map(key -> key.identifier()),
+                            .map(ResourceKey::identifier),
                     builder
             );
-        }
-        return builder.buildFuture();
-    };
-
     /**
      * Suggestion provider for structure IDs.
      */
-    private static final SuggestionProvider<CommandSourceStack> STRUCTURE_SUGGESTIONS = (context, builder) -> {
-        if (context.getSource().getLevel() != null) {
-            return SharedSuggestionProvider.suggestResource(
-                    context.getSource().getLevel().registryAccess()
+    private static final SuggestionProvider<CommandSourceStack> STRUCTURE_SUGGESTIONS = (ctx, builder) ->
+            SharedSuggestionProvider.suggestResource(
+                    ctx.getSource().getLevel().registryAccess()
                             .lookupOrThrow(Registries.STRUCTURE)
                             .listElementIds()
-                            .map(key -> key.identifier()),
+                            .map(ResourceKey::identifier),
                     builder
             );
-        }
-        return builder.buildFuture();
-    };
-
     /**
      * Suggestion provider for block IDs.
      */
-    private static final SuggestionProvider<CommandSourceStack> BLOCK_SUGGESTIONS = (context, builder) ->
-            SharedSuggestionProvider.suggestResource(
-                    BuiltInRegistries.BLOCK.keySet(),
-                    builder
-            );
+    private static final SuggestionProvider<CommandSourceStack> BLOCK_SUGGESTIONS = (ctx, builder) -> SharedSuggestionProvider.suggestResource(BuiltInRegistries.BLOCK.keySet(), builder);
+    private static final int MAX_BLACKLIST_RETRIES = 3;
+    private static final int STRUCTURE_EXCLUSION_THRESHOLD = 128;
+    /**
+     * How often (in blocks) to sample biome along the line between two points.
+     */
+    private static final int BIOME_SAMPLE_INTERVAL = 64;
+    /**
+     * Beyond this distance, assume two points cannot be in the same biome region.
+     */
+    private static final int BIOME_MAX_CONTIGUITY_DISTANCE = 10000;
+    /**
+     * How far past a blacklisted biome to shift the search origin on retry.
+     */
+    private static final int BIOME_SHIFT_DISTANCE = 1500;
+    /**
+     * When true, path search results are printed to the player's chat.
+     * Toggle with {@code /aromatest path verbose}.
+     * -- GETTER --
+     */
+    @Getter
+    private static boolean verbose = false;
 
     @Override
     public String getName() {
@@ -197,7 +188,7 @@ public class PathSubCommand implements SubCommand {
 
     private int showUsage(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
-        source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §7Path usage:"), false);
+        source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §7Path usage:"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest path biome <biome_id> [radius]"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest path structure <structure_id> [radius]"), false);
         source.sendSuccess(() -> Component.literal("§e  /aromatest path block <block_id> [radius]"), false);
@@ -209,7 +200,7 @@ public class PathSubCommand implements SubCommand {
     private int toggleVerbose(CommandContext<CommandSourceStack> context) {
         verbose = !verbose;
         String state = verbose ? "§aEnabled" : "§cDisabled";
-        context.getSource().sendSuccess(() -> Component.literal("§6[Aroma Affect] §7Verbose path messages: " + state), false);
+        context.getSource().sendSuccess(() -> Component.literal("§6[Aroma Lib] §7Verbose path messages: " + state), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -217,41 +208,36 @@ public class PathSubCommand implements SubCommand {
         CommandSourceStack source = context.getSource();
 
         if (!(source.getEntity() instanceof ServerPlayer player)) {
-            source.sendFailure(Component.literal("§6[Aroma Affect] §cThis command can only be executed by a player"));
+            source.sendFailure(Component.literal("§6[Aroma Lib] §cThis command can only be executed by a player"));
             return 0;
         }
 
         if (ActivePathManager.getInstance().hasActivePath(player.getUUID())) {
             ActivePathManager.getInstance().removePath(player.getUUID());
             if (verbose) {
-                source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §aPath stopped successfully!"), false);
+                source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aPath stopped successfully!"), false);
             }
         } else {
             if (verbose) {
-                source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §7No active path to stop."), false);
+                source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §7No active path to stop."), false);
             }
         }
 
         return Command.SINGLE_SUCCESS;
     }
 
-    private int executePath(
-            CommandContext<CommandSourceStack> context,
-            LookupType type,
-            String argumentName,
-            int radius
-    ) {
+    private int executePath(CommandContext<CommandSourceStack> context, LookupType type, String argument, int radius) {
         CommandSourceStack source = context.getSource();
 
         // Get the resource ID from the argument
-        Identifier resourceId = IdentifierArgument.getId(context, argumentName);
+        Identifier resourceId = IdentifierArgument.getId(context, argument);
 
         // Get the origin position and player
         BlockPos origin;
         ServerPlayer player;
-        if (source.getEntity() instanceof ServerPlayer serverPlayer) {
-            player = serverPlayer;
-            origin = serverPlayer.blockPosition();
+        if (source.getEntity() instanceof ServerPlayer sPlayer) {
+            player = sPlayer;
+            origin = sPlayer.blockPosition();
         } else {
             player = null;
             origin = BlockPos.containing(source.getPosition());
@@ -289,7 +275,7 @@ public class PathSubCommand implements SubCommand {
         // Send search message (verbose only)
         if (verbose) {
             source.sendSuccess(() -> Component.literal(
-                    "§6[Aroma Affect] §7Searching for §e" + type.getId() + " §7'§f" + resourceId + "§7'..."
+                    "§6[Aroma Lib] §7Searching for §e" + type.getId() + " §7'§f" + resourceId + "§7'..."
             ), false);
         }
 
@@ -302,26 +288,13 @@ public class PathSubCommand implements SubCommand {
         // Execute asynchronous search (with exclusions for block/flower types)
         if ((type == LookupType.BLOCK || type == LookupType.FLOWER) && !excludedPositions.isEmpty()) {
             LookupManager.getInstance().lookupAsyncWithExclusions(
-                    level, origin, target, radius, excludedPositions, result -> {
-                        createPath(source, result, origin, level, player, 0);
-                    });
+                    level, origin, target, radius, excludedPositions, result -> createPath(source, result, origin, level, player, 0));
         } else {
-            LookupManager.getInstance().lookupAsync(level, origin, target, radius, result -> {
-                createPath(source, result, origin, level, player, 0);
-            });
+            LookupManager.getInstance().lookupAsync(level, origin, target, radius, result -> createPath(source, result, origin, level, player, 0));
         }
 
         return Command.SINGLE_SUCCESS;
     }
-
-    private static final int MAX_BLACKLIST_RETRIES = 3;
-    private static final int STRUCTURE_EXCLUSION_THRESHOLD = 128;
-    /** How often (in blocks) to sample biome along the line between two points. */
-    private static final int BIOME_SAMPLE_INTERVAL = 64;
-    /** Beyond this distance, assume two points cannot be in the same biome region. */
-    private static final int BIOME_MAX_CONTIGUITY_DISTANCE = 10000;
-    /** How far past a blacklisted biome to shift the search origin on retry. */
-    private static final int BIOME_SHIFT_DISTANCE = 1500;
 
     private void createPath(CommandSourceStack source, LookupResult result, BlockPos origin,
                             ServerLevel level, ServerPlayer player, int retryCount) {
@@ -335,8 +308,7 @@ public class PathSubCommand implements SubCommand {
             if (lookupType == LookupType.BLOCK || lookupType == LookupType.FLOWER) {
                 finalDestination = destination;
             } else if (lookupType == LookupType.STRUCTURE) {
-                BlockPos refined = StructurePositionRefiner.refine(level, destination, result.target().resourceId());
-                finalDestination = refined;
+                finalDestination = StructurePositionRefiner.refine(level, destination, result.target().resourceId());
             } else {
                 int yLevel = LookupManager.getInstance().findYLevel(level, destination.getX(), destination.getZ(), lookupType);
                 finalDestination = new BlockPos(destination.getX(), yLevel, destination.getZ());
@@ -366,15 +338,13 @@ public class PathSubCommand implements SubCommand {
                         BlockPos shiftedOrigin = computeShiftedOrigin(origin, finalDestination, shiftDistance);
                         AromaLib.LOGGER.debug("Blacklisted position found at {}, retrying with shifted origin {} (attempt {})",
                                 finalDestination, shiftedOrigin, retryCount + 1);
-                        LookupManager.getInstance().lookupAsync(level, shiftedOrigin, result.target(), -1, retryResult -> {
-                            createPath(source, retryResult, origin, level, player, retryCount + 1);
-                        });
+                        LookupManager.getInstance().lookupAsync(level, shiftedOrigin, result.target(), -1, retryResult -> createPath(source, retryResult, origin, level, player, retryCount + 1));
                         return;
                     }
                     // Max retries — all nearby locations are blacklisted
                     if (verbose) {
                         source.sendFailure(Component.literal(
-                                "§6[Aroma Affect] §cAll nearby locations are blacklisted"));
+                                "§6[Aroma Lib] §cAll nearby locations are blacklisted"));
                     }
                     PathScentNetworking.sendPathNotFound(player, "All nearby locations are blacklisted");
                     return;
@@ -382,7 +352,7 @@ public class PathSubCommand implements SubCommand {
             }
 
             if (verbose) {
-                source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §aCreating particle path!"), false);
+                source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aCreating particle path!"), false);
                 source.sendSuccess(() -> Component.literal(
                         String.format("§7  Position: §aX: %d§7, §aY: %d§7, §aZ: %d",
                                 finalDestination.getX(), finalDestination.getY(), finalDestination.getZ())
@@ -401,9 +371,9 @@ public class PathSubCommand implements SubCommand {
                 ActivePathManager.TargetType targetType = convertLookupType(result.target().type());
                 String targetId = result.target().resourceId().toString();
 
-                ActivePathManager.getInstance().createPath(player, level, finalDestination, targetType, targetId);
+                ActivePathManager.getInstance().createPath(player, level, finalDestination, targetType, targetId, ActivePathManager.TriggerSource.COMMAND);
 
-                // Deduct per-target durability from equipped nose
+                // Deduct per-target durability from equipped tracker
                 int targetCost = resolveTrackCost(result.target().type(), targetId);
                 ItemStack headStack = Accessory.getEquipped(player);
                 if (headStack.getItem() instanceof ITrackableItem) {
@@ -437,7 +407,7 @@ public class PathSubCommand implements SubCommand {
 
             if (verbose) {
                 source.sendFailure(Component.literal(
-                        "§6[Aroma Affect] §c" + reason + ": §7" + result.target().resourceId()
+                        "§6[Aroma Lib] §c" + reason + ": §7" + result.target().resourceId()
                 ));
             }
 
@@ -627,7 +597,7 @@ public class PathSubCommand implements SubCommand {
         CommandSourceStack source = context.getSource();
 
         if (!(source.getEntity() instanceof ServerPlayer player)) {
-            source.sendFailure(Component.literal("§6[Aroma Affect] §cThis command can only be executed by a player"));
+            source.sendFailure(Component.literal("§6[Aroma Lib] §cThis command can only be executed by a player"));
             return 0;
         }
 
@@ -681,7 +651,7 @@ public class PathSubCommand implements SubCommand {
         }
 
         // Create path directly to known coordinates (no search needed)
-        ActivePathManager.getInstance().createPath(player, level, destination, targetType, idStr);
+        ActivePathManager.getInstance().createPath(player, level, destination, targetType, idStr, ActivePathManager.TriggerSource.COMMAND);
 
         // Notify client
         BlockPos origin = player.blockPosition();
@@ -692,7 +662,7 @@ public class PathSubCommand implements SubCommand {
         PathScentNetworking.sendPathFound(player, dist, destination);
 
         if (verbose) {
-            source.sendSuccess(() -> Component.literal("§6[Aroma Affect] §aRecalling path to known location!"), false);
+            source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aRecalling path to known location!"), false);
             source.sendSuccess(() -> Component.literal(
                     String.format("§7  Position: §aX: %d§7, §aY: %d§7, §aZ: %d", x, y, z)
             ), false);
