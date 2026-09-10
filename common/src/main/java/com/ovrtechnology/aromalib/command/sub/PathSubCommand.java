@@ -214,6 +214,7 @@ public class PathSubCommand implements SubCommand {
 
         if (ActivePathManager.getInstance().hasActivePath(player.getUUID())) {
             ActivePathManager.getInstance().removePath(player.getUUID());
+            PathScentNetworking.sendPathCanceled(player, "Canceled");
             if (verbose) {
                 source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aPath stopped successfully!"), false);
             }

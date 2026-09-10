@@ -76,7 +76,8 @@ public final class TrackingHud {
         // Detect new terminal state
         if (status == ActiveTrackingState.TrackingStatus.ARRIVED
                 || status == ActiveTrackingState.TrackingStatus.NOT_FOUND
-                || status == ActiveTrackingState.TrackingStatus.ERROR) {
+                || status == ActiveTrackingState.TrackingStatus.ERROR
+                || status == ActiveTrackingState.TrackingStatus.STOPPED) {
 
             if (status != lastNotifiedStatus) {
                 lastNotifiedStatus = status;
@@ -126,7 +127,8 @@ public final class TrackingHud {
 
         if (status != ActiveTrackingState.TrackingStatus.ARRIVED
                 && status != ActiveTrackingState.TrackingStatus.NOT_FOUND
-                && status != ActiveTrackingState.TrackingStatus.ERROR) {
+                && status != ActiveTrackingState.TrackingStatus.ERROR
+                && status != ActiveTrackingState.TrackingStatus.STOPPED) {
             return;
         }
 
@@ -163,6 +165,10 @@ public final class TrackingHud {
             case ERROR -> {
                 text = Component.translatable("tracking.aromalib.status.error").getString();
                 accentColor = 0xFF4444;
+            }
+            case STOPPED -> {
+                text = Component.translatable("tracking.aromalib.status.stopped").getString();
+                accentColor = 0xFF6644;
             }
             default -> { return; }
         }

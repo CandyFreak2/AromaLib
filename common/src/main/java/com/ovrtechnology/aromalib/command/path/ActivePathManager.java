@@ -129,6 +129,7 @@ public final class ActivePathManager {
      */
     public void removePath(UUID playerId) {
         activePaths.remove(playerId);
+
     }
 
     /**

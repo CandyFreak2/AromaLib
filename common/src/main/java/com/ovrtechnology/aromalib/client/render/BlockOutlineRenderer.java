@@ -26,13 +26,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 /**
- * Renders an X-ray wireframe outline at the destination block position
+ * Renders a visual wireframe outline at the destination block position
  * when tracking blocks or flowers within 32 blocks.
  */
 public final class BlockOutlineRenderer {
 
     /**
-     * X-ray pipeline: lines that draw through walls (no depth test) with
+     * Visual pipeline: lines that draw through walls (no depth test) with
      * translucent blending so distant outlines fade with alpha. Built from
      * vanilla {@code RenderPipelines.LINES_SNIPPET} (shaders, uniforms,
      * vertex format) plus our two overrides.

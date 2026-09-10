@@ -36,7 +36,8 @@ public final class ActiveTrackingState {
         TRACKING,
         ARRIVED,
         NOT_FOUND,
-        ERROR
+        ERROR,
+        STOPPED
     }
 
     @Getter
@@ -135,6 +136,19 @@ public final class ActiveTrackingState {
      */
     public static void setFailed(String reason, boolean isError) {
         status = isError ? TrackingStatus.ERROR : TrackingStatus.NOT_FOUND;
+        statusMessage = reason;
+        statusTimestamp = System.currentTimeMillis();
+    }
+
+    /**
+     * Transitions to CANCELED or ERROR state with an optional reason message.
+     * Auto-clears after 3 seconds.
+     *
+     * @param reason human-readable reason for the failure
+     * @param isError true for ERROR state, false for NOT_FOUND
+     */
+    public static void setCanceled(String reason, boolean isError) {
+        status = isError ? TrackingStatus.ERROR : TrackingStatus.STOPPED;
         statusMessage = reason;
         statusTimestamp = System.currentTimeMillis();
     }

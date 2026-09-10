@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.command.path.ActivePathManager;
 import com.ovrtechnology.aromalib.registry.BlockRegistry;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.tracker.TrackingItemHelper;

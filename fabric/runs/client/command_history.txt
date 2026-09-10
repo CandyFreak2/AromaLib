@@ -1,0 +1,29 @@
+/locate biome minecraft:jungle
+/tp @s -452 87 519
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path recall
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest stop
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop
+/aromatest path biome minecraft:birch_forest
+/aromatest path stop

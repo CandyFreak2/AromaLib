@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.ovrtechnology.fabric.ExampleModFabric"
+      "com.ovrtechnology.aromalib.fabric.AromaLibFabric"
     ],
     "client": [
-      "com.ovrtechnology.fabric.client.ExampleModFabricClient"
+      "com.ovrtechnology.aromalib.fabric.AromaLibFabricClient"
     ]
   },
   "accessWidener": "${mod_id}.classtweaker",

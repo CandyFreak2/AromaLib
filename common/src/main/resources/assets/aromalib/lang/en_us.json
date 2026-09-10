@@ -237,5 +237,6 @@
   "aromalib.bridge.connected": "Connected to",
   "aromalib.bridge.reconnecting": "Reconnecting to",
   "aromalib.bridge.ready": "Ready for",
-  "aromalib.bridge.info": "Omara is an optional scent device that works with Aroma Lib to let you physically smell Minecraft while you play. The mod is fully playable without it."
+  "aromalib.bridge.info": "Omara is an optional scent device that works with Aroma Lib to let you physically smell Minecraft while you play. The mod is fully playable without it.",
+  "tracking.aromalib.status.stopped": "Canceled"
 }

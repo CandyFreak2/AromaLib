@@ -91,6 +91,16 @@ public final class PathScentNetworking {
         @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
 
+    public record PathStatusCanceled(String reason) implements CustomPacketPayload {
+        public static final Type<PathStatusCanceled> TYPE = new Type<>(
+                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "path_status_canceled"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PathStatusCanceled> STREAM_CODEC = StreamCodec.of(
+                (buf, payload) -> buf.writeUtf(payload.reason),
+                buf -> new PathStatusCanceled(buf.readUtf())
+        );
+        @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    }
+
     public record StructureSyncS2C(String structureId) implements CustomPacketPayload {
         public static final Type<StructureSyncS2C> TYPE = new Type<>(
                 Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "structure_sync"));
@@ -226,6 +236,15 @@ public final class PathScentNetworking {
                 });
 
         Balm.networking().registerClientboundPacket(
+                PathStatusCanceled.TYPE,
+                PathStatusCanceled.class,
+                PathStatusCanceled.STREAM_CODEC,
+                (player, payload) -> {
+                    ActiveTrackingState.setCanceled(payload.reason(), false);
+                    AromaLib.LOGGER.debug("Path status: canceled");
+                });
+
+        Balm.networking().registerClientboundPacket(
                 StructureSyncS2C.TYPE,
                 StructureSyncS2C.class,
                 StructureSyncS2C.STREAM_CODEC,
@@ -267,6 +286,10 @@ public final class PathScentNetworking {
 
     public static void sendPathNotFound(ServerPlayer player, String reason) {
         Balm.networking().sendTo(player, new PathStatusNotFoundS2C(reason));
+    }
+
+    public static void sendPathCanceled(ServerPlayer player, String reason) {
+        Balm.networking().sendTo(player, new PathStatusCanceled(reason));
     }
 
     public static void sendPathArrived(ServerPlayer player) {
