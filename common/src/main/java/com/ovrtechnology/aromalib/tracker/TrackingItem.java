@@ -147,7 +147,7 @@ public class TrackingItem extends Item implements ITrackableItem {
     }
 
     @Override
-    public TrackerAbilityResolver.ResolvedAbilities getResolvedAbilities() {
+    public TrackingAbilityResolver.ResolvedAbilities getResolvedAbilities() {
         return null;
     }
 

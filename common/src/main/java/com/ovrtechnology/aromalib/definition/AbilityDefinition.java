@@ -24,9 +24,6 @@ import java.util.Map;
  * <li><b>passive</b>: Always active while wearing the item</li>
  * <li><b>block_interaction</b>: Activated by right-clicking blocks</li>
  * </ul>
- * 
- * @see AbilityDefinitionLoader
- * @see AbilityRegistry
  */
 @Getter
 @Setter

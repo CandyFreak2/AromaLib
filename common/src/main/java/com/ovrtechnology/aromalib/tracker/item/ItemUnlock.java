@@ -29,8 +29,8 @@ public class ItemUnlock {
     @SerializedName("abilities")
     private List<String> abilities;
 
-    @SerializedName("noses")
-    private List<String> noses;
+    @SerializedName("trackers")
+    private List<String> trackers;
 
     public List<String> getBlocks() {
         return blocks != null ? blocks : Collections.emptyList();
@@ -53,39 +53,39 @@ public class ItemUnlock {
     }
 
     public List<String> getTrackers() {
-        return noses != null ? noses : Collections.emptyList();
+        return trackers != null ? trackers : Collections.emptyList();
     }
 
     public boolean hasBlockUnlocks() {
         return blocks != null && !blocks.isEmpty();
     }
 
-    public boolean hasBiomeUnlocks() {
+    public boolean hasBiomeUnlocked() {
         return biomes != null && !biomes.isEmpty();
     }
 
-    public boolean hasStructureUnlocks() {
+    public boolean hasStructureUnlocked() {
         return structures != null && !structures.isEmpty();
     }
 
-    public boolean hasFlowerUnlocks() {
+    public boolean hasFlowerUnlocked() {
         return flowers != null && !flowers.isEmpty();
     }
 
-    public boolean hasAbilityUnlocks() {
+    public boolean hasAbilityUnlocked() {
         return abilities != null && !abilities.isEmpty();
     }
 
-    public boolean hasNoseInheritance() {
-        return noses != null && !noses.isEmpty();
+    public boolean isChild() {
+        return trackers != null && !trackers.isEmpty();
     }
 
     public boolean hasAnyUnlocks() {
         return hasBlockUnlocks()
-                || hasBiomeUnlocks()
-                || hasStructureUnlocks()
-                || hasFlowerUnlocks()
-                || hasAbilityUnlocks()
-                || hasNoseInheritance();
+                || hasBiomeUnlocked()
+                || hasStructureUnlocked()
+                || hasFlowerUnlocked()
+                || hasAbilityUnlocked()
+                || isChild();
     }
 }

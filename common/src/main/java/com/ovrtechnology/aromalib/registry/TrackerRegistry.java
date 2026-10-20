@@ -2,7 +2,7 @@ package com.ovrtechnology.aromalib.registry;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.loader.TrackerDefinitionLoader;
-import com.ovrtechnology.aromalib.tracker.TrackerAbilityResolver;
+import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.tracker.TrackingItem;
 import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
@@ -43,12 +43,8 @@ public class TrackerRegistry {
         AromaLib.LOGGER.info("TrackerRegistry initialized with {} trackers", TrackerRegistry.items.size());
     }
 
-    /**
-     * Initialize the ability resolver after registries are bound.
-     * Called from AromaLib.initialize after the registrar callback.
-     */
     public static void init() {
-        TrackerAbilityResolver.init();
+        TrackingAbilityResolver.init();
     }
 
     private static void register(BalmRegistrar.Scoped<Item> items, TrackerDefinition definition) {

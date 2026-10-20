@@ -50,7 +50,7 @@ class DataLayoutConsistencyTest {
 
     private static final List<String> SINGLE_FILE_RESOURCES = List.of(
 //            ScentItemDefinitionLoader.SCENT_ITEMS_RESOURCE_PATH,
-//            NoseDefinitionLoader.NOSES_RESOURCE_PATH,
+            //TrackerDefinitionLoader.getFullPath(),
 //            SnifferNoseDefinitionLoader.SNIFFER_NOSES_RESOURCE_PATH,
             ScentTriggerConfigLoader.ITEM_TRIGGERS_PATH,
             ScentTriggerConfigLoader.SETTINGS_PATH

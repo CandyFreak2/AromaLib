@@ -2,27 +2,23 @@ package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
 import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
+import com.ovrtechnology.aromalib.util.Texts;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import net.minecraft.network.chat.Component;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 @ToString
-public class TrackerDefinition {
-    /**
-     * Unique identifier for this tracker (e.g., "foragers_tracker", "iron_tracker")
-     */
+public class TrackerDefinition implements IDefinition {
     @SerializedName("id")
     private String id;
 
-    /**
-     * Path to the texture file relative to assets/aromaaffect/textures/item/
-     */
-    @SerializedName("image")
-    private String image;
+    @SerializedName("texture")
+    private String texture;
 
     /**
      * Model type for the tracker (similar to armor models)
@@ -69,8 +65,6 @@ public class TrackerDefinition {
     @SerializedName("offset")
     private float yOffset;
 
-    // Override getters with defaults
-
     public String getModel() {
         return model != null && !model.isEmpty() ? model : "minecraft:iron_helmet";
     }
@@ -87,10 +81,33 @@ public class TrackerDefinition {
         return unlock != null ? unlock : new ItemUnlock();
     }
 
-    /**
-     * Validates the tracker definition has required fields
-     */
+    @Override
+    public String getDefID() {
+        return getId();
+    }
+
+    @Override
     public boolean isValid() {
         return id != null && !id.isEmpty();
+    }
+
+    public String getDisplayName() {
+        return Texts.tr(getTranslationKey()).toString();
+    }
+
+    public Component resolveName() {
+        String key = getTranslationKey();
+        if (key != null && !key.isEmpty()) {
+            return Component.translatable(key);
+        }
+        return Component.translatable(getTranslationKey());
+    }
+
+    public String getTranslationKey() {
+        if (id == null || !id.contains(":")) {
+            return "tracker.aromalib.unknown";
+        }
+        String[] parts = id.split(":", 2);
+        return "tracker." + parts[0] + "." + parts[1];
     }
 }

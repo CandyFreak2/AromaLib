@@ -1,0 +1,12 @@
+{
+  "id": "chest",
+  "texture": "aromalib:textures/gui/sprites/status/info",
+  "slot": "chest",
+  "model": "minecraft:iron_helmet",
+  "tier": 1,
+  "durability": 100,
+  "repair": "minecraft:leather",
+    "abilities": [
+      "basic_scent"
+    ]
+}

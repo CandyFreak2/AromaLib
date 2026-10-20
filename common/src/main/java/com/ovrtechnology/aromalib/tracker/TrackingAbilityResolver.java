@@ -3,6 +3,7 @@ import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.registry.TrackerRegistry;
 import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
+import com.ovrtechnology.aromalib.tracker.variants.TrackerVariantRegistry;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 
@@ -12,7 +13,7 @@ import java.util.*;
  * Resolves and caches all abilities for each tracker, including inherited abilities from other trackers.
  * Handles circular dependency detection to prevent infinite loops.
  */
-public final class TrackerAbilityResolver {
+public final class TrackingAbilityResolver {
     
     /**
      * Cached resolved abilities for each tracker ID.
@@ -43,9 +44,9 @@ public final class TrackerAbilityResolver {
         }
 
         // Resolve abilities for each datapack variant
-//        for (Identifier variantId : TrackerVariantRegistry.all().keySet()) {
-//            resolveAbilities(variantId.toString());
-//        }
+        for (Identifier id : TrackerVariantRegistry.all().keySet()) {
+            resolveAbilities(id.toString());
+        }
 
         initialized = true;
         AromaLib.LOGGER.info("TrackerAbilityResolver initialized with {} cached entries", ABILITY_CACHE.size());

@@ -35,21 +35,21 @@ public class TrackingItemHelper {
         return getEquippedItem(player).map(ITrackableItem::getDefinition);
     }
 
-    public static TrackerAbilityResolver.ResolvedAbilities getEquippedAbilities(Player player) {
+    public static TrackingAbilityResolver.ResolvedAbilities getEquippedAbilities(Player player) {
         if (player == null) {
-            return TrackerAbilityResolver.ResolvedAbilities.EMPTY;
+            return TrackingAbilityResolver.ResolvedAbilities.EMPTY;
         }
         ItemStack stack = Accessory.getEquipped(player);
         if (stack.isEmpty()) {
-            return TrackerAbilityResolver.ResolvedAbilities.EMPTY;
+            return TrackingAbilityResolver.ResolvedAbilities.EMPTY;
         }
         if (stack.getItem() instanceof ITrackableItem item) {
             return item.getResolvedAbilities();
         }
         if (stack.getItem() instanceof CustomITrackableItem item) {
-            return item.getVariantId(stack).map(id -> TrackerAbilityResolver.getResolvedAbilities(id.toString())).orElse(TrackerAbilityResolver.ResolvedAbilities.EMPTY);
+            return item.getVariantId(stack).map(id -> TrackingAbilityResolver.getResolvedAbilities(id.toString())).orElse(TrackingAbilityResolver.ResolvedAbilities.EMPTY);
         }
-        return TrackerAbilityResolver.ResolvedAbilities.EMPTY;
+        return TrackingAbilityResolver.ResolvedAbilities.EMPTY;
     }
 
     public static boolean hasEquipped(Player player) {

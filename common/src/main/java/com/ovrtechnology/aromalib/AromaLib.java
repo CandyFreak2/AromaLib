@@ -11,6 +11,9 @@ import com.ovrtechnology.aromalib.lookup.LookupManager;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
+import com.ovrtechnology.aromalib.registry.TrackerRegistry;
+import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
+import com.ovrtechnology.aromalib.tracker.variants.TrackerVariantRegistry;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
 import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
@@ -18,6 +21,8 @@ import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
 import net.blay09.mods.balm.core.BalmRegistrars;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +36,7 @@ public final class AromaLib {
 
         AbilityDefinitionLoader.loadAllAbilities();
         ScentRegistry.init();
-        BiomeDefinitionLoader.loadAllBiomes();
+        //BiomeDefinitionLoader.loadAllBiomes();
         BlockDefinitionLoader.loadAllBlocks();
         FlowerDefinitionLoader.loadAllFlowers();
         StructureDefinitionLoader.loadAllStructures();
@@ -41,6 +46,10 @@ public final class AromaLib {
         ScentTriggerConfigLoader.init();
         ScentTriggerManager.init();
 
+        registrars.registrar(Registries.ITEM, TrackerRegistry::register);
+        //registrars.registrar(Registries.ITEM, TrackerVariantRegistry::register);
+
+        TrackerRegistry.init();
         AbilityRegistry.init();
 
         PathScentNetworking.init();
@@ -54,16 +63,20 @@ public final class AromaLib {
                 reg ->
                         reg.register(
                                 MOD_ID + "_data_reload",
-                                (net.minecraft.server.packs.resources.ResourceManager rm) -> {
+                                (ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
                                     ScentRegistry.reload(ds);
                                     AbilityDefinitionLoader.loadAllAbilities(ds);
-                                    BiomeDefinitionLoader.loadAllBiomes(ds);
+                                    //BiomeDefinitionLoader.loadAll(ds);
                                     BlockDefinitionLoader.loadAllBlocks(ds);
                                     FlowerDefinitionLoader.loadAllFlowers(ds);
                                     StructureDefinitionLoader.loadAllStructures(ds);
                                     MobDefinitionLoader.loadAllMobs(ds);
                                     CategoryDefinitionLoader.loadAllCategories(ds);
+                                    TrackerDefinitionLoader.loadAll(ds);
+                                    TrackerVariantRegistry.reload(ds);
+                                    //VariantRecipeIndex.reload(ds);
+                                    TrackingAbilityResolver.rebuild();
                                     EventDefinitionLoader.loadAllEvents(ds);
                                     ScentTriggerConfigLoader.rebuild();
                                 }));

@@ -49,7 +49,7 @@ public class AbilityDefinitionLoader {
     /**
      * Resource path for the abilities definition file.
      */
-    public static final String ABILITY_PATH = DataSourceInfo.BASE + "abilities/abilities.json";
+    public static final String DIR = DataSourceInfo.BASE + "abilities/abilities.json";
 
     /**
      * Cached map of loaded ability definitions by ID.
@@ -75,7 +75,7 @@ public class AbilityDefinitionLoader {
         loadedAbilities.clear();
 
         try {
-            AbilityDefinition[] abilities = loadAbilitiesFromResource(dataSource, ABILITY_PATH);
+            AbilityDefinition[] abilities = loadAbilitiesFromResource(dataSource, DIR);
             if (abilities != null) {
                 for (AbilityDefinition ability : abilities) {
                     if (ability != null && ability.isValid()) {

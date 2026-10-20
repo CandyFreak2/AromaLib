@@ -221,6 +221,22 @@ public abstract class Definition {
         return result.toString();
     }
 
+    /**
+     * Get the namespace portion of the definition ID.
+     *
+     * @return Namespace (e.g., "minecraft"), or empty string if invalid
+     */
+    public String getNamespace() {
+        if (id != null && id.contains(":")) {
+            return id.split(":", 2)[0];
+        }
+        return "";
+    }
+
+    public boolean isVanilla() {
+        return "minecraft".equals(getNamespace());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
