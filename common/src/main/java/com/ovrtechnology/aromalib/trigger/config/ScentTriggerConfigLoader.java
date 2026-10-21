@@ -182,7 +182,7 @@ public final class ScentTriggerConfigLoader {
      */
     private static void buildBiomeTriggers() {
         biomeTriggerMap.clear();
-        for (BiomeDefinition biome : BiomeDefinitionLoader.getLoadedBiomes()) {
+        for (BiomeDefinition biome : BiomeDefinitionLoader.INSTANCE.loadAll()) {
             if (!biome.hasScentId()) continue;
 
             String scentName = resolveScentName(biome.getScentId());
@@ -213,7 +213,7 @@ public final class ScentTriggerConfigLoader {
      */
     private static void buildBlockTriggers() {
         blockTriggerMap.clear();
-        for (BlockDefinition block : BlockDefinitionLoader.getLoadedBlocks()) {
+        for (BlockDefinition block : BlockDefinitionLoader.INSTANCE.getLoadedDefinitions()) {
             if (!block.hasScentId()) continue;
 
             String scentName = resolveScentName(block.getScentId());
@@ -244,7 +244,7 @@ public final class ScentTriggerConfigLoader {
      * Builds flower triggers (as block triggers) from FlowerDefinitionLoader.
      */
     private static void buildFlowerTriggers() {
-        for (FlowerDefinition flower : FlowerDefinitionLoader.getLoadedFlowers()) {
+        for (FlowerDefinition flower : FlowerDefinitionLoader.INSTANCE.getLoadedDefinitions()) {
             if (!flower.hasScentId()) continue;
 
             String scentName = resolveScentName(flower.getScentId());
@@ -277,7 +277,7 @@ public final class ScentTriggerConfigLoader {
      */
     private static void buildStructureTriggers() {
         structureTriggerMap.clear();
-        for (StructureDefinition structure : StructureDefinitionLoader.getLoadedStructures()) {
+        for (StructureDefinition structure : StructureDefinitionLoader.INSTANCE.getLoadedDefinitions()) {
             if (!structure.hasScentId()) continue;
 
             String scentName = resolveScentName(structure.getScentId());
@@ -309,7 +309,7 @@ public final class ScentTriggerConfigLoader {
      */
     private static void buildMobTriggers() {
         mobTriggerMap.clear();
-        for (MobDefinition mob : MobDefinitionLoader.getLoadedMobs()) {
+        for (MobDefinition mob : MobDefinitionLoader.INSTANCE.getLoadedDefinitions()) {
             if (!mob.hasScentId()) continue;
 
             String scentName = resolveScentName(mob.getScentId());

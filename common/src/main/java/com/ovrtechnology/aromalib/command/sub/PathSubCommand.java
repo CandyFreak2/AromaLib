@@ -516,19 +516,19 @@ public class PathSubCommand implements SubCommand {
     private int resolveTrackCost(LookupType type, String targetId) {
         return switch (type) {
             case BLOCK -> {
-                BlockDefinition block = BlockDefinitionLoader.getBlockById(targetId);
+                BlockDefinition block = BlockDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield block != null ? block.getTrackCost() : 10;
             }
             case BIOME -> {
-                BiomeDefinition biome = BiomeDefinitionLoader.getBiomeById(targetId);
+                BiomeDefinition biome = BiomeDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield biome != null ? biome.getTrackCost() : 10;
             }
             case STRUCTURE -> {
-                StructureDefinition structure = StructureDefinitionLoader.getStructureById(targetId);
+                StructureDefinition structure = StructureDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield structure != null ? structure.getTrackCost() : 10;
             }
             case FLOWER -> {
-                FlowerDefinition flower = FlowerDefinitionLoader.getFlowerById(targetId);
+                FlowerDefinition flower = FlowerDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield flower != null ? flower.getTrackCost() : 10;
             }
         };
@@ -537,19 +537,19 @@ public class PathSubCommand implements SubCommand {
     private RequiredItem resolveRequiredItem(LookupType type, String targetId) {
         return switch (type) {
             case BLOCK -> {
-                BlockDefinition block = BlockDefinitionLoader.getBlockById(targetId);
+                BlockDefinition block = BlockDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield block != null ? block.getRequiredItem() : null;
             }
             case BIOME -> {
-                BiomeDefinition biome = BiomeDefinitionLoader.getBiomeById(targetId);
+                BiomeDefinition biome = BiomeDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield biome != null ? biome.getRequiredItem() : null;
             }
             case STRUCTURE -> {
-                StructureDefinition structure = StructureDefinitionLoader.getStructureById(targetId);
+                StructureDefinition structure = StructureDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield structure != null ? structure.getRequiredItem() : null;
             }
             case FLOWER -> {
-                FlowerDefinition flower = FlowerDefinitionLoader.getFlowerById(targetId);
+                FlowerDefinition flower = FlowerDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
                 yield flower != null ? flower.getRequiredItem() : null;
             }
         };
@@ -629,9 +629,9 @@ public class PathSubCommand implements SubCommand {
         // Determine target type by checking which registry contains the ID
         String idStr = targetId.toString();
         ActivePathManager.TargetType targetType;
-        if (StructureDefinitionLoader.hasStructureId(idStr)) {
+        if (StructureDefinitionLoader.INSTANCE.hasId(idStr)) {
             targetType = ActivePathManager.TargetType.STRUCTURE;
-        } else if (BiomeDefinitionLoader.hasBiomeId(idStr)) {
+        } else if (BiomeDefinitionLoader.INSTANCE.hasId(idStr)) {
             targetType = ActivePathManager.TargetType.BIOME;
         } else {
             targetType = ActivePathManager.TargetType.BLOCK;

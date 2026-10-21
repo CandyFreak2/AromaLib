@@ -33,7 +33,7 @@ class DataLayoutConsistencyTest {
     private static final String DATA_ROOT = "data/aromalib/";
 
     private static final List<String> INDEXED_DIRECTORIES = List.of(
-            BiomeDefinitionLoader.DIRECTORY,
+            BiomeDefinitionLoader.INSTANCE.getDirectory(),
             BlockDefinitionLoader.DIRECTORY,
             CategoryDefinitionLoader.DIRECTORY,
             FlowerDefinitionLoader.DIRECTORY,

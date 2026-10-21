@@ -2,6 +2,7 @@ package com.ovrtechnology.aromalib.definition.loader;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.BiomeDefinition;
+import com.ovrtechnology.aromalib.definition.Definition;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 
 /**
@@ -34,14 +35,16 @@ import com.ovrtechnology.aromalib.registry.ScentRegistry;
  *   <li>Scent ID validation against ScentRegistry</li>
  * </ul>
  */
-public class BiomeDefinitionLoader extends DefinitionLoader<BiomeDefinition> {
+public class BiomeDefinitionLoader extends AbstractDefinitionLoader<BiomeDefinition> {
 
-    protected BiomeDefinitionLoader(String directory, Class<BiomeDefinition> def) {
-        super(directory, def);
+    public static final BiomeDefinitionLoader INSTANCE = new BiomeDefinitionLoader();
+
+    private BiomeDefinitionLoader() {
+        super("biomes", BiomeDefinition.class, "biome");
     }
 
     @Override
-    protected void validateDefinition(BiomeDefinition def) {
+    protected void validate(BiomeDefinition def) {
         String id = def.getId();
 
         // Validate biome_id format (namespace:path)

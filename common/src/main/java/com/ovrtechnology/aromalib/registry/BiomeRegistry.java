@@ -79,7 +79,7 @@ public final class BiomeRegistry {
         AromaLib.LOGGER.info("Initializing BiomeRegistry...");
         
         // Load biome definitions from JSON
-        List<BiomeDefinition> definitions = BiomeDefinitionLoader.loadAllBiomes();
+        List<BiomeDefinition> definitions = BiomeDefinitionLoader.INSTANCE.loadAll();
         
         // Store each biome in the map
         for (BiomeDefinition definition : definitions) {
@@ -316,7 +316,7 @@ public final class BiomeRegistry {
         AromaLib.LOGGER.info("Reloading BiomeRegistry...");
         biomeDefinitions.clear();
         
-        List<BiomeDefinition> definitions = BiomeDefinitionLoader.reload();
+        List<BiomeDefinition> definitions = BiomeDefinitionLoader.INSTANCE.reload();
         for (BiomeDefinition definition : definitions) {
             registerBiome(definition);
         }

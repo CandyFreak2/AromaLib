@@ -79,7 +79,7 @@ public final class StructureRegistry {
         AromaLib.LOGGER.info("Initializing StructureRegistry...");
         
         // Load structure definitions from JSON
-        List<StructureDefinition> definitions = StructureDefinitionLoader.loadAllStructures();
+        List<StructureDefinition> definitions = StructureDefinitionLoader.INSTANCE.loadAll();
         
         // Store each structure in the map
         for (StructureDefinition definition : definitions) {
@@ -316,7 +316,7 @@ public final class StructureRegistry {
         AromaLib.LOGGER.info("Reloading StructureRegistry...");
         structureDefinitions.clear();
         
-        List<StructureDefinition> definitions = StructureDefinitionLoader.reload();
+        List<StructureDefinition> definitions = StructureDefinitionLoader.INSTANCE.reload();
         for (StructureDefinition definition : definitions) {
             registerStructure(definition);
         }

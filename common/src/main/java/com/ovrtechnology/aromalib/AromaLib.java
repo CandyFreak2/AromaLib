@@ -36,13 +36,13 @@ public final class AromaLib {
 
         AbilityDefinitionLoader.loadAllAbilities();
         ScentRegistry.init();
-        //BiomeDefinitionLoader.loadAllBiomes();
-        BlockDefinitionLoader.loadAllBlocks();
-        FlowerDefinitionLoader.loadAllFlowers();
-        StructureDefinitionLoader.loadAllStructures();
-        MobDefinitionLoader.loadAllMobs();
+        BiomeDefinitionLoader.INSTANCE.loadAll();
+        BlockDefinitionLoader.INSTANCE.loadAll();
+        FlowerDefinitionLoader.INSTANCE.loadAll();
+        StructureDefinitionLoader.INSTANCE.loadAll();
+        MobDefinitionLoader.INSTANCE.loadAll();
         EventDefinitionLoader.loadAllEvents();
-        CategoryDefinitionLoader.loadAllCategories();
+        CategoryDefinitionLoader.INSTANCE.loadAll();
         ScentTriggerConfigLoader.init();
         ScentTriggerManager.init();
 
@@ -67,12 +67,12 @@ public final class AromaLib {
                                     var ds = new ResourceManagerDataSource(rm);
                                     ScentRegistry.reload(ds);
                                     AbilityDefinitionLoader.loadAllAbilities(ds);
-                                    //BiomeDefinitionLoader.loadAll(ds);
-                                    BlockDefinitionLoader.loadAllBlocks(ds);
-                                    FlowerDefinitionLoader.loadAllFlowers(ds);
-                                    StructureDefinitionLoader.loadAllStructures(ds);
-                                    MobDefinitionLoader.loadAllMobs(ds);
-                                    CategoryDefinitionLoader.loadAllCategories(ds);
+                                    BiomeDefinitionLoader.INSTANCE.loadAll(ds);
+                                    BlockDefinitionLoader.INSTANCE.loadAll(ds);
+                                    FlowerDefinitionLoader.INSTANCE.loadAll(ds);
+                                    StructureDefinitionLoader.INSTANCE.loadAll(ds);
+                                    MobDefinitionLoader.INSTANCE.loadAll(ds);
+                                    CategoryDefinitionLoader.INSTANCE.loadAll(ds);
                                     TrackerDefinitionLoader.loadAll(ds);
                                     TrackerVariantRegistry.reload(ds);
                                     //VariantRecipeIndex.reload(ds);

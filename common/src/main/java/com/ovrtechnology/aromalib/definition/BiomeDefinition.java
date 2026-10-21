@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class BiomeDefinition extends ImageDefinition implements IDefinition{
+public class BiomeDefinition extends ImageDefinition {
 
     public BiomeDefinition() {
         super();
@@ -54,11 +54,6 @@ public class BiomeDefinition extends ImageDefinition implements IDefinition{
     @Override
     protected String getTranslationTitle() {
         return "biome";
-    }
-
-    @Override
-    public String getDefID() {
-        return getId();
     }
 }
 

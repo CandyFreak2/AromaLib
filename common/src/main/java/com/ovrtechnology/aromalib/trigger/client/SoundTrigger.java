@@ -19,7 +19,7 @@ public final class SoundTrigger {
     }
 
     public static void playEventSound(Player player, String categoryID, SoundRef ref) {
-        CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
+        CategoryDefinition category = CategoryDefinitionLoader.INSTANCE.getDefinitionByID(categoryID);
 
         // If category is not null, play the category sound over the soundRef
         if (category != null) {

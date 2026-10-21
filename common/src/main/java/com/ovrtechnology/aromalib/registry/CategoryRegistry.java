@@ -33,7 +33,7 @@ public final class CategoryRegistry {
         AromaLib.LOGGER.info("Initializing CategoryRegistry...");
         
         // Load category definitions from JSON
-        List<CategoryDefinition> definitions = CategoryDefinitionLoader.loadAllCategories();
+        List<CategoryDefinition> definitions = CategoryDefinitionLoader.INSTANCE.loadAll();
         
         // Store each category in the map
         for (CategoryDefinition definition : definitions) {
@@ -113,7 +113,7 @@ public final class CategoryRegistry {
         AromaLib.LOGGER.info("Reloading CategoryRegistry...");
         categoryDefinitions.clear();
         
-        List<CategoryDefinition> definitions = CategoryDefinitionLoader.reload();
+        List<CategoryDefinition> definitions = CategoryDefinitionLoader.INSTANCE.reload();
         for (CategoryDefinition definition : definitions) {
             registerCategory(definition);
         }

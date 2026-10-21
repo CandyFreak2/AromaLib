@@ -74,7 +74,7 @@ public final class BlockRegistry {
         AromaLib.LOGGER.info("Initializing BlockRegistry...");
         
         // Load block definitions from JSON
-        List<BlockDefinition> definitions = BlockDefinitionLoader.loadAllBlocks();
+        List<BlockDefinition> definitions = BlockDefinitionLoader.INSTANCE.loadAll();
         
         // Store each block in the map
         for (BlockDefinition definition : definitions) {
@@ -249,7 +249,7 @@ public final class BlockRegistry {
         AromaLib.LOGGER.info("Reloading BlockRegistry...");
         blockDefinitions.clear();
         
-        List<BlockDefinition> definitions = BlockDefinitionLoader.reload();
+        List<BlockDefinition> definitions = BlockDefinitionLoader.INSTANCE.reload();
         for (BlockDefinition definition : definitions) {
             registerBlock(definition);
         }

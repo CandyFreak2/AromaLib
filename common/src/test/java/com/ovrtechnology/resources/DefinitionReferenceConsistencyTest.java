@@ -34,12 +34,12 @@ class DefinitionReferenceConsistencyTest {
     private static final String MOD_PREFIX = "aromalib:";
 
     private static final Map<String, String> SPRITE_DIRECTORIES = Map.of(
-            BiomeDefinitionLoader.DIRECTORY, "biomes",
+            BiomeDefinitionLoader.INSTANCE.getDirectory(), "biomes",
             StructureDefinitionLoader.DIRECTORY, "structures"
     );
 
     private static final List<String> SCENTED_DIRECTORIES = List.of(
-            BiomeDefinitionLoader.DIRECTORY,
+            BiomeDefinitionLoader.INSTANCE.getDirectory(),
             BlockDefinitionLoader.DIRECTORY,
             StructureDefinitionLoader.DIRECTORY,
             FlowerDefinitionLoader.DIRECTORY,

@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class TrackerDefinition implements IDefinition {
+public class TrackerDefinition {
     @SerializedName("id")
     private String id;
 
@@ -81,16 +81,6 @@ public class TrackerDefinition implements IDefinition {
         return unlock != null ? unlock : new ItemUnlock();
     }
 
-    @Override
-    public String getDefID() {
-        return getId();
-    }
-
-    @Override
-    public boolean isValid() {
-        return id != null && !id.isEmpty();
-    }
-
     public String getDisplayName() {
         return Texts.tr(getTranslationKey()).toString();
     }
@@ -109,5 +99,9 @@ public class TrackerDefinition implements IDefinition {
         }
         String[] parts = id.split(":", 2);
         return "tracker." + parts[0] + "." + parts[1];
+    }
+
+    public boolean isValid() {
+        return id != null && !id.isEmpty();
     }
 }

@@ -70,7 +70,7 @@ public final class ScentRegistry {
         AromaLib.LOGGER.info("Initializing ScentRegistry...");
         
         // Load scent definitions from JSON
-        List<ScentDefinition> definitions = ScentDefinitionLoader.loadAllScents();
+        List<ScentDefinition> definitions = ScentDefinitionLoader.INSTANCE.loadAll();
         
         // Store each scent in the map
         for (ScentDefinition definition : definitions) {
@@ -238,7 +238,7 @@ public final class ScentRegistry {
         AromaLib.LOGGER.info("Reloading ScentRegistry...");
         scentDefinitions.clear();
 
-        List<ScentDefinition> definitions = ScentDefinitionLoader.reload();
+        List<ScentDefinition> definitions = ScentDefinitionLoader.INSTANCE.loadAll();
         for (ScentDefinition definition : definitions) {
             registerScent(definition);
         }
@@ -250,7 +250,7 @@ public final class ScentRegistry {
         AromaLib.LOGGER.info("Reloading ScentRegistry...");
         scentDefinitions.clear();
 
-        List<ScentDefinition> definitions = ScentDefinitionLoader.loadAllScents(dataSource);
+        List<ScentDefinition> definitions = ScentDefinitionLoader.INSTANCE.loadAll(dataSource);
         for (ScentDefinition definition : definitions) {
             registerScent(definition);
         }

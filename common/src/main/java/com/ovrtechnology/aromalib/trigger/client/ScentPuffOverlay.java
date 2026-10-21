@@ -158,7 +158,7 @@ public final class ScentPuffOverlay {
     }
 
     private static Identifier resolveMask(String scentName, String categoryID) {
-        CategoryDefinition category = CategoryDefinitionLoader.getCategoryFromID(categoryID);
+        CategoryDefinition category = CategoryDefinitionLoader.INSTANCE.getDefinitionByID(categoryID);
 
         if (category == null) {
             categoryColor = "#FFFFFF";
