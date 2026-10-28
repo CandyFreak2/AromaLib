@@ -13,37 +13,37 @@ import static org.assertj.core.api.Assertions.*;
  */
 @DisplayName("ConnectionState")
 class ConnectionStateTest {
-    
+
     @Test
     @DisplayName("DISCONNECTED should not be active or pending")
     void disconnectedShouldNotBeActiveOrPending() {
         assertThat(ConnectionState.DISCONNECTED.isActiveOrPending()).isFalse();
     }
-    
+
     @Test
     @DisplayName("CONNECTING should be active or pending")
     void connectingShouldBeActiveOrPending() {
         assertThat(ConnectionState.CONNECTING.isActiveOrPending()).isTrue();
     }
-    
+
     @Test
     @DisplayName("CONNECTED should be active or pending")
     void connectedShouldBeActiveOrPending() {
         assertThat(ConnectionState.CONNECTED.isActiveOrPending()).isTrue();
     }
-    
+
     @Test
     @DisplayName("CONNECTION_FAILED should not be active or pending")
     void connectionFailedShouldNotBeActiveOrPending() {
         assertThat(ConnectionState.CONNECTION_FAILED.isActiveOrPending()).isFalse();
     }
-    
+
     @Test
     @DisplayName("RECONNECTING should be active or pending")
     void reconnectingShouldBeActiveOrPending() {
         assertThat(ConnectionState.RECONNECTING.isActiveOrPending()).isTrue();
     }
-    
+
     @Test
     @DisplayName("only CONNECTED should allow sending messages")
     void onlyConnectedShouldAllowMessages() {
@@ -53,14 +53,14 @@ class ConnectionStateTest {
         assertThat(ConnectionState.CONNECTION_FAILED.canSendMessages()).isFalse();
         assertThat(ConnectionState.RECONNECTING.canSendMessages()).isFalse();
     }
-    
+
     @ParameterizedTest
     @EnumSource(ConnectionState.class)
     @DisplayName("all states should have non-empty display name")
     void allStatesShouldHaveDisplayName(ConnectionState state) {
         assertThat(state.getDisplayName()).isNotEmpty();
     }
-    
+
     @Test
     @DisplayName("display names should be human-readable")
     void displayNamesShouldBeHumanReadable() {
@@ -71,4 +71,3 @@ class ConnectionStateTest {
         assertThat(ConnectionState.RECONNECTING.getDisplayName()).isEqualTo("Reconnecting...");
     }
 }
-

@@ -109,4 +109,8 @@ public class TrackingItemHelper {
         }
         return Optional.empty();
     }
+
+    public static boolean canTrackRespawn(Player player) {
+        return getEquippedTier(player) >= 2;
+    }
 }

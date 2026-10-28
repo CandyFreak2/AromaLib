@@ -21,9 +21,13 @@ import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
 import com.ovrtechnology.aromalib.lookup.*;
 import com.ovrtechnology.aromalib.network.BlacklistSyncManager;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
+import com.ovrtechnology.aromalib.network.RespawnTrackingNetworking;
+import com.ovrtechnology.aromalib.tracker.TrackingItemHelper;
 import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
 import com.ovrtechnology.aromalib.tracking.RequiredItem;
+import com.ovrtechnology.aromalib.tracking.RespawnSyncState;
 import com.ovrtechnology.aromalib.tracking.TrackingConfig;
+import com.ovrtechnology.aromalib.tracking.TrackingRequestLimiter;
 import lombok.Getter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -37,11 +41,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Subcommand to create a particle path towards biomes, structures, or blocks.
@@ -58,6 +64,9 @@ import java.util.Set;
  * </ul>
  */
 public class PathSubCommand implements SubCommand {
+    
+    @Getter
+    private static boolean verbose = false;
 
     /**
      * Suggestion provider for biome IDs.
@@ -99,13 +108,6 @@ public class PathSubCommand implements SubCommand {
      * How far past a blacklisted biome to shift the search origin on retry.
      */
     private static final int BIOME_SHIFT_DISTANCE = 1500;
-    /**
-     * When true, path search results are printed to the player's chat.
-     * Toggle with {@code /aromatest path verbose}.
-     * -- GETTER --
-     */
-    @Getter
-    private static boolean verbose = false;
 
     @Override
     public String getName() {
@@ -212,9 +214,9 @@ public class PathSubCommand implements SubCommand {
             return 0;
         }
 
+        cancelSearch(player);
         if (ActivePathManager.getInstance().hasActivePath(player.getUUID())) {
             ActivePathManager.getInstance().removePath(player.getUUID());
-            PathScentNetworking.sendPathCanceled(player, "Canceled");
             if (verbose) {
                 source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aPath stopped successfully!"), false);
             }
@@ -227,78 +229,149 @@ public class PathSubCommand implements SubCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private int executePath(CommandContext<CommandSourceStack> context, LookupType type, String argument, int radius) {
+    private int executePath(
+            CommandContext<CommandSourceStack> context,
+            LookupType type,
+            String argumentName,
+            int radius
+    ) {
         CommandSourceStack source = context.getSource();
+        Identifier resourceId = IdentifierArgument.getId(context, argumentName);
 
-        // Get the resource ID from the argument
-        Identifier resourceId = IdentifierArgument.getId(context, argument);
-
-        // Get the origin position and player
-        BlockPos origin;
-        ServerPlayer player;
-        if (source.getEntity() instanceof ServerPlayer sPlayer) {
-            player = sPlayer;
-            origin = sPlayer.blockPosition();
+        if (source.getEntity() instanceof ServerPlayer player) {
+            startSearch(source, player, source.getLevel(), player.blockPosition(), type, resourceId, radius, false);
         } else {
-            player = null;
-            origin = BlockPos.containing(source.getPosition());
+            startSearch(source, null, source.getLevel(), BlockPos.containing(source.getPosition()),
+                    type, resourceId, radius, false);
         }
 
-        ServerLevel level = source.getLevel();
-        LookupTarget target = new LookupTarget(type, resourceId);
+        return Command.SINGLE_SUCCESS;
+    }
 
-        // Server-side cost validation before searching
+    private static final TrackingRequestLimiter menuRequests = new TrackingRequestLimiter(1_000_000_000L);
+    private static final Map<UUID, Integer> searchGenerations = new HashMap<>();
+
+    public static void trackFromMenu(ServerPlayer player, LookupType type, Identifier targetId) {
+        if (!acceptMenuRequest(player, type, targetId)) return;
+        startSearch(player.createCommandSourceStack(), player, player.level(), player.blockPosition(),
+                type, targetId, -1, true);
+    }
+
+    public static void recallFromMenu(ServerPlayer player, LookupType type, Identifier targetId,
+                                      BlockPos destination, Identifier dimension) {
+        if (!acceptMenuRequest(player, type, targetId)) return;
+        recall(player.createCommandSourceStack(), player, type, targetId, destination, dimension);
+    }
+
+    public static void cancelSearch(ServerPlayer player) {
+        searchGenerations.merge(player.getUUID(), 1, Integer::sum);
+    }
+
+    public static void removePlayer(UUID playerId) {
+        menuRequests.remove(playerId);
+        searchGenerations.remove(playerId);
+    }
+
+    private static boolean acceptMenuRequest(ServerPlayer player, LookupType type, Identifier targetId) {
+        String reason = null;
+        if (type == null || !player.isAlive() || player.isSpectator()) {
+            reason = "Invalid tracking request";
+        } else if (!menuRequests.allow(player.getUUID(), System.nanoTime())) {
+            reason = "Too many tracking requests";
+        } else if (!canDetect(player, type, targetId.toString())) {
+            reason = "Equipped nose cannot detect this target";
+        }
+        if (reason == null) return true;
+
+        // The client already switched to the new target, so an older search must not land either
+        cancelSearch(player);
+        PathScentNetworking.sendPathNotFound(player, reason);
+        return false;
+    }
+
+    private static boolean canDetect(ServerPlayer player, LookupType type, String targetId) {
+        return switch (type) {
+            case BLOCK -> TrackingItemHelper.canDetectBlock(player, targetId);
+            case FLOWER -> TrackingItemHelper.canDetectFlower(player, targetId);
+            case BIOME -> TrackingItemHelper.canDetectBiome(player, targetId);
+            case STRUCTURE -> TrackingItemHelper.canDetectStructure(player, targetId);
+        };
+    }
+
+    private static boolean canAfford(ServerPlayer player, LookupType type, String targetId) {
+        if (!hasDurability(player, resolveTrackCost(type, targetId))) {
+            PathScentNetworking.sendPathNotFound(player, "Not enough tracker durability");
+            return false;
+        }
+        RequiredItem req = resolveRequiredItem(type, targetId);
+        if (req != null && req.getItemId() != null && !playerHasItem(player, req)) {
+            PathScentNetworking.sendPathNotFound(player, "Missing required item");
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean hasDurability(ServerPlayer player, int cost) {
+        if (!TrackingItemHelper.hasEquipped(player)) return true;
+        ItemStack stack = Accessory.getEquipped(player);
+        return !stack.isDamageableItem() || stack.getMaxDamage() - stack.getDamageValue() >= cost;
+    }
+
+    private static void hurtTracker(ServerPlayer player, int cost) {
+        ItemStack stack = Accessory.getEquipped(player);
+        if (stack.getItem() instanceof ITrackableItem) {
+            stack.hurtAndBreak(cost, player, player.getEquipmentSlotForItem(stack));
+        }
+    }
+
+    private record SearchRequest(CommandSourceStack source, ServerPlayer player, ServerLevel level,
+                                 BlockPos origin, LookupType type, int generation, boolean requireAbility) {
+    }
+
+    private static void startSearch(CommandSourceStack source, ServerPlayer player, ServerLevel level,
+                                    BlockPos origin, LookupType type, Identifier resourceId, int radius,
+                                    boolean requireAbility) {
+        int generation = 0;
         if (player != null) {
-            int targetCost = resolveTrackCost(type, resourceId.toString());
-
-            // Check durability
-            ItemStack stack = Accessory.getEquipped(player);
-            if (stack.isEmpty() && stack.getItem() instanceof ITrackableItem) {
-                if (stack.isDamageableItem()) {
-                    int remaining = stack.getMaxDamage() - stack.getDamageValue();
-                    if (remaining < targetCost) {
-                        PathScentNetworking.sendPathNotFound(player, "Not enough durability");
-                        return Command.SINGLE_SUCCESS;
-                    }
-                }
-            }
-
-            // Check required item
-            RequiredItem req = resolveRequiredItem(type, resourceId.toString());
-            if (req != null && req.getItemId() != null) {
-                if (!playerHasItem(player, req)) {
-                    PathScentNetworking.sendPathNotFound(player, "Missing required item");
-                    return Command.SINGLE_SUCCESS;
-                }
-            }
+            generation = searchGenerations.merge(player.getUUID(), 1, Integer::sum);
+            if (!canAfford(player, type, resourceId.toString())) return;
         }
 
-        // Send search message (verbose only)
         if (verbose) {
             source.sendSuccess(() -> Component.literal(
                     "§6[Aroma Lib] §7Searching for §e" + type.getId() + " §7'§f" + resourceId + "§7'..."
             ), false);
         }
 
-        // Collect excluded positions from blacklist sync
+        // Flowers have no lookup strategy of their own; they are scanned like any other block
+        LookupType searchType = type == LookupType.FLOWER ? LookupType.BLOCK : type;
+        LookupTarget target = new LookupTarget(searchType, resourceId);
+        SearchRequest request = new SearchRequest(source, player, level, origin, type, generation, requireAbility);
+
         Set<BlockPos> excludedPositions = player != null
                 ? BlacklistSyncManager.getInstance().getExcludedPositionsForTarget(
                 player.getUUID(), resourceId.toString())
                 : Set.of();
 
-        // Execute asynchronous search (with exclusions for block/flower types)
-        if ((type == LookupType.BLOCK || type == LookupType.FLOWER) && !excludedPositions.isEmpty()) {
+        if (searchType == LookupType.BLOCK && !excludedPositions.isEmpty()) {
             LookupManager.getInstance().lookupAsyncWithExclusions(
-                    level, origin, target, radius, excludedPositions, result -> createPath(source, result, origin, level, player, 0));
+                    level, origin, target, radius, excludedPositions, result -> createPath(request, result, 0));
         } else {
-            LookupManager.getInstance().lookupAsync(level, origin, target, radius, result -> createPath(source, result, origin, level, player, 0));
+            LookupManager.getInstance().lookupAsync(level, origin, target, radius,
+                    result -> createPath(request, result, 0));
         }
-
-        return Command.SINGLE_SUCCESS;
     }
 
-    private void createPath(CommandSourceStack source, LookupResult result, BlockPos origin,
-                            ServerLevel level, ServerPlayer player, int retryCount) {
+    private static void createPath(SearchRequest request, LookupResult result, int retryCount) {
+        CommandSourceStack source = request.source();
+        ServerPlayer player = request.player();
+        ServerLevel level = request.level();
+        BlockPos origin = request.origin();
+
+        if (player != null && (player.isRemoved() || searchGenerations.getOrDefault(player.getUUID(), 0) != request.generation())) {
+            return;
+        }
+
         if (result.isSuccess()) {
             BlockPos destination = result.getPosition();
 
@@ -309,7 +382,8 @@ public class PathSubCommand implements SubCommand {
             if (lookupType == LookupType.BLOCK || lookupType == LookupType.FLOWER) {
                 finalDestination = destination;
             } else if (lookupType == LookupType.STRUCTURE) {
-                finalDestination = StructurePositionRefiner.refine(level, destination, result.target().resourceId());
+                BlockPos refined = StructurePositionRefiner.refine(level, destination, result.target().resourceId());
+                finalDestination = refined;
             } else {
                 int yLevel = LookupManager.getInstance().findYLevel(level, destination.getX(), destination.getZ(), lookupType);
                 finalDestination = new BlockPos(destination.getX(), yLevel, destination.getZ());
@@ -339,7 +413,9 @@ public class PathSubCommand implements SubCommand {
                         BlockPos shiftedOrigin = computeShiftedOrigin(origin, finalDestination, shiftDistance);
                         AromaLib.LOGGER.debug("Blacklisted position found at {}, retrying with shifted origin {} (attempt {})",
                                 finalDestination, shiftedOrigin, retryCount + 1);
-                        LookupManager.getInstance().lookupAsync(level, shiftedOrigin, result.target(), -1, retryResult -> createPath(source, retryResult, origin, level, player, retryCount + 1));
+                        LookupManager.getInstance().lookupAsync(level, shiftedOrigin, result.target(), -1, retryResult -> {
+                            createPath(request, retryResult, retryCount + 1);
+                        });
                         return;
                     }
                     // Max retries — all nearby locations are blacklisted
@@ -372,17 +448,17 @@ public class PathSubCommand implements SubCommand {
                 ActivePathManager.TargetType targetType = convertLookupType(result.target().type());
                 String targetId = result.target().resourceId().toString();
 
+                // The nose or inventory may have changed while the search ran
+                if (request.requireAbility() && !canDetect(player, request.type(), targetId)) {
+                    PathScentNetworking.sendPathNotFound(player, "Equipped tracker cannot detect this target");
+                    return;
+                }
+                if (!canAfford(player, request.type(), targetId)) return;
+
                 ActivePathManager.getInstance().createPath(player, level, finalDestination, targetType, targetId, ActivePathManager.TriggerSource.COMMAND);
 
-                // Deduct per-target durability from equipped tracker
-                int targetCost = resolveTrackCost(result.target().type(), targetId);
-                ItemStack headStack = Accessory.getEquipped(player);
-                if (headStack.getItem() instanceof ITrackableItem) {
-                    headStack.hurtAndBreak(targetCost, player, EquipmentSlot.HEAD);
-                }
-
-                // Consume required item (if any)
-                consumeRequiredItem(player, result.target().type(), targetId);
+                hurtTracker(player, resolveTrackCost(request.type(), targetId));
+                consumeRequiredItem(player, request.type(), targetId);
 
                 // Notify client that path was found (use original player origin for distance)
                 int dist = (int) Math.sqrt(
@@ -390,7 +466,9 @@ public class PathSubCommand implements SubCommand {
                                 Math.pow(origin.getZ() - finalDestination.getZ(), 2)
                 );
                 PathScentNetworking.sendPathFound(player, dist, finalDestination);
-            } else if (player == null && verbose) {
+            } else if (player != null) {
+                PathScentNetworking.sendPathNotFound(player, "Changed dimension during search");
+            } else if (verbose) {
                 source.sendSuccess(() -> Component.literal("§7  §o(Particles only visible to players)"), false);
             }
 
@@ -413,8 +491,8 @@ public class PathSubCommand implements SubCommand {
             }
 
             // Notify client that search failed
-            if (source.getEntity() instanceof ServerPlayer failedPlayer) {
-                PathScentNetworking.sendPathNotFound(failedPlayer, reason);
+            if (player != null) {
+                PathScentNetworking.sendPathNotFound(player, reason);
             }
         }
     }
@@ -425,7 +503,7 @@ public class PathSubCommand implements SubCommand {
      *
      * @param shiftDistance how far (in blocks) past the blacklisted position to shift
      */
-    private BlockPos computeShiftedOrigin(BlockPos playerOrigin, BlockPos blacklistedPos, int shiftDistance) {
+    private static BlockPos computeShiftedOrigin(BlockPos playerOrigin, BlockPos blacklistedPos, int shiftDistance) {
         double dx = blacklistedPos.getX() - playerOrigin.getX();
         double dz = blacklistedPos.getZ() - playerOrigin.getZ();
         double dist = Math.sqrt(dx * dx + dz * dz);
@@ -451,15 +529,10 @@ public class PathSubCommand implements SubCommand {
      * between each blacklisted position and the found position. If the biome is continuous
      * the entire way (no gap of a different biome), the two points are in the same region.
      */
-    private boolean isBiomeBlacklistedByContiguity(ServerLevel level, java.util.UUID playerId,
-                                                   String targetId, Identifier biomeId,
-                                                   BlockPos foundPos) {
-        Set<BlockPos> excluded = BlacklistSyncManager.getInstance()
-                .getExcludedPositionsForTarget(playerId, targetId);
+    private static boolean isBiomeBlacklistedByContiguity(ServerLevel level, UUID playerId, String targetId, Identifier biomeId, BlockPos foundPos) {
+        Set<BlockPos> excluded = BlacklistSyncManager.getInstance().getExcludedPositionsForTarget(playerId, targetId);
         if (excluded.isEmpty()) return false;
-
         ResourceKey<Biome> biomeKey = ResourceKey.create(Registries.BIOME, biomeId);
-
         for (BlockPos blacklistedPos : excluded) {
             if (isSameBiomeRegion(level, blacklistedPos, foundPos, biomeKey)) {
                 return true;
@@ -473,8 +546,8 @@ public class PathSubCommand implements SubCommand {
      * the biome along the straight line between them. If every sample point has the
      * target biome, the two points are considered part of the same region.
      */
-    private boolean isSameBiomeRegion(ServerLevel level, BlockPos a, BlockPos b,
-                                      ResourceKey<Biome> biomeKey) {
+    private static boolean isSameBiomeRegion(ServerLevel level, BlockPos a, BlockPos b,
+                                             ResourceKey<Biome> biomeKey) {
         double dx = b.getX() - a.getX();
         double dz = b.getZ() - a.getZ();
         double distance = Math.sqrt(dx * dx + dz * dz);
@@ -503,7 +576,7 @@ public class PathSubCommand implements SubCommand {
     /**
      * Converts a LookupType to an ActivePathManager.TargetType.
      */
-    private ActivePathManager.TargetType convertLookupType(LookupType lookupType) {
+    private static ActivePathManager.TargetType convertLookupType(LookupType lookupType) {
         return switch (lookupType) {
             case BLOCK, FLOWER -> ActivePathManager.TargetType.BLOCK;
             case BIOME -> ActivePathManager.TargetType.BIOME;
@@ -513,7 +586,7 @@ public class PathSubCommand implements SubCommand {
 
     // ── Per-target cost resolution ────────────────────────────────────────
 
-    private int resolveTrackCost(LookupType type, String targetId) {
+    private static int resolveTrackCost(LookupType type, String targetId) {
         return switch (type) {
             case BLOCK -> {
                 BlockDefinition block = BlockDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
@@ -534,7 +607,7 @@ public class PathSubCommand implements SubCommand {
         };
     }
 
-    private RequiredItem resolveRequiredItem(LookupType type, String targetId) {
+    private static RequiredItem resolveRequiredItem(LookupType type, String targetId) {
         return switch (type) {
             case BLOCK -> {
                 BlockDefinition block = BlockDefinitionLoader.INSTANCE.getDefinitionByID(targetId);
@@ -555,7 +628,7 @@ public class PathSubCommand implements SubCommand {
         };
     }
 
-    private boolean playerHasItem(ServerPlayer player, RequiredItem req) {
+    private static boolean playerHasItem(ServerPlayer player, RequiredItem req) {
         if (req == null || req.getItemId() == null) return true;
         Identifier itemId = Identifier.parse(req.getItemId());
         var itemOpt = BuiltInRegistries.ITEM.get(itemId);
@@ -573,7 +646,7 @@ public class PathSubCommand implements SubCommand {
         return false;
     }
 
-    private void consumeRequiredItem(ServerPlayer player, LookupType type, String targetId) {
+    private static void consumeRequiredItem(ServerPlayer player, LookupType type, String targetId) {
         RequiredItem req = resolveRequiredItem(type, targetId);
         if (req == null || req.getItemId() == null) return;
 
@@ -606,9 +679,7 @@ public class PathSubCommand implements SubCommand {
         int x = IntegerArgumentType.getInteger(context, "x");
         int y = IntegerArgumentType.getInteger(context, "y");
         int z = IntegerArgumentType.getInteger(context, "z");
-        BlockPos destination = new BlockPos(x, y, z);
 
-        // Validate dimension if provided
         Identifier expectedDimension = null;
         try {
             expectedDimension = IdentifierArgument.getId(context, "dimension");
@@ -616,45 +687,45 @@ public class PathSubCommand implements SubCommand {
             // dimension argument not provided (legacy command format)
         }
 
-        ServerLevel level = source.getLevel();
-
-        if (expectedDimension != null) {
-            String currentDimension = level.dimension().identifier().toString();
-            if (!currentDimension.equals(expectedDimension.toString())) {
-                PathScentNetworking.sendPathNotFound(player, "Wrong dimension");
-                return Command.SINGLE_SUCCESS;
-            }
-        }
-
-        // Determine target type by checking which registry contains the ID
         String idStr = targetId.toString();
-        ActivePathManager.TargetType targetType;
+        LookupType type;
         if (StructureDefinitionLoader.INSTANCE.hasId(idStr)) {
-            targetType = ActivePathManager.TargetType.STRUCTURE;
+            type = LookupType.STRUCTURE;
         } else if (BiomeDefinitionLoader.INSTANCE.hasId(idStr)) {
-            targetType = ActivePathManager.TargetType.BIOME;
+            type = LookupType.BIOME;
         } else {
-            targetType = ActivePathManager.TargetType.BLOCK;
+            type = LookupType.BLOCK;
         }
 
-        // Deduct reduced history retrack cost
-        int retrackCost = TrackingConfig.getInstance().getHistoryRetrackCost();
-        ItemStack headStack = Accessory.getEquipped(player);
-        if (headStack.getItem() instanceof ITrackableItem) {
-            if (headStack.isDamageableItem()) {
-                int remaining = headStack.getMaxDamage() - headStack.getDamageValue();
-                if (remaining < retrackCost) {
-                    PathScentNetworking.sendPathNotFound(player, "Not enough durability");
-                    return Command.SINGLE_SUCCESS;
-                }
-            }
-            headStack.hurtAndBreak(retrackCost, player, EquipmentSlot.HEAD);
+        recall(source, player, type, targetId, new BlockPos(x, y, z), expectedDimension);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static void recall(CommandSourceStack source, ServerPlayer player, LookupType type,
+                               Identifier targetId, BlockPos destination, Identifier expectedDimension) {
+        cancelSearch(player);
+        ServerLevel level = player.level();
+
+        if (expectedDimension != null && !level.dimension().identifier().equals(expectedDimension)) {
+            PathScentNetworking.sendPathNotFound(player, "Wrong dimension");
+            return;
         }
+
+        if (RespawnSyncState.isRespawnBlock(targetId)) {
+            RespawnTrackingNetworking.track(player);
+            return;
+        }
+
+        int retrackCost = TrackingConfig.getInstance().getHistoryRetrackCost();
+        if (!hasDurability(player, retrackCost)) {
+            PathScentNetworking.sendPathNotFound(player, "Not enough nose durability");
+            return;
+        }
+        hurtTracker(player, retrackCost);
 
         // Create path directly to known coordinates (no search needed)
-        ActivePathManager.getInstance().createPath(player, level, destination, targetType, idStr, ActivePathManager.TriggerSource.COMMAND);
+        ActivePathManager.getInstance().createPath(player, level, destination, convertLookupType(type), targetId.toString(), ActivePathManager.TriggerSource.COMMAND);
 
-        // Notify client
         BlockPos origin = player.blockPosition();
         int dist = (int) Math.sqrt(
                 Math.pow(origin.getX() - destination.getX(), 2) +
@@ -665,10 +736,9 @@ public class PathSubCommand implements SubCommand {
         if (verbose) {
             source.sendSuccess(() -> Component.literal("§6[Aroma Lib] §aRecalling path to known location!"), false);
             source.sendSuccess(() -> Component.literal(
-                    String.format("§7  Position: §aX: %d§7, §aY: %d§7, §aZ: %d", x, y, z)
+                    String.format("§7  Position: §aX: %d§7, §aY: %d§7, §aZ: %d",
+                            destination.getX(), destination.getY(), destination.getZ())
             ), false);
         }
-
-        return Command.SINGLE_SUCCESS;
     }
 }

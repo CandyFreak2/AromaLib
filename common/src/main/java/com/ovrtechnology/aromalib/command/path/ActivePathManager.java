@@ -4,6 +4,7 @@ import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.command.sub.PathSubCommand;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
 import com.ovrtechnology.aromalib.tracker.TrackingItemHelper;
+import com.ovrtechnology.aromalib.tracking.RespawnSyncState;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -91,8 +92,12 @@ public final class ActivePathManager {
      * @param level       the server level
      * @param destination the destination position
      */
-    public void createPath(ServerPlayer player, net.minecraft.server.level.ServerLevel level, BlockPos destination) {
+    public void createPath(ServerPlayer player, ServerLevel level, BlockPos destination) {
         createPath(player, level, destination, null, null, TriggerSource.TRACKER);
+    }
+
+    public void createPath(ServerPlayer player, ServerLevel level, BlockPos destination, TargetType targetType, String targetId) {
+        createPath(player, level, destination, targetType, targetId, TriggerSource.TRACKER);
     }
 
     /**
@@ -104,9 +109,9 @@ public final class ActivePathManager {
      * @param destination the destination position
      * @param targetType  the type of target being tracked (can be null)
      * @param targetId    the ID of the target (e.g., "minecraft:diamond_ore", can be null)
-     * @param source      the source of the path being created
      */
-    public void createPath(ServerPlayer player, ServerLevel level, BlockPos destination, TargetType targetType, String targetId, TriggerSource source) {
+    public void createPath(ServerPlayer player, ServerLevel level, BlockPos destination,
+                           TargetType targetType, String targetId, TriggerSource source) {
         UUID playerId = player.getUUID();
 
         // Remove any existing path for this player
@@ -129,7 +134,6 @@ public final class ActivePathManager {
      */
     public void removePath(UUID playerId) {
         activePaths.remove(playerId);
-
     }
 
     /**
@@ -171,6 +175,24 @@ public final class ActivePathManager {
                 continue;
             }
 
+            // A personal spawn route cannot survive a downgrade or a changed spawn point.
+            if (path.targetId() != null && RespawnSyncState.isRespawnBlock(
+                    net.minecraft.resources.Identifier.tryParse(path.targetId()))) {
+                var respawn = player.getRespawnConfig();
+                boolean valid = TrackingItemHelper.canTrackRespawn(player) && respawn != null && respawn.respawnData().dimension().identifier().equals(path.dimension()) && respawn.respawnData().pos().equals(path.destination());
+                if (valid && player.level().hasChunkAt(path.destination())) {
+                    var state = player.level().getBlockState(path.destination());
+                    valid = state.getBlock() instanceof net.minecraft.world.level.block.BedBlock
+                            || (state.getBlock() instanceof net.minecraft.world.level.block.RespawnAnchorBlock
+                            && state.getValue(net.minecraft.world.level.block.RespawnAnchorBlock.CHARGE) > 0);
+                }
+                if (!valid) {
+                    PathScentNetworking.sendPathNotFound(player, "Respawn point or equipped nose changed");
+                    iterator.remove();
+                    continue;
+                }
+            }
+
             // Check if player is in the same dimension
             if (!player.level().dimension().identifier().equals(path.dimension())) {
                 // Player changed dimension, remove path
@@ -184,8 +206,8 @@ public final class ActivePathManager {
             // Check if player has arrived (3D distance — prevents false arrival above underground targets)
             double distanceToDestination = Math.sqrt(
                     Math.pow(playerPos.getX() - destination.getX(), 2) +
-                    Math.pow(playerPos.getY() - destination.getY(), 2) +
-                    Math.pow(playerPos.getZ() - destination.getZ(), 2)
+                            Math.pow(playerPos.getY() - destination.getY(), 2) +
+                            Math.pow(playerPos.getZ() - destination.getZ(), 2)
             );
 
             // Send distance update to client
@@ -211,7 +233,7 @@ public final class ActivePathManager {
                 // Player has arrived!
                 if (PathSubCommand.isVerbose()) {
                     player.sendOverlayMessage(Component.literal(
-                            "§6[Aroma Lib] §aYou have arrived at your destination!"
+                            "§6[Aroma Affect] §aYou have arrived at your destination!"
                     ));
                 }
                 PathScentNetworking.sendPathArrived(player);

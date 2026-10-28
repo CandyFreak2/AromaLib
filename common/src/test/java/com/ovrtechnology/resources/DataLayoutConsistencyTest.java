@@ -1,5 +1,6 @@
 package com.ovrtechnology.resources;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -30,38 +31,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Data layout consistency")
 class DataLayoutConsistencyTest {
 
-    private static final String DATA_ROOT = "data/aromalib/";
+    private static final String DATA_ROOT = "data/aromaaffect/";
 
     private static final List<String> INDEXED_DIRECTORIES = List.of(
             BiomeDefinitionLoader.INSTANCE.getDirectory(),
-            BlockDefinitionLoader.DIRECTORY,
-            CategoryDefinitionLoader.DIRECTORY,
-            FlowerDefinitionLoader.DIRECTORY,
-            MobDefinitionLoader.DIRECTORY,
-            ScentDefinitionLoader.DIRECTORY,
-            StructureDefinitionLoader.DIRECTORY,
+            BlockDefinitionLoader.INSTANCE.getDirectory(),
+            CategoryDefinitionLoader.INSTANCE.getDirectory(),
+            FlowerDefinitionLoader.INSTANCE.getDirectory(),
+            MobDefinitionLoader.INSTANCE.getDirectory(),
+            ScentDefinitionLoader.INSTANCE.getDirectory(),
+            StructureDefinitionLoader.INSTANCE.getDirectory(),
             EventDefinitionLoader.DIRECTORY
-//            SnifferLootRegistry.RULES_DIR
-    );
-
-    private static final List<String> UNINDEXED_DIRECTORIES = List.of(
-            //NoseVariantRegistry.VARIANTS_DIR
     );
 
     private static final List<String> SINGLE_FILE_RESOURCES = List.of(
-//            ScentItemDefinitionLoader.SCENT_ITEMS_RESOURCE_PATH,
-            //TrackerDefinitionLoader.getFullPath(),
-//            SnifferNoseDefinitionLoader.SNIFFER_NOSES_RESOURCE_PATH,
+            TrackerDefinitionLoader.INSTANCE.getDirectory(),
             ScentTriggerConfigLoader.ITEM_TRIGGERS_PATH,
-            ScentTriggerConfigLoader.SETTINGS_PATH
-            //AbilityDefinitionLoader.ABILITY_PATH
+            ScentTriggerConfigLoader.SETTINGS_PATH,
+            AbilityDefinitionLoader.INSTANCE.getDirectory()
     );
 
     @Test
     @DisplayName("every loader directory should exist in bundled resources")
     void loaderDirectoriesShouldExist() {
-        Stream.concat(INDEXED_DIRECTORIES.stream(), UNINDEXED_DIRECTORIES.stream())
-                .forEach(directory -> assertThat(resourceUrl(DATA_ROOT + directory))
+        INDEXED_DIRECTORIES.forEach(directory -> assertThat(resourceUrl(DATA_ROOT + directory))
                         .as("bundled directory %s%s", DATA_ROOT, directory)
                         .isNotNull());
     }
@@ -103,7 +96,7 @@ class DataLayoutConsistencyTest {
     @Test
     @DisplayName("every mask reference in scent and category definitions should resolve to a bundled texture")
     void maskReferencesShouldResolve() throws IOException, URISyntaxException {
-        for (String directory : List.of(ScentDefinitionLoader.DIRECTORY, CategoryDefinitionLoader.DIRECTORY)) {
+        for (String directory : List.of(ScentDefinitionLoader.INSTANCE.getDirectory(), CategoryDefinitionLoader.INSTANCE.getDirectory())) {
             for (String stem : listJsonStems(DATA_ROOT + directory)) {
                 String definitionPath = DATA_ROOT + directory + "/" + stem + ".json";
                 JsonObject definition = loadJson(definitionPath).getAsJsonObject();
@@ -124,7 +117,7 @@ class DataLayoutConsistencyTest {
     @Test
     @DisplayName("every mask texture should be 160 wide with a height that is a multiple of 90")
     void maskTexturesShouldMatchFrameGrid() throws IOException, URISyntaxException {
-        URL maskDirectory = resourceUrl("assets/aromalib/textures/mask");
+        URL maskDirectory = resourceUrl("assets/aromaaffect/textures/mask");
         assertThat(maskDirectory).as("bundled mask texture directory").isNotNull();
         assertThat(maskDirectory.getProtocol()).isEqualTo("file");
 

@@ -1,33 +1,39 @@
 package com.ovrtechnology.aromalib.tracking;
 
 import com.ovrtechnology.aromalib.lookup.LookupType;
+import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver.ResolvedAbilities;
+import lombok.Getter;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class TrackingCategory {
 
+    @Getter
     private final String id;
+    @Getter
     private final LookupType lookupType;
-    private final String pathCommandType;
     private final Supplier<ItemStack> iconItem;
+    @Getter
     private final Identifier headerIcon;
     private final Identifier radialIcon;
     private final String titleKey;
     private final String descriptionKey;
+    @Getter
     private final TrailDomain trailDomain;
     private final boolean worldOutline;
     private final Supplier<Screen> screenFactory;
-    //private final Function<ResolvedAbilities, Set<String>> abilityAccessor;
+    private final Function<ResolvedAbilities, Set<String>> abilityAccessor;
 
     private TrackingCategory(Builder b) {
         this.id = Objects.requireNonNull(b.id, "id");
         this.lookupType = Objects.requireNonNull(b.lookupType, "lookupType");
-        this.pathCommandType = Objects.requireNonNull(b.pathCommandType, "pathCommandType");
         this.iconItem = Objects.requireNonNull(b.iconItem, "iconItem");
         this.headerIcon = Objects.requireNonNull(b.headerIcon, "headerIcon");
         this.radialIcon = b.radialIcon != null ? b.radialIcon : b.headerIcon;
@@ -36,27 +42,15 @@ public final class TrackingCategory {
         this.trailDomain = Objects.requireNonNull(b.trailDomain, "trailDomain");
         this.worldOutline = b.worldOutline;
         this.screenFactory = Objects.requireNonNull(b.screenFactory, "screenFactory");
-        //this.abilityAccessor = Objects.requireNonNull(b.abilityAccessor, "abilityAccessor");
+        this.abilityAccessor = Objects.requireNonNull(b.abilityAccessor, "abilityAccessor");
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public LookupType getLookupType() {
-        return lookupType;
-    }
-
-    public String getPathCommandType() {
-        return pathCommandType;
+    public static Builder builder(String id) {
+        return new Builder(id);
     }
 
     public ItemStack getIconItem() {
         return iconItem.get().copy();
-    }
-
-    public Identifier getHeaderIcon() {
-        return headerIcon;
     }
 
     public Identifier getRadialIcon() {
@@ -71,10 +65,6 @@ public final class TrackingCategory {
         return Component.translatable(descriptionKey);
     }
 
-    public TrailDomain getTrailDomain() {
-        return trailDomain;
-    }
-
     public boolean hasWorldOutline() {
         return worldOutline;
     }
@@ -83,18 +73,13 @@ public final class TrackingCategory {
         return screenFactory.get();
     }
 
-//    public Set<String> detectableFor(ResolvedAbilities abilities) {
-//        return abilityAccessor.apply(abilities);
-//    }
-
-    public static Builder builder(String id) {
-        return new Builder(id);
+    public Set<String> detectableFor(ResolvedAbilities abilities) {
+        return abilityAccessor.apply(abilities);
     }
 
     public static final class Builder {
         private final String id;
         private LookupType lookupType;
-        private String pathCommandType;
         private Supplier<ItemStack> iconItem;
         private Identifier headerIcon;
         private Identifier radialIcon;
@@ -103,7 +88,7 @@ public final class TrackingCategory {
         private TrailDomain trailDomain = TrailDomain.BLOCK;
         private boolean worldOutline = true;
         private Supplier<Screen> screenFactory;
-        //private Function<ResolvedAbilities, Set<String>> abilityAccessor;
+        private Function<ResolvedAbilities, Set<String>> abilityAccessor;
 
         private Builder(String id) {
             this.id = id;
@@ -111,11 +96,6 @@ public final class TrackingCategory {
 
         public Builder lookupType(LookupType lookupType) {
             this.lookupType = lookupType;
-            return this;
-        }
-
-        public Builder pathCommandType(String pathCommandType) {
-            this.pathCommandType = pathCommandType;
             return this;
         }
 
@@ -159,10 +139,10 @@ public final class TrackingCategory {
             return this;
         }
 
-//        public Builder abilityAccessor(Function<ResolvedAbilities, Set<String>> abilityAccessor) {
-//            this.abilityAccessor = abilityAccessor;
-//            return this;
-//        }
+        public Builder abilityAccessor(Function<ResolvedAbilities, Set<String>> abilityAccessor) {
+            this.abilityAccessor = abilityAccessor;
+            return this;
+        }
 
         public TrackingCategory build() {
             return new TrackingCategory(this);

@@ -1,13 +1,17 @@
 package com.ovrtechnology.aromalib.network;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.command.sub.PathSubCommand;
 import com.ovrtechnology.aromalib.history.BlacklistEntry;
 import com.ovrtechnology.aromalib.history.HistoryEntry;
 import com.ovrtechnology.aromalib.history.TrackingHistoryData;
+import com.ovrtechnology.aromalib.lookup.LookupType;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
+import com.ovrtechnology.aromalib.tracking.RespawnSyncState;
 import com.ovrtechnology.aromalib.trigger.*;
 import com.ovrtechnology.aromalib.trigger.client.PathTrackingMaskOverlay;
 import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.BlockPos;
@@ -91,16 +95,6 @@ public final class PathScentNetworking {
         @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
 
-    public record PathStatusCanceled(String reason) implements CustomPacketPayload {
-        public static final Type<PathStatusCanceled> TYPE = new Type<>(
-                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "path_status_canceled"));
-        public static final StreamCodec<RegistryFriendlyByteBuf, PathStatusCanceled> STREAM_CODEC = StreamCodec.of(
-                (buf, payload) -> buf.writeUtf(payload.reason),
-                buf -> new PathStatusCanceled(buf.readUtf())
-        );
-        @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
-    }
-
     public record StructureSyncS2C(String structureId) implements CustomPacketPayload {
         public static final Type<StructureSyncS2C> TYPE = new Type<>(
                 Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "structure_sync"));
@@ -112,6 +106,27 @@ public final class PathScentNetworking {
                 buf -> {
                     boolean hasStructure = buf.readBoolean();
                     return new StructureSyncS2C(hasStructure ? buf.readUtf() : null);
+                }
+        );
+        @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    }
+
+    public record RespawnSyncS2C(boolean present, String dimension, BlockPos pos, String blockId) implements CustomPacketPayload {
+        public static final Type<RespawnSyncS2C> TYPE = new Type<>(
+                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "respawn_sync"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, RespawnSyncS2C> STREAM_CODEC = StreamCodec.of(
+                (buf, payload) -> {
+                    buf.writeBoolean(payload.present);
+                    if (payload.present) {
+                        buf.writeUtf(payload.dimension);
+                        buf.writeBlockPos(payload.pos);
+                        buf.writeUtf(payload.blockId);
+                    }
+                },
+                buf -> {
+                    boolean present = buf.readBoolean();
+                    if (!present) return new RespawnSyncS2C(false, null, null, null);
+                    return new RespawnSyncS2C(true, buf.readUtf(), buf.readBlockPos(), buf.readUtf());
                 }
         );
         @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
@@ -142,6 +157,36 @@ public final class PathScentNetworking {
                     }
                     return new PathBlacklistSyncC2S(positions);
                 }
+        );
+        @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    }
+
+    public record PathTrackC2S(String lookupType, Identifier targetId) implements CustomPacketPayload {
+        public static final Type<PathTrackC2S> TYPE = new Type<>(
+                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "path_track"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PathTrackC2S> STREAM_CODEC = StreamCodec.of(
+                (buf, payload) -> {
+                    buf.writeUtf(payload.lookupType, 16);
+                    Identifier.STREAM_CODEC.encode(buf, payload.targetId);
+                },
+                buf -> new PathTrackC2S(buf.readUtf(16), Identifier.STREAM_CODEC.decode(buf))
+        );
+        @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    }
+
+    public record PathRecallC2S(String lookupType, Identifier targetId, BlockPos destination, Identifier dimension)
+            implements CustomPacketPayload {
+        public static final Type<PathRecallC2S> TYPE = new Type<>(
+                Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "path_recall"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, PathRecallC2S> STREAM_CODEC = StreamCodec.of(
+                (buf, payload) -> {
+                    buf.writeUtf(payload.lookupType, 16);
+                    Identifier.STREAM_CODEC.encode(buf, payload.targetId);
+                    buf.writeBlockPos(payload.destination);
+                    Identifier.STREAM_CODEC.encode(buf, payload.dimension);
+                },
+                buf -> new PathRecallC2S(buf.readUtf(16), Identifier.STREAM_CODEC.decode(buf),
+                        buf.readBlockPos(), Identifier.STREAM_CODEC.decode(buf))
         );
         @Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
     }
@@ -236,15 +281,6 @@ public final class PathScentNetworking {
                 });
 
         Balm.networking().registerClientboundPacket(
-                PathStatusCanceled.TYPE,
-                PathStatusCanceled.class,
-                PathStatusCanceled.STREAM_CODEC,
-                (player, payload) -> {
-                    ActiveTrackingState.setCanceled(payload.reason(), false);
-                    AromaLib.LOGGER.debug("Path status: canceled");
-                });
-
-        Balm.networking().registerClientboundPacket(
                 StructureSyncS2C.TYPE,
                 StructureSyncS2C.class,
                 StructureSyncS2C.STREAM_CODEC,
@@ -253,10 +289,23 @@ public final class PathScentNetworking {
                     AromaLib.LOGGER.debug("Received structure sync from server: {}", payload.structureId());
                 });
 
+        Balm.networking().registerClientboundPacket(
+                RespawnSyncS2C.TYPE,
+                RespawnSyncS2C.class,
+                RespawnSyncS2C.STREAM_CODEC,
+                (player, payload) -> {
+                    if (payload.present()) {
+                        RespawnSyncState.update(payload.dimension(), payload.pos(), payload.blockId());
+                    } else {
+                        RespawnSyncState.clear();
+                    }
+                    AromaLib.LOGGER.debug("Received respawn sync from server: {} at {}", payload.blockId(), payload.pos());
+                });
+
         // Server-side receiver for blacklist sync. Under Balm this runs on the main
         // server thread; BlacklistSyncManager uses ConcurrentHashMap so the update
-        // is still safe and ordering is preserved because the same tick processes
-        // the packet and the following /aromatest path command.
+        // is still safe and ordering is preserved because C2S packets are handled
+        // in arrival order, before the PathTrackC2S that follows.
         Balm.networking().registerServerboundPacket(
                 PathBlacklistSyncC2S.TYPE,
                 PathBlacklistSyncC2S.class,
@@ -266,6 +315,24 @@ public final class PathScentNetworking {
                     AromaLib.LOGGER.debug("Received blacklist sync from {}: {} entries",
                             serverPlayer.getName().getString(), payload.positions().size());
                 });
+
+        // Menu tracking goes through packets instead of /aromatest, which is OP-only
+        Balm.networking().registerServerboundPacket(
+                PathTrackC2S.TYPE,
+                PathTrackC2S.class,
+                PathTrackC2S.STREAM_CODEC,
+                (serverPlayer, payload) -> PathSubCommand.trackFromMenu(
+                        serverPlayer, LookupType.fromId(payload.lookupType()), payload.targetId()));
+
+        Balm.networking().registerServerboundPacket(
+                PathRecallC2S.TYPE,
+                PathRecallC2S.class,
+                PathRecallC2S.STREAM_CODEC,
+                (serverPlayer, payload) -> PathSubCommand.recallFromMenu(
+                        serverPlayer, LookupType.fromId(payload.lookupType()), payload.targetId(),
+                        payload.destination(), payload.dimension()));
+
+        ServerPlayerCallback.Leave.EVENT.register(player -> PathSubCommand.removePlayer(player.getUUID()));
 
         AromaLib.LOGGER.info("PathScentNetworking initialized");
     }
@@ -288,16 +355,20 @@ public final class PathScentNetworking {
         Balm.networking().sendTo(player, new PathStatusNotFoundS2C(reason));
     }
 
-    public static void sendPathCanceled(ServerPlayer player, String reason) {
-        Balm.networking().sendTo(player, new PathStatusCanceled(reason));
-    }
-
     public static void sendPathArrived(ServerPlayer player) {
         Balm.networking().sendTo(player, new PathStatusArrivedS2C());
     }
 
     public static void sendStructureSync(ServerPlayer player, String structureId) {
         Balm.networking().sendTo(player, new StructureSyncS2C(structureId));
+    }
+
+    public static void sendRespawnSync(ServerPlayer player, String dimension, BlockPos pos, String blockId) {
+        Balm.networking().sendTo(player, new RespawnSyncS2C(true, dimension, pos, blockId));
+    }
+
+    public static void sendRespawnCleared(ServerPlayer player) {
+        Balm.networking().sendTo(player, new RespawnSyncS2C(false, null, null, null));
     }
 
     public static void sendBlacklistSync(RegistryAccess registryAccess) {
@@ -309,5 +380,13 @@ public final class PathScentNetworking {
 
         Balm.networking().sendToServer(new PathBlacklistSyncC2S(positions));
         AromaLib.LOGGER.debug("Sent blacklist sync to server: {} entries", blacklist.size());
+    }
+
+    public static void sendTrackRequest(LookupType type, Identifier targetId) {
+        Balm.networking().sendToServer(new PathTrackC2S(type.getId(), targetId));
+    }
+
+    public static void sendRecallRequest(LookupType type, Identifier targetId, BlockPos destination, Identifier dimension) {
+        Balm.networking().sendToServer(new PathRecallC2S(type.getId(), targetId, destination, dimension));
     }
 }

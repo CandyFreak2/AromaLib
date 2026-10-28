@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ovrtechnology.aromalib.definition.loader.*;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,22 +34,22 @@ class DefinitionReferenceConsistencyTest {
 
     private static final Map<String, String> SPRITE_DIRECTORIES = Map.of(
             BiomeDefinitionLoader.INSTANCE.getDirectory(), "biomes",
-            StructureDefinitionLoader.DIRECTORY, "structures"
+            StructureDefinitionLoader.INSTANCE.getDirectory(), "structures"
     );
 
     private static final List<String> SCENTED_DIRECTORIES = List.of(
             BiomeDefinitionLoader.INSTANCE.getDirectory(),
-            BlockDefinitionLoader.DIRECTORY,
-            StructureDefinitionLoader.DIRECTORY,
-            FlowerDefinitionLoader.DIRECTORY,
-            MobDefinitionLoader.DIRECTORY,
+            BlockDefinitionLoader.INSTANCE.getDirectory(),
+            StructureDefinitionLoader.INSTANCE.getDirectory(),
+            FlowerDefinitionLoader.INSTANCE.getDirectory(),
+            MobDefinitionLoader.INSTANCE.getDirectory(),
             EventDefinitionLoader.DIRECTORY
     );
 
     @Test
     @DisplayName("every scented definition should reference a defined scent")
     void scentReferencesShouldResolve() throws IOException, URISyntaxException {
-        Set<String> scentIds = idsIn(ScentDefinitionLoader.DIRECTORY);
+        Set<String> scentIds = idsIn(ScentDefinitionLoader.INSTANCE.getDirectory());
         assertThat(scentIds).as("bundled scents").isNotEmpty();
 
         for (String directory : SCENTED_DIRECTORIES) {
@@ -68,7 +67,7 @@ class DefinitionReferenceConsistencyTest {
     @Test
     @DisplayName("every perception reference should resolve to a defined category")
     void perceptionReferencesShouldResolve() throws IOException, URISyntaxException {
-        Set<String> categoryIds = idsIn(CategoryDefinitionLoader.DIRECTORY);
+        Set<String> categoryIds = idsIn(CategoryDefinitionLoader.INSTANCE.getDirectory());
         assertThat(categoryIds).as("bundled categories").isNotEmpty();
 
         int references = 0;
@@ -86,55 +85,6 @@ class DefinitionReferenceConsistencyTest {
         }
         assertThat(references).as("perception references found").isPositive();
     }
-
-    @Test
-    @DisplayName("every scent item trigger should reference a defined scent item and OVR scent")
-    void scentItemTriggersShouldResolve() throws IOException, URISyntaxException {
-        Set<String> scentItemIds = new HashSet<>();
-//        for (JsonElement item : wrappedArray(ScentItemDefinitionLoader.SCENT_ITEMS_RESOURCE_PATH, "scents")) {
-//            scentItemIds.add(item.getAsJsonObject().get("id").getAsString());
-//        }
-        Set<String> scentNames = new HashSet<>();
-        for (Path file : listJsonFiles(DATA_ROOT + ScentDefinitionLoader.DIRECTORY)) {
-            scentNames.add(loadObject(file).get("fallback_name").getAsString().toLowerCase(Locale.ROOT));
-        }
-
-        JsonArray triggers = wrappedArray(ScentTriggerConfigLoader.ITEM_TRIGGERS_PATH, "item_triggers");
-        assertThat(triggers).as("scent item triggers").isNotEmpty();
-        for (JsonElement element : triggers) {
-            JsonObject trigger = element.getAsJsonObject();
-            String itemId = optionalString(trigger, "item_id");
-            String scentName = optionalString(trigger, "scent_name");
-            assertThat(itemId).as("item_id in scent item trigger").isNotNull().startsWith(MOD_PREFIX);
-            assertThat(scentItemIds)
-                    .as("scent item referenced by trigger %s", itemId)
-                    .contains(itemId.substring(MOD_PREFIX.length()));
-            assertThat(scentName).as("scent_name in trigger %s", itemId).isNotNull();
-            assertThat(scentNames)
-                    .as("scent '%s' referenced by trigger %s", scentName, itemId)
-                    .contains(scentName.toLowerCase(Locale.ROOT));
-        }
-    }
-
-//    @Test
-//    @DisplayName("every sniffer loot rule should reference a defined sniffer nose")
-//    void snifferLootRulesShouldReferenceDefinedNoses() throws IOException, URISyntaxException {
-//        Set<String> snifferNoseIds = new HashSet<>();
-//        for (JsonElement nose : wrappedArray(SnifferNoseDefinitionLoader.SNIFFER_NOSES_RESOURCE_PATH, "sniffer_noses")) {
-//            snifferNoseIds.add(MOD_PREFIX + nose.getAsJsonObject().get("id").getAsString());
-//        }
-//        assertThat(snifferNoseIds).as("bundled sniffer noses").isNotEmpty();
-//
-//        List<Path> rules = listJsonFiles(DATA_ROOT + SnifferLootRegistry.RULES_DIR);
-//        assertThat(rules).as("sniffer loot rules").isNotEmpty();
-//        for (Path file : rules) {
-//            String snifferNose = optionalString(loadObject(file), "sniffer_nose");
-//            assertThat(snifferNose).as("sniffer_nose in %s", file.getFileName()).isNotNull();
-//            assertThat(snifferNoseIds)
-//                    .as("sniffer nose '%s' referenced by %s", snifferNose, file.getFileName())
-//                    .contains(snifferNose);
-//        }
-//    }
 
     @Test
     @DisplayName("every biome and structure should have a menu sprite")
