@@ -7,14 +7,14 @@ import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.data.ClasspathDataSource;
 import com.ovrtechnology.aromalib.data.DataSource;
 import com.ovrtechnology.aromalib.definition.Definition;
-import com.ovrtechnology.aromalib.definition.StructureDefinition;
+import com.ovrtechnology.aromalib.definition.TriggerDefinition;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 
 import java.util.*;
 
 public abstract class AbstractDefinitionLoader<T extends Definition> {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     @Getter
     protected final List<T> loadedDefinitions = new ArrayList<>();
     @Getter
@@ -23,6 +23,7 @@ public abstract class AbstractDefinitionLoader<T extends Definition> {
     @Getter
     private final String directory;
     private final Class<T> definition;
+    @Getter
     private final String name;
 
     protected AbstractDefinitionLoader(String directory, Class<T> definition, String name) {
@@ -59,14 +60,14 @@ public abstract class AbstractDefinitionLoader<T extends Definition> {
         return loadAll(ClasspathDataSource.INSTANCE);
     }
 
-    private void process(T def) {
+    public void process(T def) {
         if (def == null) {
-            addWarning("Null {category} definition found, skipping...");
+            addWarning("Null " + getName() + " definition found, skipping...");
             return;
         }
 
         if (!def.isValid()) {
-            addWarning("Invalid category definition found (missing id), skipping...");
+            addWarning("Invalid " + getName() + " definition found (missing id), skipping...");
             return;
         }
 

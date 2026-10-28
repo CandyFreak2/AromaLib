@@ -13,10 +13,7 @@ import net.minecraft.network.chat.Component;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class TrackerDefinition {
-    @SerializedName("id")
-    private String id;
-
+public class TrackerDefinition extends Definition {
     @SerializedName("texture")
     private String texture;
 
@@ -93,15 +90,17 @@ public class TrackerDefinition {
         return Component.translatable(getTranslationKey());
     }
 
-    public String getTranslationKey() {
-        if (id == null || !id.contains(":")) {
-            return "tracker.aromalib.unknown";
-        }
-        String[] parts = id.split(":", 2);
-        return "tracker." + parts[0] + "." + parts[1];
+    @Override
+    protected String getFallbackTitle() {
+        return "Tracker";
     }
 
-    public boolean isValid() {
-        return id != null && !id.isEmpty();
+    @Override
+    protected String getTranslationTitle() {
+        return "tracker";
+    }
+
+    public void setId(String ID) {
+        id = ID;
     }
 }

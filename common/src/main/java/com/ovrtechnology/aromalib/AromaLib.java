@@ -34,7 +34,7 @@ public final class AromaLib {
     public static void initialize(BalmRegistrars registrars) {
         LOGGER.info("Initializing Aroma Lib...");
 
-        AbilityDefinitionLoader.loadAllAbilities();
+        AbilityDefinitionLoader.INSTANCE.loadAll();
         ScentRegistry.init();
         BiomeDefinitionLoader.INSTANCE.loadAll();
         BlockDefinitionLoader.INSTANCE.loadAll();
@@ -66,7 +66,7 @@ public final class AromaLib {
                                 (ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
                                     ScentRegistry.reload(ds);
-                                    AbilityDefinitionLoader.loadAllAbilities(ds);
+                                    AbilityDefinitionLoader.INSTANCE.loadAll(ds);
                                     BiomeDefinitionLoader.INSTANCE.loadAll(ds);
                                     BlockDefinitionLoader.INSTANCE.loadAll(ds);
                                     FlowerDefinitionLoader.INSTANCE.loadAll(ds);

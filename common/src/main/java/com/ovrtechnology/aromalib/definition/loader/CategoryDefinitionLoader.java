@@ -1,7 +1,6 @@
 package com.ovrtechnology.aromalib.definition.loader;
 
 import com.ovrtechnology.aromalib.definition.CategoryDefinition;
-import com.ovrtechnology.aromalib.definition.Definition;
 
 public class CategoryDefinitionLoader extends AbstractDefinitionLoader<CategoryDefinition> {
 

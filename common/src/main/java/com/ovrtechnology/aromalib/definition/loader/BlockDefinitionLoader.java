@@ -1,7 +1,6 @@
 package com.ovrtechnology.aromalib.definition.loader;
 
 import com.ovrtechnology.aromalib.definition.BlockDefinition;
-import com.ovrtechnology.aromalib.definition.Definition;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 
 import java.util.ArrayList;

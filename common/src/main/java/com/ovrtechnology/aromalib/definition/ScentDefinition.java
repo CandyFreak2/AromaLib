@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class ScentDefinition extends Definition {
+public class ScentDefinition extends TriggerDefinition {
 
     /**
      * Optional description of the scent for tooltips.
@@ -53,25 +53,6 @@ public class ScentDefinition extends Definition {
      */
     public ScentDefinition(String id, String fallbackName, String colorHTML) {
         super(id, fallbackName, colorHTML);
-    }
-    
-    /**
-     * Get the localization key for this scent's name.
-     * 
-     * @return The localization key in format "scent.aromaaffect.{id}"
-     */
-    @Override
-    public String getTranslationKey() {
-        return "scent.aromaaffect." + id;
-    }
-    
-    /**
-     * Get the localization key for this scent's description.
-     * 
-     * @return The localization key in format "scent.aromaaffect.{id}.description"
-     */
-    public String getDescriptionTranslationKey() {
-        return "scent.aromaaffect." + id + ".description";
     }
 }
 

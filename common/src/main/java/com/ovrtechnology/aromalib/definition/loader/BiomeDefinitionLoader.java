@@ -2,7 +2,6 @@ package com.ovrtechnology.aromalib.definition.loader;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.BiomeDefinition;
-import com.ovrtechnology.aromalib.definition.Definition;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 
 /**

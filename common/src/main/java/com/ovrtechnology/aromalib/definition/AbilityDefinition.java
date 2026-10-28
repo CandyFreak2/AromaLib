@@ -1,24 +1,27 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
+import com.ovrtechnology.aromalib.ability.Ability;
+import com.ovrtechnology.aromalib.util.AbilityType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Represents an ability definition loaded from JSON.
- * 
+ *
  * <p>
  * Abilities are special actions that can be granted to items. Each ability
  * has a type that determines how it's triggered and a config object for
  * ability-specific settings.
  * </p>
- * 
+ *
  * <h2>Ability Types:</h2>
  * <ul>
  * <li><b>passive</b>: Always active while wearing the item</li>
@@ -29,44 +32,30 @@ import java.util.Map;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class AbilityDefinition {
-
-    /**
-     * Unique identifier for this ability
-     * Must match the strings used in JSON files.
-     */
-    @SerializedName("id")
-    private String id;
-
-    /**
-     * Type of ability that determines how it's triggered.
-     * Valid values: "passive", "block_interaction"
-     */
+public class AbilityDefinition extends Definition {
     @SerializedName("type")
-    private String type;
+    private AbilityType type;
 
-    /**
-     * Human-readable description of the ability.
-     */
     @SerializedName("description")
     private String description;
 
-    /**
-     * Ability-specific configuration.
-     * Structure depends on the ability type.
-     */
     @SerializedName("config")
     private Map<String, Object> config;
 
-    // ========== Type Constants ==========
+    public AbilityDefinition() {
+        super();
+    }
 
-    public static final String TYPE_PASSIVE = "passive";
-    public static final String TYPE_BLOCK_INTERACTION = "block_interaction";
-
-    // ========== Getters with Defaults ==========
+    public AbilityDefinition(String id) {
+        super(id);
+    }
 
     public String getType() {
-        return type != null ? type : TYPE_PASSIVE;
+        return type != null ? type.getText() : AbilityType.PASSIVE.getText();
+    }
+
+    public boolean isTypeValid() {
+        return Arrays.stream(AbilityType.values()).anyMatch(t -> t.equals(getType()));
     }
 
     public String getDescription() {
@@ -77,11 +66,9 @@ public class AbilityDefinition {
         return config != null ? config : Collections.emptyMap();
     }
 
-    // ========== Config Accessors ==========
-
     /**
      * Gets an integer config value with a default.
-     * 
+     *
      * @param key          the config key
      * @param defaultValue the default if not found
      * @return the config value or default
@@ -96,7 +83,7 @@ public class AbilityDefinition {
 
     /**
      * Gets a double config value with a default.
-     * 
+     *
      * @param key          the config key
      * @param defaultValue the default if not found
      * @return the config value or default
@@ -111,7 +98,7 @@ public class AbilityDefinition {
 
     /**
      * Gets a string config value with a default.
-     * 
+     *
      * @param key          the config key
      * @param defaultValue the default if not found
      * @return the config value or default
@@ -126,7 +113,7 @@ public class AbilityDefinition {
 
     /**
      * Gets a boolean config value with a default.
-     * 
+     *
      * @param key          the config key
      * @param defaultValue the default if not found
      * @return the config value or default
@@ -141,7 +128,7 @@ public class AbilityDefinition {
 
     /**
      * Gets a list of strings config value.
-     * 
+     *
      * @param key the config key
      * @return the list or empty list if not found
      */
@@ -154,32 +141,21 @@ public class AbilityDefinition {
         return Collections.emptyList();
     }
 
-    // ========== Validation ==========
-
-    /**
-     * Validates the ability definition has required fields.
-     * 
-     * @return true if the definition is valid
-     */
-    public boolean isValid() {
-        return id != null && !id.isEmpty();
-    }
-
     /**
      * Checks if this ability is a passive type.
-     * 
+     *
      * @return true if passive
      */
     public boolean isPassive() {
-        return TYPE_PASSIVE.equals(getType());
+        return AbilityType.PASSIVE.equals(getType());
     }
 
     /**
      * Checks if this ability is a block interaction type.
-     * 
+     *
      * @return true if block interaction
      */
     public boolean isBlockInteraction() {
-        return TYPE_BLOCK_INTERACTION.equals(getType());
+        return AbilityType.BLOCK_INTERACTION.equals(getType());
     }
 }
