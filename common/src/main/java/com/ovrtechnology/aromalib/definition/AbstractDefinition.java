@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import java.util.regex.Pattern;
 
-public abstract class Definition {
+public abstract class AbstractDefinition {
     /**
      * Pattern for validating HTML hex color format.
      * Matches #RGB, #RRGGBB, or #RRGGBBAA formats.
@@ -23,7 +23,7 @@ public abstract class Definition {
     /**
      * Default constructor for GSON deserialization.
      */
-    public Definition() {
+    public AbstractDefinition() {
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class Definition {
      *
      * @param id Minecraft ID
      */
-    public Definition(String id) {
+    public AbstractDefinition(String id) {
         this.id = id;
     }
 
@@ -103,7 +103,7 @@ public abstract class Definition {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TriggerDefinition that = (TriggerDefinition) o;
+        AbstractTriggerDefinition that = (AbstractTriggerDefinition) o;
         return id != null && id.equals(that.id);
     }
 

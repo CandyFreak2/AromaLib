@@ -1,7 +1,6 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.ability.Ability;
 import com.ovrtechnology.aromalib.util.AbilityType;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +31,7 @@ import java.util.Map;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class AbilityDefinition extends Definition {
+public class AbilityDefinition extends AbstractDefinition {
     @SerializedName("type")
     private AbilityType type;
 

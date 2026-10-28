@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class TrackerDefinition extends Definition {
+public class TrackerDefinition extends AbstractDefinition {
     @SerializedName("texture")
     private String texture;
 

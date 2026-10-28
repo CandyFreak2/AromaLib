@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class CategoryDefinition extends TriggerDefinition {
+public class CategoryDefinition extends AbstractTriggerDefinition {
     @SerializedName("mask")
     private String mask;
 

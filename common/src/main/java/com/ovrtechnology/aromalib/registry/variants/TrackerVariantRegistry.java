@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.tracker.variants;
+package com.ovrtechnology.aromalib.registry.variants;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

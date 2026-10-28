@@ -3,7 +3,7 @@ import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.registry.TrackerRegistry;
 import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
-import com.ovrtechnology.aromalib.tracker.variants.TrackerVariantRegistry;
+import com.ovrtechnology.aromalib.registry.variants.TrackerVariantRegistry;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 

@@ -4,9 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ovrtechnology.aromalib.util.SoundRef;
 import lombok.Getter;
 
-import java.util.regex.Pattern;
-
-public abstract class TriggerDefinition extends Definition {
+public abstract class AbstractTriggerDefinition extends AbstractDefinition {
     /**
      * HTML hex color for UI display (e.g., "#5DECF5").
      * Used for rendering block indicators, trails, and menu items.
@@ -32,7 +30,7 @@ public abstract class TriggerDefinition extends Definition {
     /**
      * Default constructor for GSON deserialization.
      */
-    public TriggerDefinition() {
+    public AbstractTriggerDefinition() {
         super();
     }
 
@@ -42,7 +40,7 @@ public abstract class TriggerDefinition extends Definition {
      * @param id Minecraft ID
      * @param colorHtml HTML hex color
      */
-    public TriggerDefinition(String id, String fallbackName, String colorHtml) {
+    public AbstractTriggerDefinition(String id, String fallbackName, String colorHtml) {
         super(id);
         this.fallbackName = fallbackName;
         this.colorHtml = colorHtml;
@@ -161,7 +159,7 @@ public abstract class TriggerDefinition extends Definition {
         return "#FFFFFF";
     }
 
-    public static String getColor(TriggerDefinition instance) {
+    public static String getColor(AbstractTriggerDefinition instance) {
         return instance.getDefaultColor();
     }
 }

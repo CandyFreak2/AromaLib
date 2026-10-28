@@ -6,7 +6,7 @@ import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-public abstract class ScentedDefinition extends TriggerDefinition {
+public abstract class ScentedDefinition extends AbstractTriggerDefinition {
     /**
      * Reference to a scent ID from scents.json.
      * This scent will be emitted when tracking or entering this biome.

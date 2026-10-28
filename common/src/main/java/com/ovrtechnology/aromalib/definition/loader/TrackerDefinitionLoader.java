@@ -1,115 +1,28 @@
 package com.ovrtechnology.aromalib.definition.loader;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.data.ClasspathDataSource;
 import com.ovrtechnology.aromalib.data.DataSource;
-import com.ovrtechnology.aromalib.definition.StructureDefinition;
+import com.ovrtechnology.aromalib.data.JsonResources;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.registry.BiomeRegistry;
 import com.ovrtechnology.aromalib.registry.BlockRegistry;
 import com.ovrtechnology.aromalib.registry.StructureRegistry;
 import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
-import lombok.Getter;
-import net.minecraft.resources.Identifier;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TrackerDefinitionLoader {
+public class TrackerDefinitionLoader extends AbstractDefinitionLoader<TrackerDefinition> {
 
-    private static final Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .create();
+    public static final TrackerDefinitionLoader INSTANCE = new TrackerDefinitionLoader();
 
-    public static final String DIRECTORY = "items";
     private static final String DEFAULT_TEXTURE = "item/foragers_nose";
     private static final String DEFAULT_MODEL = "minecraft:iron_helmet";
 
-    @Getter
-    private static List<TrackerDefinition> loadedItems = new ArrayList<>();
-
-    private static Set<String> loadedIds = new HashSet<>();
-
-    @Getter
-    private static List<String> validationWarnings = new ArrayList<>();
-
-    public static List<TrackerDefinition> loadAll() {
-        return loadAll(ClasspathDataSource.INSTANCE);
-    }
-
-    public static List<TrackerDefinition> loadAll(DataSource dataSource) {
-        loadedItems.clear();
-        loadedIds.clear();
-        validationWarnings.clear();
-
-        Map<Identifier, JsonElement> files = dataSource.listJson(DIRECTORY);
-        for (Map.Entry<Identifier, JsonElement> entry : files.entrySet()) {
-            try {
-                TrackerDefinition def = GSON.fromJson(entry.getValue(), TrackerDefinition.class);
-                process(def);
-            } catch (Exception e) {
-                AromaLib.LOGGER.error("Failed to parse tracker {}: {}", entry.getKey(), e.getMessage());
-            }
-        }
-
-        AromaLib.LOGGER.info("Loaded {} tracker definitions", loadedItems.size());
-        return Collections.unmodifiableList(loadedItems);
-    }
-
-    private static void process(TrackerDefinition def) {
-        if (def == null) {
-            addWarning("Null tracker definition found, skipping...");
-            return;
-        }
-
-        if (!def.isValid()) {
-            addWarning("Invalid tracker definition found, skipping...");
-            return;
-        }
-
-        String id = def.getId();
-
-        if (loadedIds.contains(id)) {
-            addWarning("Duplicate id '" + id + "' found, skipping...");
-            return;
-        }
-
-        validate(def);
-
-        loadedIds.add(id);
-        loadedItems.add(def);
-        AromaLib.LOGGER.debug("Loaded {} trackers", loadedItems.size());
-    }
-
-    /*
-    TrackerDefinition[] newDefs = loadAllFromResource(dataSource, "data/aromaaffect/noses/noses.json");
-        int mutated = 0;
-        int skipped = 0;
-        for (TrackerDefinition src : newDefs) {
-            if (src == null || !src.isValid()) continue;
-            TrackerDefinition target = findLoadedById(src.getId());
-            if (target == null) {
-                AromaLib.LOGGER.warn(
-                        "[Nose reload] ID '{}' is not a built-in nose; custom noses must use the aromaaffect:custom_nose variant system.",
-                        src.getId());
-                skipped++;
-                continue;
-            }
-            copyFields(src, target);
-            validateAndApplyFallbacks(target);
-            mutated++;
-        }
-        AromaLib.LOGGER.info("Tracker Item reload: mutated {} definitions in place, skipped {} unknown IDs", mutated, skipped);
-     */
-
-    private static TrackerDefinition findLoadedById(String id) {
-        for (TrackerDefinition d : loadedItems) {
-            if (id.equals(d.getId())) return d;
-        }
-        return null;
+    public TrackerDefinitionLoader() {
+        super("items", TrackerDefinition.class, "trackers");
     }
 
     private static void copyFields(TrackerDefinition src, TrackerDefinition dst) {
@@ -122,7 +35,8 @@ public class TrackerDefinitionLoader {
         dst.setTrackCost(src.getTrackCost());
     }
 
-    private static void validate(TrackerDefinition def) {
+    @Override
+    public void validate(TrackerDefinition def) {
         String id = def.getId();
 
         String texturePath = def.getTexture();
@@ -151,8 +65,7 @@ public class TrackerDefinitionLoader {
                 List<String> invalidBlocks = BlockRegistry.validateBlockIds(unlock.getBlocks());
                 if (!invalidBlocks.isEmpty()) {
                     for (String invalidBlock : invalidBlocks) {
-                        AromaLib.LOGGER.warn("[{}] Skipping unregistered block: '{}' - block must be defined in blocks.json",
-                                id, invalidBlock);
+                        AromaLib.LOGGER.warn("[{}] Skipping unregistered block: '{}' - block must be defined in blocks.json", id, invalidBlock);
                     }
                     List<String> validBlocks = new ArrayList<>(unlock.getBlocks());
                     validBlocks.removeAll(invalidBlocks);
@@ -165,8 +78,7 @@ public class TrackerDefinitionLoader {
                 List<String> invalidStructures = StructureRegistry.validateStructureIds(unlock.getStructures());
                 if (!invalidStructures.isEmpty()) {
                     for (String invalidStructure : invalidStructures) {
-                        AromaLib.LOGGER.warn("[{}] Skipping unregistered structure: '{}' - structure must be defined in structures.json",
-                                id, invalidStructure);
+                        AromaLib.LOGGER.warn("[{}] Skipping unregistered structure: '{}' - structure must be defined in structures.json", id, invalidStructure);
                     }
                     List<String> validStructures = new ArrayList<>(unlock.getStructures());
                     validStructures.removeAll(invalidStructures);
@@ -179,8 +91,7 @@ public class TrackerDefinitionLoader {
                 List<String> invalidBiomes = BiomeRegistry.validateBiomeIds(unlock.getBiomes());
                 if (!invalidBiomes.isEmpty()) {
                     for (String invalidBiome : invalidBiomes) {
-                        AromaLib.LOGGER.warn("[{}] Skipping unregistered biome: '{}' - biome must be defined in biomes.json",
-                                id, invalidBiome);
+                        AromaLib.LOGGER.warn("[{}] Skipping unregistered biome: '{}' - biome must be defined in biomes.json", id, invalidBiome);
                     }
                     List<String> validBiomes = new ArrayList<>(unlock.getBiomes());
                     validBiomes.removeAll(invalidBiomes);
@@ -191,7 +102,7 @@ public class TrackerDefinitionLoader {
         }
     }
 
-    private static boolean textureExists(String texturePath) {
+    public boolean textureExists(String texturePath) {
         String fullPath = texturePath + ".png";
 
         try (InputStream stream = TrackerDefinitionLoader.class.getClassLoader().getResourceAsStream(fullPath)) {
@@ -201,27 +112,16 @@ public class TrackerDefinitionLoader {
         }
     }
 
-    public static TrackerDefinition parseFromJson(String json) {
-        try {
-            return GSON.fromJson(json, TrackerDefinition.class);
-        } catch (Exception e) {
-            AromaLib.LOGGER.error("Failed to parse tracker definition from JSON", e);
-            return null;
-        }
-    }
+    // @TODO replace the above with this one
+//    public boolean textureExists(String path) {
+//        String[] parts = path.split(":", 2);
+//        Identifier file = Identifier.fromNamespaceAndPath(parts[0], parts[1] + ".png");
+//        return Minecraft.getInstance().getResourceManager().getResource(file).isPresent();
+//    }
 
-    public static TrackerDefinition getByID(String id) {
-        for (TrackerDefinition def : loadedItems) {
-            if (def.getId().equals(id)) {
-                return def;
-            }
-        }
-        return null;
-    }
-
-    public static List<TrackerDefinition> getItemsByTier(int tier) {
+    public List<TrackerDefinition> getItemsByTier(int tier) {
         List<TrackerDefinition> result = new ArrayList<>();
-        for (TrackerDefinition def : loadedItems) {
+        for (TrackerDefinition def : loadedDefinitions) {
             if (def.getTier() == tier) {
                 result.add(def);
             }
@@ -229,16 +129,32 @@ public class TrackerDefinitionLoader {
         return result;
     }
 
-    public static String toJson(TrackerDefinition nose) {
-        return GSON.toJson(nose);
+    @Override
+    protected void reload(DataSource source) {
+        TrackerDefinition[] newDefs = loadFromResource(source, getDirectory());
+        int mutated = 0, skipped = 0;
+        for (TrackerDefinition src : newDefs) {
+            if (src == null || !src.isValid()) continue;
+            TrackerDefinition target = getDefinitionByID(src.getId());
+            if (target == null) {
+                AromaLib.LOGGER.warn("[Tracker Reload] ID '{}' is not built-in. Custom trackers must use the variant system.", src.getId());
+                skipped++;
+                continue;
+            }
+            copyFields(src, target);
+            validate(target);
+            mutated++;
+        }
+        AromaLib.LOGGER.info("Tracker Item reload: mutated {} definitions in place, skipped {} unknown IDs", mutated, skipped);
     }
 
-    public static Gson getGson() {
-        return GSON;
-    }
-
-    private static void addWarning(String warning) {
-        validationWarnings.add(warning);
-        AromaLib.LOGGER.warn(warning);
+    @Override
+    protected TrackerDefinition[] loadFromResource(DataSource source, String path) {
+        JsonElement element = source.read(path);
+        if (element == null) {
+            AromaLib.LOGGER.warn("Tracker definitions file not found: {}", path);
+            return new TrackerDefinition[0];
+        }
+        return JsonResources.parseArrayOrWrapped(element, getName(), TrackerDefinition[].class, GSON, path);
     }
 }

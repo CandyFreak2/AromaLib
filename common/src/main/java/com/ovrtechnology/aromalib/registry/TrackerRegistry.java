@@ -34,7 +34,7 @@ public class TrackerRegistry {
 
         AromaLib.LOGGER.info("Initializing TrackerRegistry...");
 
-        List<TrackerDefinition> definitions = TrackerDefinitionLoader.loadAll();
+        List<TrackerDefinition> definitions = TrackerDefinitionLoader.INSTANCE.loadAll();
         for (TrackerDefinition definition : definitions) {
             register(items, definition);
         }

@@ -13,7 +13,7 @@ import com.ovrtechnology.aromalib.network.ScentEventNetworking;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.registry.TrackerRegistry;
 import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
-import com.ovrtechnology.aromalib.tracker.variants.TrackerVariantRegistry;
+import com.ovrtechnology.aromalib.registry.variants.TrackerVariantRegistry;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
 import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
@@ -73,7 +73,7 @@ public final class AromaLib {
                                     StructureDefinitionLoader.INSTANCE.loadAll(ds);
                                     MobDefinitionLoader.INSTANCE.loadAll(ds);
                                     CategoryDefinitionLoader.INSTANCE.loadAll(ds);
-                                    TrackerDefinitionLoader.loadAll(ds);
+                                    TrackerDefinitionLoader.INSTANCE.loadAll(ds);
                                     TrackerVariantRegistry.reload(ds);
                                     //VariantRecipeIndex.reload(ds);
                                     TrackingAbilityResolver.rebuild();

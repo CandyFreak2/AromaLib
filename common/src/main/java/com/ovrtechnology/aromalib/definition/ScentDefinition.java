@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class ScentDefinition extends TriggerDefinition {
+public class ScentDefinition extends AbstractTriggerDefinition {
 
     /**
      * Optional description of the scent for tooltips.

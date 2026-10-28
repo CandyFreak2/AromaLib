@@ -6,14 +6,13 @@ import com.google.gson.JsonElement;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.data.ClasspathDataSource;
 import com.ovrtechnology.aromalib.data.DataSource;
-import com.ovrtechnology.aromalib.definition.Definition;
-import com.ovrtechnology.aromalib.definition.TriggerDefinition;
+import com.ovrtechnology.aromalib.definition.AbstractDefinition;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 
 import java.util.*;
 
-public abstract class AbstractDefinitionLoader<T extends Definition> {
+public abstract class AbstractDefinitionLoader<T extends AbstractDefinition> {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     @Getter
     protected final List<T> loadedDefinitions = new ArrayList<>();
@@ -60,6 +59,10 @@ public abstract class AbstractDefinitionLoader<T extends Definition> {
         return loadAll(ClasspathDataSource.INSTANCE);
     }
 
+    protected T[] loadFromResource(DataSource source, String path) {
+        return null;
+    }
+
     public void process(T def) {
         if (def == null) {
             addWarning("Null " + getName() + " definition found, skipping...");
@@ -104,11 +107,11 @@ public abstract class AbstractDefinitionLoader<T extends Definition> {
         return result;
     }
 
-    protected boolean isValid(Definition def) {
+    protected boolean isValid(AbstractDefinition def) {
         return def.isValid();
     }
 
-    protected String getID(Definition def) {
+    protected String getID(AbstractDefinition def) {
         return def.getId();
     }
 
@@ -129,6 +132,11 @@ public abstract class AbstractDefinitionLoader<T extends Definition> {
     public List<T> reload() {
         AromaLib.LOGGER.info("Reloading {} definitions...", name);
         return loadAll();
+    }
+
+    protected void reload(DataSource source) {
+        AromaLib.LOGGER.info("Reloading {} definitions w/ data source", name);
+
     }
 
     public boolean hasId(String id) {

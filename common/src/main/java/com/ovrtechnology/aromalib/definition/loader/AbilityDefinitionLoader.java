@@ -50,7 +50,8 @@ public class AbilityDefinitionLoader extends AbstractDefinitionLoader<AbilityDef
         super(DataSourceInfo.ABILITIES_PATH + "abilities.json", AbilityDefinition.class, "abilities");
     }
 
-    private static AbilityDefinition[] loadFromResource(DataSource source, String path) {
+    @Override
+    protected AbilityDefinition[] loadFromResource(DataSource source, String path) {
         try {
             JsonElement jsonElement = source.read(path);
             if (jsonElement == null) {
