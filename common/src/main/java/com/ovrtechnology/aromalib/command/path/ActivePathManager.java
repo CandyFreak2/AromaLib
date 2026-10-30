@@ -3,7 +3,7 @@ package com.ovrtechnology.aromalib.command.path;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.command.sub.PathSubCommand;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
-import com.ovrtechnology.aromalib.tracker.TrackingItemHelper;
+import com.ovrtechnology.aromalib.item.tracker.TrackingItemHelper;
 import com.ovrtechnology.aromalib.tracking.RespawnSyncState;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.minecraft.core.BlockPos;

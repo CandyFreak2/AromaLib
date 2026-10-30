@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ovrtechnology.aromalib.definition.loader.*;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

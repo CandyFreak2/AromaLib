@@ -1,9 +1,7 @@
-package com.ovrtechnology.aromalib.tracker;
+package com.ovrtechnology.aromalib.item.tracker;
 
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
-import com.ovrtechnology.aromalib.compat.Accessory;
-import com.ovrtechnology.aromalib.tracker.item.CustomITrackableItem;
-import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
+import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

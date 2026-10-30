@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.tracking.RequiredItem;
+import com.ovrtechnology.aromalib.util.RequiredItem;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import lombok.AccessLevel;
 import lombok.Getter;

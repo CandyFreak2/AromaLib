@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.config;
+package com.ovrtechnology.aromalib.definition.trigger;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

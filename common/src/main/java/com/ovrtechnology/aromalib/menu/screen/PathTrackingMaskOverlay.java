@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.client;
+package com.ovrtechnology.aromalib.menu.screen;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
@@ -8,10 +8,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Fullscreen scent mask overlay for active path tracking.

@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
+import com.ovrtechnology.aromalib.util.ItemUnlock;
 import com.ovrtechnology.aromalib.util.Texts;
 import lombok.Getter;
 import lombok.Setter;

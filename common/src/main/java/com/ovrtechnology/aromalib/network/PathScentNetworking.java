@@ -9,7 +9,7 @@ import com.ovrtechnology.aromalib.lookup.LookupType;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.tracking.RespawnSyncState;
 import com.ovrtechnology.aromalib.trigger.*;
-import com.ovrtechnology.aromalib.trigger.client.PathTrackingMaskOverlay;
+import com.ovrtechnology.aromalib.menu.screen.PathTrackingMaskOverlay;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.minecraft.client.Minecraft;

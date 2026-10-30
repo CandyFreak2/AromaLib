@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.client;
+package com.ovrtechnology.aromalib.menu.screen;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.trigger.PassiveModeManager;
@@ -6,8 +6,8 @@ import com.ovrtechnology.aromalib.trigger.ScentTrigger;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerSource;
 import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
-import com.ovrtechnology.aromalib.trigger.config.TriggerSettings;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.TriggerSettings;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

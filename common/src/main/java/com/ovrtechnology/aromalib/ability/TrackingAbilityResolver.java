@@ -1,9 +1,9 @@
-package com.ovrtechnology.aromalib.tracker;
+package com.ovrtechnology.aromalib.ability;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.registry.TrackerRegistry;
-import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
 import com.ovrtechnology.aromalib.registry.variants.TrackerVariantRegistry;
+import com.ovrtechnology.aromalib.util.ItemUnlock;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 

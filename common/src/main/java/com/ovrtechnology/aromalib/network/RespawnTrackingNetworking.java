@@ -2,8 +2,8 @@ package com.ovrtechnology.aromalib.network;
 
 import com.ovrtechnology.aromalib.command.path.ActivePathManager;
 import com.ovrtechnology.aromalib.command.sub.PathSubCommand;
-import com.ovrtechnology.aromalib.compat.Accessory;
-import com.ovrtechnology.aromalib.tracker.TrackingItemHelper;
+import com.ovrtechnology.aromalib.item.tracker.Accessory;
+import com.ovrtechnology.aromalib.item.tracker.TrackingItemHelper;
 import com.ovrtechnology.aromalib.tracking.*;
 import com.ovrtechnology.aromalib.util.Ids;
 import net.blay09.mods.balm.Balm;

@@ -8,7 +8,7 @@ import com.ovrtechnology.aromalib.definition.TrackerDefinition;
 import com.ovrtechnology.aromalib.registry.BiomeRegistry;
 import com.ovrtechnology.aromalib.registry.BlockRegistry;
 import com.ovrtechnology.aromalib.registry.StructureRegistry;
-import com.ovrtechnology.aromalib.tracker.item.ItemUnlock;
+import com.ovrtechnology.aromalib.util.ItemUnlock;
 
 import java.io.InputStream;
 import java.util.ArrayList;

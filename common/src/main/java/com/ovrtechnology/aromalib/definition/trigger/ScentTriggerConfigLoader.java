@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.config;
+package com.ovrtechnology.aromalib.definition.trigger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,6 +15,7 @@ import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.definition.StructureDefinition;
 import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
+import lombok.Getter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,6 +62,7 @@ public final class ScentTriggerConfigLoader {
     private static final Map<String, MobTriggerDefinition> mobTriggerMap = new HashMap<>();
     private static final Map<String, StructureTriggerDefinition> structureTriggerMap = new HashMap<>();
 
+    @Getter
     private static boolean initialized = false;
 
     private ScentTriggerConfigLoader() {
@@ -396,10 +398,6 @@ public final class ScentTriggerConfigLoader {
 
     public static TriggerSettings getSettings() {
         return settings != null ? settings : TriggerSettings.defaults();
-    }
-
-    public static boolean isInitialized() {
-        return initialized;
     }
 
     public static void reload() {

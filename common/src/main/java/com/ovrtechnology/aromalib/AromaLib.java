@@ -3,6 +3,7 @@ package com.ovrtechnology.aromalib;
 import com.ovrtechnology.aromalib.ability.AbilityHandler;
 import com.ovrtechnology.aromalib.ability.AbilityRegistry;
 import com.ovrtechnology.aromalib.command.path.ActivePathManager;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.definition.loader.*;
 import com.ovrtechnology.aromalib.command.AromaTestCommand;
 import com.ovrtechnology.aromalib.data.ResourceManagerDataSource;
@@ -12,14 +13,15 @@ import com.ovrtechnology.aromalib.network.PathScentNetworking;
 import com.ovrtechnology.aromalib.network.ScentEventNetworking;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.registry.TrackerRegistry;
-import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
+import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver;
 import com.ovrtechnology.aromalib.registry.variants.TrackerVariantRegistry;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.StructureSyncHandler;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -34,6 +36,8 @@ public final class AromaLib {
     public static void initialize(BalmRegistrars registrars) {
         LOGGER.info("Initializing Aroma Lib...");
 
+        Balm.config().registerConfig(AromaConfig.class);
+
         AbilityDefinitionLoader.INSTANCE.loadAll();
         ScentRegistry.init();
         BiomeDefinitionLoader.INSTANCE.loadAll();
@@ -47,7 +51,6 @@ public final class AromaLib {
         ScentTriggerManager.init();
 
         registrars.registrar(Registries.ITEM, TrackerRegistry::register);
-        //registrars.registrar(Registries.ITEM, TrackerVariantRegistry::register);
 
         TrackerRegistry.init();
         AbilityRegistry.init();
@@ -75,7 +78,6 @@ public final class AromaLib {
                                     CategoryDefinitionLoader.INSTANCE.loadAll(ds);
                                     TrackerDefinitionLoader.INSTANCE.loadAll(ds);
                                     TrackerVariantRegistry.reload(ds);
-                                    //VariantRecipeIndex.reload(ds);
                                     TrackingAbilityResolver.rebuild();
                                     EventDefinitionLoader.loadAllEvents(ds);
                                     ScentTriggerConfigLoader.rebuild();

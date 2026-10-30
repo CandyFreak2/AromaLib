@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.hooks;
 
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.config.ModpackConfig;
+import com.ovrtechnology.aromalib.client.config.ModpackConfig;
 import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.util.MenuRenderUtils;
 import com.ovrtechnology.aromalib.websocket.ConnectionState;

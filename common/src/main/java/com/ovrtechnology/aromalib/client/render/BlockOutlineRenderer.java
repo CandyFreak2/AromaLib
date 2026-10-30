@@ -13,7 +13,7 @@ import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.tracking.TrackingCategory;
 import com.ovrtechnology.aromalib.tracking.TrailDomain;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.client.renderer.RenderPipelines;

@@ -1,6 +1,5 @@
-package com.ovrtechnology.aromalib.trigger.config;
+package com.ovrtechnology.aromalib.definition.trigger;
 
-import com.ovrtechnology.aromalib.definition.trigger.DefinitionTrigger;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import lombok.Getter;
 import lombok.Setter;

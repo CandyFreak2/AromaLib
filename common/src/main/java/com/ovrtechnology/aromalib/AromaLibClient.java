@@ -1,16 +1,21 @@
 package com.ovrtechnology.aromalib;
 
+import com.ovrtechnology.aromalib.client.config.ConfigScreenFactory;
 import com.ovrtechnology.aromalib.menu.TrackingHud;
 import com.ovrtechnology.aromalib.websocket.WebSocketConnectionListener;
 import com.ovrtechnology.aromalib.hooks.ClientHooks;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerHandler;
-import com.ovrtechnology.aromalib.trigger.client.PassiveModeHud;
-import com.ovrtechnology.aromalib.trigger.client.PathTrackingMaskOverlay;
-import com.ovrtechnology.aromalib.trigger.client.ScentPuffOverlay;
+import com.ovrtechnology.aromalib.menu.screen.PassiveModeHud;
+import com.ovrtechnology.aromalib.menu.screen.PathTrackingMaskOverlay;
+import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
 import com.ovrtechnology.aromalib.websocket.WebSocketConfig;
 import lombok.experimental.UtilityClass;
 import net.blay09.mods.balm.client.BalmClientRegistrars;
+import net.blay09.mods.balm.client.platform.config.BalmConfigScreenRegistrar;
+import net.blay09.mods.balm.client.platform.module.BalmClientModule;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 /**
  * Client-side initialization for the Aroma Lib mod.
@@ -19,21 +24,14 @@ import net.blay09.mods.balm.client.BalmClientRegistrars;
  * <p>Invoked via {@code BalmClient.initializeMod(MOD_ID, loadContext, AromaAffectClient::initialize)}
  * from each platform client entry point.</p>
  */
-@UtilityClass
-public final class AromaLibClient {
-
-    private static boolean initialized = false;
+public class AromaLibClient implements BalmClientModule  {
 
     /**
      * Initializes all client-side systems.
      * Should be called during client mod initialization.
      */
-    public static void initialize(BalmClientRegistrars registrars) {
-        if (initialized) {
-            AromaLib.LOGGER.warn("AromaLibClient.initialize() called multiple times!");
-            return;
-        }
-        
+    @Override
+    public void initialize() {
         AromaLib.LOGGER.info("Initializing Aroma Lib client...");
 
         ClientHooks.init();
@@ -60,9 +58,13 @@ public final class AromaLibClient {
         // TODO: Initialize other client systems
         // - Particle effects
         // - Sound manager
-        
-        initialized = true;
+
         AromaLib.LOGGER.info("Aroma Lib client initialized successfully!");
+    }
+
+    @Override
+    public void registerConfigScreen(BalmConfigScreenRegistrar configScreens) {
+        configScreens.register(ConfigScreenFactory::create);
     }
 
     /**
@@ -72,8 +74,7 @@ public final class AromaLibClient {
      * built with the matching menu class in phase 4.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <TMenu extends net.minecraft.world.inventory.AbstractContainerMenu>
-            net.minecraft.core.Holder<net.minecraft.world.inventory.MenuType<TMenu>>
+    private static <TMenu extends AbstractContainerMenu> net.minecraft.core.Holder<net.minecraft.world.inventory.MenuType<TMenu>>
             castMenuHolder(net.minecraft.core.Holder<net.minecraft.world.inventory.MenuType<?>> holder) {
         return (net.minecraft.core.Holder) holder;
     }
@@ -122,6 +123,11 @@ public final class AromaLibClient {
                     }
                 }
         );
+    }
+
+    @Override
+    public Identifier getId() {
+        return Identifier.fromNamespaceAndPath(AromaLib.MOD_ID, "client");
     }
 }
 

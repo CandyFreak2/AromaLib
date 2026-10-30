@@ -1,9 +1,10 @@
 package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.definition.trigger.*;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
-import com.ovrtechnology.aromalib.trigger.client.ScentPuffOverlay;
-import com.ovrtechnology.aromalib.trigger.client.SoundTrigger;
+import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
+import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
 import com.ovrtechnology.aromalib.trigger.config.*;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;

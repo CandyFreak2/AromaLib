@@ -1,7 +1,8 @@
-package com.ovrtechnology.aromalib.tracker.item;
+package com.ovrtechnology.aromalib.item.tracker;
 
-import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
+import com.ovrtechnology.aromalib.util.ItemUnlock;
+import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public interface ITrackableItem {

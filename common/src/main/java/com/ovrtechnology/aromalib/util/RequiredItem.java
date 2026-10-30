@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.tracking;
+package com.ovrtechnology.aromalib.util;
 
 import com.google.gson.annotations.SerializedName;
 

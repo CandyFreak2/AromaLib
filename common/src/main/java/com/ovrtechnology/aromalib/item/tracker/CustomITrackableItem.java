@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.tracker.item;
+package com.ovrtechnology.aromalib.item.tracker;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;

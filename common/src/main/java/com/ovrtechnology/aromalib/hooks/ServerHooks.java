@@ -1,6 +1,6 @@
 package com.ovrtechnology.aromalib.hooks;
 
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import net.blay09.mods.balm.platform.event.callback.ServerLifecycleCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 

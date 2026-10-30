@@ -21,10 +21,10 @@ import net.neoforged.fml.common.Mod;
  * trail / block outline overlays) are wired below.</p>
  */
 @Mod(value = AromaLib.MOD_ID, dist = Dist.CLIENT)
-public final class AromaLibNeoForgeClient {
+public class AromaLibNeoForgeClient {
 
     public AromaLibNeoForgeClient(ModContainer modContainer, IEventBus modEventBus) {
-        BalmClient.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), AromaLibClient::initialize);
+        BalmClient.initializeMod(AromaLib.MOD_ID, new NeoForgeLoadContext(modContainer, modEventBus), new AromaLibClient());
 
         BlockOutlineRendererNeoForge.init();
     }

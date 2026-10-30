@@ -2,10 +2,10 @@ package com.ovrtechnology.aromalib.registry;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.loader.TrackerDefinitionLoader;
-import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver;
+import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
-import com.ovrtechnology.aromalib.tracker.TrackingItem;
-import com.ovrtechnology.aromalib.tracker.item.ITrackableItem;
+import com.ovrtechnology.aromalib.item.tracker.TrackingItem;
+import com.ovrtechnology.aromalib.item.tracker.ITrackableItem;
 import lombok.Getter;
 import net.blay09.mods.balm.core.BalmRegistrar;
 import net.minecraft.core.Holder;

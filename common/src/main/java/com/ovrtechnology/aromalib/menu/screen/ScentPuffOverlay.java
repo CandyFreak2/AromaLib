@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.client;
+package com.ovrtechnology.aromalib.menu.screen;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.CategoryDefinition;

@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.config;
+package com.ovrtechnology.aromalib.client.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 public final class ModpackConfig {
 
-    private static final String CONFIG_FILE_NAME = "aromaaffect_modpack.json";
+    private static final String CONFIG_FILE_NAME = "aromalib_modpack.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static ModpackConfig instance;

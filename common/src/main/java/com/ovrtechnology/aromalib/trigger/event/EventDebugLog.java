@@ -2,8 +2,8 @@ package com.ovrtechnology.aromalib.trigger.event;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.EventDefinition;
-import com.ovrtechnology.aromalib.trigger.client.ScentPuffOverlay;
-import com.ovrtechnology.aromalib.trigger.client.SoundTrigger;
+import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
+import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
 import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.util.Texts;
 import net.minecraft.client.Minecraft;

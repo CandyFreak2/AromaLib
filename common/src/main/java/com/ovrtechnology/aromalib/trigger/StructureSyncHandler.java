@@ -2,8 +2,8 @@ package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.network.PathScentNetworking;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
-import com.ovrtechnology.aromalib.trigger.config.StructureTriggerDefinition;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.StructureTriggerDefinition;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.minecraft.core.BlockPos;

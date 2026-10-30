@@ -2,8 +2,8 @@ package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
-import com.ovrtechnology.aromalib.trigger.config.ScentTriggerConfigLoader;
-import com.ovrtechnology.aromalib.trigger.config.TriggerSettings;
+import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
+import com.ovrtechnology.aromalib.definition.trigger.TriggerSettings;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
 import com.ovrtechnology.aromalib.websocket.WebSocketMessage;
 import lombok.Getter;

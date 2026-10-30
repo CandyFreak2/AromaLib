@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.tracking;
 
 import com.ovrtechnology.aromalib.lookup.LookupType;
-import com.ovrtechnology.aromalib.tracker.TrackingAbilityResolver.ResolvedAbilities;
+import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver.ResolvedAbilities;
 import lombok.Getter;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
