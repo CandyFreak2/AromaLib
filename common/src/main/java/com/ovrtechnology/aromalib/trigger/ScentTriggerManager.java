@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
-import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import com.ovrtechnology.aromalib.definition.trigger.TriggerSettings;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 /**
  * Central manager for scent triggers.
- * 
+ *
  * <p>
  * This singleton handles:
  * </p>
@@ -25,9 +25,9 @@ import java.util.Optional;
  * <li>Sending play/stop commands to OVR hardware</li>
  * <li>Processing trigger durations each tick</li>
  * </ul>
- * 
+ * <p>
  * Usage:
- * 
+ *
  * <pre>
  * // Check if can trigger (cooldown)
  * if (ScentTriggerManager.getInstance().canTrigger("Winter")) {
@@ -43,33 +43,28 @@ public final class ScentTriggerManager {
     // ========================================
     // State
     // ========================================
-
+    /**
+     * Map of scent name -> last trigger timestamp (ms).
+     */
+    private final Map<String, Long> lastTriggerTime = new HashMap<>();
     /**
      * The currently active scent trigger.
      */
     @Getter
     private ScentTrigger activeScent = null;
-
     /**
      * The last triggered scent (kept for HUD cooldown display after scent ends).
      */
     @Getter
     private ScentTrigger lastTriggeredScent = null;
 
+    // ========================================
+    // Cooldowns
+    // ========================================
     /**
      * Remaining ticks for the active scent.
      */
     private int remainingTicks = 0;
-
-    // ========================================
-    // Cooldowns
-    // ========================================
-
-    /**
-     * Map of scent name -> last trigger timestamp (ms).
-     */
-    private final Map<String, Long> lastTriggerTime = new HashMap<>();
-
     /**
      * Timestamp of the last global trigger (any scent).
      */
@@ -90,7 +85,7 @@ public final class ScentTriggerManager {
 
     /**
      * Gets the singleton instance.
-     * 
+     *
      * @return the manager instance
      */
     public static ScentTriggerManager getInstance() {
@@ -118,17 +113,17 @@ public final class ScentTriggerManager {
 
     /**
      * Checks if a scent can be triggered (not on cooldown).
-     * 
+     *
      * <p>
      * This checks both the global cooldown and the per-scent cooldown.
      * </p>
-     * 
+     *
      * @param scentName the scent name to check
      * @return true if the scent can be triggered
      */
     public boolean canTrigger(String scentName) {
         TriggerSettings settings = ScentTriggerConfigLoader.getSettings();
-        long globalCooldownMs = ClientConfig.getInstance().getGlobalCooldownMs();
+        long globalCooldownMs = AromaConfig.getGeneral().globalCooldownMs;
         long now = System.currentTimeMillis();
 
         // Check global cooldown (reads from user-editable ClientConfig)
@@ -159,7 +154,7 @@ public final class ScentTriggerManager {
      * @return true if can trigger
      */
     public boolean canTrigger(String scentName, long cooldownMs) {
-        long globalCooldownMs = ClientConfig.getInstance().getGlobalCooldownMs();
+        long globalCooldownMs = AromaConfig.getGeneral().globalCooldownMs;
         long now = System.currentTimeMillis();
 
         // Check global cooldown (reads from user-editable ClientConfig)
@@ -169,11 +164,7 @@ public final class ScentTriggerManager {
 
         // Check per-scent cooldown
         Long lastTime = lastTriggerTime.get(scentName);
-        if (lastTime != null && now - lastTime < cooldownMs) {
-            return false;
-        }
-
-        return true;
+        return lastTime == null || now - lastTime >= cooldownMs;
     }
 
     /**
@@ -181,7 +172,7 @@ public final class ScentTriggerManager {
      * Used for immediate proximity bypass (≤2 blocks) and mob interrupts.
      * Still respects the per-scent/type cooldown.
      *
-     * @param scentName the scent name
+     * @param scentName  the scent name
      * @param cooldownMs the per-type cooldown to check
      * @return true if can trigger (ignoring global cooldown)
      */
@@ -202,13 +193,13 @@ public final class ScentTriggerManager {
 
     /**
      * Gets the remaining cooldown time for a scent in milliseconds.
-     * 
+     *
      * @param scentName the scent name
      * @return remaining cooldown in ms, or 0 if not on cooldown
      */
     public long getRemainingCooldown(String scentName) {
         TriggerSettings settings = ScentTriggerConfigLoader.getSettings();
-        long globalCooldownMs = ClientConfig.getInstance().getGlobalCooldownMs();
+        long globalCooldownMs = AromaConfig.getGeneral().globalCooldownMs;
         long now = System.currentTimeMillis();
 
         // Check global cooldown first (reads from user-editable ClientConfig)
@@ -235,12 +226,12 @@ public final class ScentTriggerManager {
 
     /**
      * Triggers a scent.
-     * 
+     *
      * <p>
      * This method handles priority resolution and sends the appropriate
      * commands to OVR hardware.
      * </p>
-     * 
+     *
      * @param trigger the trigger to activate
      * @return true if the trigger was activated, false if blocked
      */
@@ -291,7 +282,7 @@ public final class ScentTriggerManager {
 
     /**
      * Stops a specific scent if it's the active one.
-     * 
+     *
      * @param scentName the scent to stop
      */
     public void stop(String scentName) {
@@ -332,7 +323,7 @@ public final class ScentTriggerManager {
 
     /**
      * Sends a play command to OVR hardware.
-     * 
+     *
      * @param scentName the scent name to play
      * @param intensity the scent intensity (0.0 to 1.0)
      */
@@ -366,7 +357,7 @@ public final class ScentTriggerManager {
 
     /**
      * Gets the currently active scent trigger.
-     * 
+     *
      * @return Optional containing the active scent, or empty if none
      */
     public Optional<ScentTrigger> getActiveScentOptional() {
@@ -375,7 +366,7 @@ public final class ScentTriggerManager {
 
     /**
      * Checks if any scent is currently active.
-     * 
+     *
      * @return true if a scent is playing
      */
     public boolean hasActiveScent() {
@@ -384,7 +375,7 @@ public final class ScentTriggerManager {
 
     /**
      * Gets the remaining duration of the active scent in ticks.
-     * 
+     *
      * @return remaining ticks, or 0 if no active scent
      */
     public int getRemainingTicks() {
@@ -441,7 +432,7 @@ public final class ScentTriggerManager {
      * @return true if any cooldown is active
      */
     public boolean hasActiveCooldown() {
-        long globalCooldownMs = ClientConfig.getInstance().getGlobalCooldownMs();
+        long globalCooldownMs = AromaConfig.getGeneral().globalCooldownMs;
         long now = System.currentTimeMillis();
 
         // Check global cooldown
@@ -453,9 +444,7 @@ public final class ScentTriggerManager {
         if (lastTriggeredScent != null) {
             long cooldownMs = getEffectiveScentCooldownMs(lastTriggeredScent);
             Long lastTime = lastTriggerTime.get(lastTriggeredScent.scentName());
-            if (lastTime != null && now - lastTime < cooldownMs) {
-                return true;
-            }
+            return lastTime != null && now - lastTime < cooldownMs;
         }
 
         return false;

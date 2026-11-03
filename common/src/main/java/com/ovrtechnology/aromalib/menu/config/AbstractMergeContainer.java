@@ -30,5 +30,4 @@ public abstract class AbstractMergeContainer extends AbstractContainerWidget {
     public List<BalmConfigScreenRowState> all() {
         return List.copyOf(states);
     }
-
 }

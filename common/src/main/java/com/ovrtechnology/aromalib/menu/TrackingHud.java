@@ -1,9 +1,9 @@
 package com.ovrtechnology.aromalib.menu;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.tracking.TrackingCategory;
-import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.util.MenuRenderUtils;
 import net.blay09.mods.balm.client.platform.event.callback.ClientTickCallback;
 import net.blay09.mods.balm.client.platform.event.callback.RenderCallback;
@@ -20,29 +20,36 @@ import net.minecraft.util.Mth;
  */
 public final class TrackingHud {
 
-    private static boolean initialized = false;
-
-    /** Whether a sound has already been played for the current ARRIVED state. */
-    private static boolean arrivedSoundPlayed = false;
-
-    /** Timestamp when the current notification started (for fade animation). */
-    private static long notificationStart = 0;
-
-    /** The status we're currently showing a notification for. */
-    private static ActiveTrackingState.TrackingStatus lastNotifiedStatus = ActiveTrackingState.TrackingStatus.IDLE;
-
-    /** How long the notification is visible (matches auto-clear). */
+    /**
+     * How long the notification is visible (matches auto-clear).
+     */
     private static final long NOTIFICATION_DURATION_MS = 3000;
-
-    /** Fade-out starts this many ms before the notification ends. */
+    /**
+     * Fade-out starts this many ms before the notification ends.
+     */
     private static final long FADE_OUT_MS = 600;
-
-    /** Brief, central guidance shown when a newly found trail starts off-screen. */
+    /**
+     * Brief, central guidance shown when a newly found trail starts off-screen.
+     */
     private static final long DIRECTION_GUIDE_MS = 2500;
+    private static boolean initialized = false;
+    /**
+     * Whether a sound has already been played for the current ARRIVED state.
+     */
+    private static boolean arrivedSoundPlayed = false;
+    /**
+     * Timestamp when the current notification started (for fade animation).
+     */
+    private static long notificationStart = 0;
+    /**
+     * The status we're currently showing a notification for.
+     */
+    private static ActiveTrackingState.TrackingStatus lastNotifiedStatus = ActiveTrackingState.TrackingStatus.IDLE;
     private static long directionGuideStart = 0;
     private static ActiveTrackingState.TrackingStatus previousStatus = ActiveTrackingState.TrackingStatus.IDLE;
 
-    private TrackingHud() {}
+    private TrackingHud() {
+    }
 
     public static void init() {
         if (initialized) {
@@ -119,7 +126,7 @@ public final class TrackingHud {
         if (status == ActiveTrackingState.TrackingStatus.TRACKING) {
             renderInitialDirectionGuide(graphics, mc);
         }
-        if (ClientConfig.getInstance().isTrackingToastPersistent()
+        if (AromaConfig.getGeneral().isTrackingToastPersistent
                 && (status == ActiveTrackingState.TrackingStatus.SEARCHING
                 || status == ActiveTrackingState.TrackingStatus.TRACKING)) {
             renderPersistentTrackingToast(graphics, mc, status);
@@ -170,7 +177,9 @@ public final class TrackingHud {
                 text = Component.translatable("tracking.aromalib.status.stopped").getString();
                 accentColor = 0xFF6644;
             }
-            default -> { return; }
+            default -> {
+                return;
+            }
         }
 
         // Display name of target
@@ -225,13 +234,20 @@ public final class TrackingHud {
         int y = screenH / 2 - 2;
         switch (kind) {
             case E -> x = screenW - margin;
-            case SE -> { x = screenW - margin; y = screenH - margin; }
+            case SE -> {
+                x = screenW - margin;
+                y = screenH - margin;
+            }
             case S -> y = screenH - margin;
-            case SW -> { x = margin; y = screenH - margin; }
+            case SW -> {
+                x = margin;
+                y = screenH - margin;
+            }
             case W -> x = margin;
             case UP -> y = margin;
             case DOWN -> y = screenH - margin;
-            default -> { }
+            default -> {
+            }
         }
 
         float fade = elapsed < 250 ? elapsed / 250f

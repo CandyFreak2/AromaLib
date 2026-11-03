@@ -1,11 +1,12 @@
 package com.ovrtechnology.aromalib.trigger;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
+import com.ovrtechnology.aromalib.client.config.PassiveModeConfig;
 import com.ovrtechnology.aromalib.definition.trigger.*;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
-import com.ovrtechnology.aromalib.trigger.config.*;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
 import net.minecraft.core.BlockPos;
@@ -62,14 +63,14 @@ public final class PassiveModeManager {
      * Gets the activation range for mob triggers from user config.
      */
     private static double getMobActivationRange() {
-        return ClientConfig.getInstance().getPassiveMobRange();
+        return AromaConfig.getConfig().passiveSettings.passiveMobRange;
     }
 
     /**
      * Gets the activation range for block triggers from user config.
      */
     private static double getBlockActivationRange() {
-        return ClientConfig.getInstance().getPassiveBlockRange();
+        return AromaConfig.getConfig().passiveSettings.blockRange;
     }
 
     /**
@@ -329,10 +330,10 @@ public final class PassiveModeManager {
      * Structure and biome cooldowns come from TriggerSettings (data pack defaults).
      */
     private static long getCooldownForType(TriggerType type) {
-        ClientConfig config = ClientConfig.getInstance();
+        AromaConfig.Passive config = AromaConfig.getConfig().passiveSettings;
         return switch (type) {
-            case BLOCK -> config.getPassiveBlockCooldownMs();
-            case MOB -> config.getPassiveMobCooldownMs();
+            case BLOCK -> config.blockCooldownMS;
+            case MOB -> config.mobCooldownMS;
             case STRUCTURE -> ScentTriggerConfigLoader.getSettings().getStructureCooldownMs();
             case BIOME -> ScentTriggerConfigLoader.getSettings().getBiomeCooldownMs();
         };
@@ -345,7 +346,7 @@ public final class PassiveModeManager {
     private static long getEffectiveCooldown(TriggerCandidate candidate) {
         // Passive mobs (villagers, sheep, cows) use their own cooldown
         if (candidate.type == TriggerType.MOB && !isHostileMob(candidate.source)) {
-            return ClientConfig.getInstance().getPassivePassiveMobCooldownMs();
+            return AromaConfig.getPassive().hostileMobCooldownMS;
         }
         return getCooldownForType(candidate.type);
     }
@@ -703,7 +704,7 @@ public final class PassiveModeManager {
             SoundTrigger.playEventSound(player, candidate.trigger.perception(), candidate.trigger.sound());
 
             // Show border overlay if setting is enabled
-            if (ClientConfig.getInstance().isPassivePuffOverlay()) {
+            if (AromaConfig.getGeneral().isOverlayActive) {
                 ScentPuffOverlay.onScentPuff(candidate.trigger.scentName(), candidate.trigger.perception(), candidate.trigger.intensity());
             }
         }
@@ -713,7 +714,7 @@ public final class PassiveModeManager {
         }
 
         // Show chat message when debug scent messages are enabled in settings
-        if (ClientConfig.getInstance().isDebugScentMessages()) {
+        if (AromaConfig.getGeneral().debugScentMessages) {
             // Get trigger type name for message
             String triggerTypeName = candidate.type.name().toLowerCase();
 

@@ -1,4 +1,4 @@
-package com.ovrtechnology.aromalib.trigger.config;
+package com.ovrtechnology.aromalib.client.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

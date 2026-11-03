@@ -1,10 +1,10 @@
 package com.ovrtechnology.aromalib.trigger.event;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.definition.EventDefinition;
 import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
-import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.util.Texts;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,7 +17,7 @@ public final class EventDebugLog {
     public static void fired(EventDefinition def, String scentName, double intensity) {
         if (def == null) return;
 
-        boolean debugChat = ClientConfig.getInstance().isDebugScentMessages();
+        boolean debugChat = AromaConfig.getGeneral().debugScentMessages;
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
@@ -36,7 +36,7 @@ public final class EventDebugLog {
         // Visible feedback (screen-border puff), independent of the debug chat
         // setting — mirrors the proximity-trigger UX so events are observable
         // without OVR hardware.
-        if (ClientConfig.getInstance().isPassivePuffOverlay()) {
+        if (AromaConfig.getGeneral().isOverlayActive) {
             ScentPuffOverlay.onScentPuff(scentName, def.getPerception(), intensity);
         }
 
@@ -62,7 +62,7 @@ public final class EventDebugLog {
 
     public static void stopped(EventDefinition def, String scentName) {
         if (def == null) return;
-        if (!ClientConfig.getInstance().isDebugScentMessages()) {
+        if (!AromaConfig.getGeneral().debugScentMessages) {
             AromaLib.LOGGER.debug("[Events] STOPPED {} (was {})", def.getId(), scentName);
             return;
         }
@@ -77,7 +77,7 @@ public final class EventDebugLog {
 
     public static void suppressed(EventDefinition def, String reason) {
         if (def == null) return;
-        if (!ClientConfig.getInstance().isDebugScentMessages()) {
+        if (!AromaConfig.getGeneral().debugScentMessages) {
             AromaLib.LOGGER.debug("[Events] suppressed {} ({})", def.getId(), reason);
             return;
         }

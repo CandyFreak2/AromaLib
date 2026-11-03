@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.registry.BlockRegistry;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.item.tracker.TrackingItemHelper;
@@ -20,7 +21,6 @@ import com.ovrtechnology.aromalib.trigger.ScentTrigger;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerManager;
 import com.ovrtechnology.aromalib.trigger.ScentTriggerSource;
 import com.ovrtechnology.aromalib.menu.screen.PathTrackingMaskOverlay;
-import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.definition.trigger.ScentTriggerConfigLoader;
 import com.ovrtechnology.aromalib.definition.trigger.TriggerSettings;
 import net.minecraft.client.Minecraft;
@@ -718,7 +718,7 @@ public final class PathTrailRenderer {
         if (triggered) {
             PathTrackingMaskOverlay.onPathScentPuff(scentName, intensity);
 
-            if (ClientConfig.getInstance().isDebugScentMessages()) {
+            if (AromaConfig.getGeneral().debugScentMessages) {
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.player != null) {
                     int intensityPercent = (int) Math.round(intensity * 100);

@@ -1,8 +1,10 @@
 package com.ovrtechnology.aromalib.menu.config;
 
+import com.ovrtechnology.aromalib.client.config.util.ConfigLocalization;
+import com.ovrtechnology.aromalib.client.config.util.PuffMode;
 import net.blay09.mods.balm.client.platform.config.screen.BalmConfigScreenRowState;
+import net.blay09.mods.balm.platform.config.schema.ConfiguredEnum;
 import net.blay09.mods.balm.platform.config.schema.ConfiguredProperty;
-import net.blay09.mods.balm.platform.config.util.ConfigLocalization;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;

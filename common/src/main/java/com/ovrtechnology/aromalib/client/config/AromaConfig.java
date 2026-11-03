@@ -2,6 +2,7 @@ package com.ovrtechnology.aromalib.client.config;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.client.config.util.PuffMode;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.config.reflection.Comment;
 import net.blay09.mods.balm.platform.config.reflection.Config;
 import net.blay09.mods.balm.platform.config.reflection.Range;
@@ -39,7 +40,7 @@ public class AromaConfig {
         public boolean isOverlayActive = true;
 
         @Comment("Whether it shows debug messages for scent triggers")
-        public boolean debugScentMessages = true;
+        public boolean debugScentMessages = false;
 
         @Comment("Whether it shows status on title screen")
         public boolean showOmaraStatus = true;
@@ -56,7 +57,7 @@ public class AromaConfig {
         public int hostileMobCooldownMS = 8000;
 
         @Range(min = "1000", max = "30000")
-        public int passiveMobCooldownMS = 8000;
+        public int mobCooldownMS = 8000;
 
         @Range(min = "1.1", max = "5.0")
         public double blockRange = 2.5;
@@ -72,4 +73,15 @@ public class AromaConfig {
         public int cooldown = 5000;
     }
 
+    public static AromaConfig getConfig() {
+        return Balm.config().getActiveConfig(AromaConfig.class);
+    }
+
+    public static General getGeneral() {
+        return getConfig().generalSettings;
+    }
+
+    public static Passive getPassive() {
+        return getConfig().passiveSettings;
+    }
 }

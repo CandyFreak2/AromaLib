@@ -1,8 +1,8 @@
 package com.ovrtechnology.aromalib.hooks;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.client.config.ModpackConfig;
-import com.ovrtechnology.aromalib.trigger.config.ClientConfig;
 import com.ovrtechnology.aromalib.util.MenuRenderUtils;
 import com.ovrtechnology.aromalib.websocket.ConnectionState;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
@@ -14,8 +14,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
-import net.minecraft.util.Util;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Util;
 
 import java.net.URI;
 import java.util.List;
@@ -43,7 +43,7 @@ public class ClientHooks {
             if (!(screen instanceof TitleScreen titleScreen)) {
                 return;
             }
-            if (!ClientConfig.getInstance().isOmaraStatusOverlay()) {
+            if (!AromaConfig.getGeneral().showOmaraStatus) {
                 return;
             }
             renderStatus(titleScreen, guiGraphics, mouseX, mouseY);
@@ -53,7 +53,7 @@ public class ClientHooks {
             if (!(screen instanceof TitleScreen)) {
                 return false;
             }
-            if (!ClientConfig.getInstance().isOmaraStatusOverlay() || event.button() != 0) {
+            if (!AromaConfig.getGeneral().showOmaraStatus || event.button() != 0) {
                 return false;
             }
             if (event.x() >= linkX1 && event.x() < linkX2 && event.y() >= linkY1 && event.y() < linkY2) {
@@ -79,8 +79,8 @@ public class ClientHooks {
         // RECONNECTING wait; treat those as "reconnecting" too so the text doesn't flicker.
         boolean reconnecting = client.hasEverConnected()
                 && (state == ConnectionState.RECONNECTING
-                    || ((state == ConnectionState.CONNECTING || state == ConnectionState.CONNECTION_FAILED)
-                        && client.getReconnectAttempts() > 0));
+                || ((state == ConnectionState.CONNECTING || state == ConnectionState.CONNECTION_FAILED)
+                && client.getReconnectAttempts() > 0));
         boolean linked = connected || reconnecting;
 
         Component prefix;
