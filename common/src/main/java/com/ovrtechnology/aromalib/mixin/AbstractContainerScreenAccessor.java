@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(AbstractContainerScreen.class)
 public interface AbstractContainerScreenAccessor {
     @Accessor("leftPos")
-    int aromaaffect$getLeftPos();
+    int aromalib$getLeftPos();
 
     @Accessor("topPos")
-    int aromaaffect$getTopPos();
+    int aromalib$getTopPos();
 }

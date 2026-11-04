@@ -3,7 +3,13 @@ package com.ovrtechnology.aromalib.trigger;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.client.config.PassiveModeConfig;
+import com.ovrtechnology.aromalib.condition.EntityConditions;
+import com.ovrtechnology.aromalib.definition.AbstractDefinition;
+import com.ovrtechnology.aromalib.definition.ScentedDefinition;
 import com.ovrtechnology.aromalib.definition.trigger.*;
+import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
+import com.ovrtechnology.aromalib.definition.variant.BlockVariant;
+import com.ovrtechnology.aromalib.tags.TagInit;
 import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
@@ -441,6 +447,7 @@ public final class PassiveModeManager {
                         bestDot = dot;
                         double intensity = calculateIntensityByDistance(distance, activationRange);
 
+
                         ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
                                 trigger.getScentName(),
                                 trigger.getPerception(),
@@ -469,30 +476,41 @@ public final class PassiveModeManager {
      */
     private static TriggerCandidate evaluateMobTriggers(Level level, Player player) {
         int searchRange = (int) Math.ceil(getMobActivationRange());
+        String entityTypeId, scentName, perception;
+        double distance, intensity;
+        Optional<Entity> foundEntity;
+        AbstractVariant variant;
 
         for (MobTriggerDefinition trigger : ScentTriggerConfigLoader.getAllMobTriggers()) {
             if (!trigger.isValid()) {
                 continue;
             }
 
-            String entityTypeId = trigger.getId();
-
-            Optional<Entity> foundEntity = findNearbyMob(level, player, entityTypeId, searchRange);
+            entityTypeId = trigger.getId();
+            foundEntity = findNearbyMob(level, player, entityTypeId, searchRange);
 
             if (foundEntity.isPresent()) {
-                double distance = player.distanceTo(foundEntity.get());
+                distance = player.distanceTo(foundEntity.get());
 
                 // Only activate if within activation range
                 // Non-hostile mobs also require the player to be looking at them
                 if (distance <= getMobActivationRange()
                         && (HOSTILE_MOBS.contains(entityTypeId)
                         || isPlayerLookingAt(player, foundEntity.get().getEyePosition(1.0f)))) {
-                    double intensity = calculateIntensityByDistance(distance, getMobActivationRange());
+                    intensity = calculateIntensityByDistance(distance, getMobActivationRange());
+
+                    scentName = trigger.getScentName();
+                    perception = trigger.getPerception();
+                    variant = handleVariant(trigger, foundEntity.get(), player);
+                    if (variant != null) {
+                        scentName = variant.getScentId();
+                        perception = variant.getPerception();
+                    }
 
                     // Mobs use HIGH priority for player safety
                     ScentTrigger scentTrigger = ScentTrigger.fromPassiveMode(
-                            trigger.getScentName(),
-                            trigger.getPerception(),
+                            scentName,
+                            perception,
                             trigger.getSound(),
                             ScentPriority.HIGH,
                             -1,
@@ -505,6 +523,19 @@ public final class PassiveModeManager {
                     return new TriggerCandidate(scentTrigger, source, displayName,
                             TriggerType.MOB, (int) getMobActivationRange(), distance);
                 }
+            }
+        }
+        return null;
+    }
+
+    private static AbstractVariant handleVariant(DefinitionTrigger definition, Entity found, Player player) {
+        String source = definition.getFallbackName() + definition.getId();
+        List<AbstractVariant> variants = definition.getVariants();
+
+        for (AbstractVariant variant : variants) {
+            if (EntityConditions.matches(variant.getConditions(), found, player)) {
+                source = source + "#" + variants.indexOf(variant);
+                return variant;
             }
         }
         return null;
@@ -779,7 +810,7 @@ public final class PassiveModeManager {
                         BlockPos checkPos = center.offset(x, y, z);
                         BlockState state = level.getBlockState(checkPos);
 
-                        if (state.is(targetBlock)) {
+                        if (BlockVariant.matches(state, targetBlock)) {
                             double distSq = center.distSqr(checkPos);
                             if (distSq < closestDistSq) {
                                 closestDistSq = distSq;
@@ -883,7 +914,9 @@ public final class PassiveModeManager {
      */
     private static boolean isHostileMob(String source) {
         if (source == null || !source.startsWith("mob:")) return false;
-        String entityType = source.substring(4); // Remove "mob:" prefix
+        String entityType = source.substring(4);
+        int variant = entityType.indexOf('#');
+        if (variant >= 0) entityType = entityType.substring(0, variant) ;// Remove "mob:" prefix
         return HOSTILE_MOBS.contains(entityType);
     }
 

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FlintUseServerMixin {
 
     @Inject(method = "useOn", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onFlintUse(UseOnContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
+    private void aromalib$onFlintUse(UseOnContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
         if (ctx.getPlayer() instanceof ServerPlayer player) {
             ServerEventBusHandler.onFlintUsed(player);
         }

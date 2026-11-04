@@ -24,7 +24,7 @@ public abstract class AdvancementServerMixin {
     @Shadow public abstract AdvancementProgress getOrStartProgress(AdvancementHolder holder);
 
     @Inject(method = "award", at = @At("RETURN"), require = 0)
-    private void aromaaffect$onAward(
+    private void aromalib$onAward(
             AdvancementHolder advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValueZ()
                 && player != null

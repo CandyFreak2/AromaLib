@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LocalPlayerCompleteUseItemMixin {
 
     @Inject(method = "completeUsingItem", at = @At("HEAD"))
-    private void aromaaffect$onCompleteUsingItem(CallbackInfo ci) {
+    private void aromalib$onCompleteUsingItem(CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof LocalPlayer localPlayer)) return;
 

@@ -41,5 +41,10 @@ public class StructureTriggerDefinition extends DefinitionTrigger {
     protected ScentPriority getDefaultPriority() {
         return ScentPriority.MEDLOW;
     }
+
+    @Override
+    public String getFallbackName() {
+        return "structure";
+    }
 }
 

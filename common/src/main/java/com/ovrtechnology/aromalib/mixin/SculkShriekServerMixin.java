@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SculkShriekServerMixin {
 
     @Inject(method = "shriek", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onShriek(ServerLevel level, Entity sourceEntity, CallbackInfo ci) {
+    private void aromalib$onShriek(ServerLevel level, Entity sourceEntity, CallbackInfo ci) {
         if (sourceEntity instanceof ServerPlayer player) {
             ServerEventBusHandler.onSculkShriek(player);
         }

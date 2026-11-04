@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SeedPlantServerMixin {
 
     @Inject(method = "place", at = @At("RETURN"), require = 0)
-    private void aromaaffect$onPlace(BlockPlaceContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
+    private void aromalib$onPlace(BlockPlaceContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
         if (ctx.getPlayer() instanceof ServerPlayer player) {
             ServerEventBusHandler.onSeedPlanted(player, ctx.getItemInHand());
         }

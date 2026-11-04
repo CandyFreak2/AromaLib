@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class CampfireCookServerMixin {
 
     @Inject(method = "placeFood", at = @At("RETURN"), require = 0)
-    private void aromaaffect$onPlaceFood(
+    private void aromalib$onPlaceFood(
             ServerLevel level,
             LivingEntity placer,
             ItemStack stack,

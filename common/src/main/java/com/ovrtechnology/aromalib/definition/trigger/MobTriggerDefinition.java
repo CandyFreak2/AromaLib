@@ -42,4 +42,9 @@ public class MobTriggerDefinition extends DefinitionTrigger {
     protected ScentPriority getDefaultPriority() {
         return ScentPriority.MEDLOW;
     }
+
+    @Override
+    public String getFallbackName() {
+        return "mob";
+    }
 }

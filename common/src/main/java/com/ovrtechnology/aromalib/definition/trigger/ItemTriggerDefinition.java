@@ -8,10 +8,10 @@ import lombok.ToString;
 
 /**
  * Defines a scent trigger associated with an item.
- * 
+ *
  * <p>When a player uses the specified item, the configured scent
  * will be triggered on the OVR hardware.</p>
- * 
+ *
  * <p>Example JSON:</p>
  * <pre>
  * {
@@ -34,43 +34,43 @@ public class ItemTriggerDefinition extends DefinitionTrigger {
      */
     @SerializedName("duration_ticks")
     private int durationTicks = getDefaultDurationTicks();
-    
+
     /**
      * Cooldown in milliseconds before this item can trigger again.
      * If not specified, uses the global item_use_cooldown_ms.
      */
     @SerializedName("cooldown_ms")
     private Long cooldownMs;
-    
+
     /**
      * Default constructor for GSON.
      */
     public ItemTriggerDefinition() {
     }
-    
+
     /**
      * Constructor for programmatic creation.
-     * 
-     * @param id    the full item ID
+     *
+     * @param id        the full item ID
      * @param scentName the OVR scent name
      */
     public ItemTriggerDefinition(String id, String scentName) {
         this.id = id;
         this.scentName = scentName;
     }
-    
+
     /**
      * Gets the cooldown, falling back to default if not specified.
-     * 
+     *
      * @return cooldown in milliseconds
      */
     public long getCooldownMsOrDefault() {
         return cooldownMs != null ? cooldownMs : getDefaultCooldownMS();
     }
-    
+
     /**
      * Gets the priority, falling back to default if not specified.
-     * 
+     *
      * @return the priority level
      */
     public ScentPriority getPriorityOrDefault() {
@@ -80,6 +80,11 @@ public class ItemTriggerDefinition extends DefinitionTrigger {
     @Override
     protected ScentPriority getDefaultPriority() {
         return ScentPriority.HIGH;
+    }
+
+    @Override
+    public String getFallbackName() {
+        return "item";
     }
 
     @Override

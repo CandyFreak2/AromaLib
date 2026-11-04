@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MerchantNotifyTradeMixin {
 
     @Inject(method = "notifyTrade", at = @At("TAIL"))
-    private void aromaaffect$onTrade(MerchantOffer offer, CallbackInfo ci) {
+    private void aromalib$onTrade(MerchantOffer offer, CallbackInfo ci) {
         AbstractVillager self = (AbstractVillager) (Object) this;
         if (self.level().isClientSide()) return;
         Player trader = self.getTradingPlayer();

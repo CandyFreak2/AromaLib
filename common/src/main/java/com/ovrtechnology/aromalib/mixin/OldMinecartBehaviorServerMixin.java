@@ -17,7 +17,7 @@ public abstract class OldMinecartBehaviorServerMixin extends MinecartBehaviorSer
     }
 
     @Inject(method = "moveAlongTrack", at = @At("HEAD"))
-    private void aromaaffect$onMoveAlongTrack(ServerLevel level, CallbackInfo ci) {
+    private void aromalib$onMoveAlongTrack(ServerLevel level, CallbackInfo ci) {
         onRideOverRail(ServerEventBusHandler.TT_MINECART_OVERLAP_POWERED_RAIL);
     }
 }

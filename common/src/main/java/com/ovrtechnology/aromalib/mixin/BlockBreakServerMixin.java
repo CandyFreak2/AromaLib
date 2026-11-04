@@ -19,7 +19,7 @@ public abstract class BlockBreakServerMixin {
     @Shadow protected ServerPlayer player;
 
     @Inject(method = "destroyBlock", at = @At("HEAD"))
-    private void aromaaffect$onDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+    private void aromalib$onDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (level != null && player != null) {
             ServerEventBusHandler.onBlockBroken(player, level.getBlockState(pos));
         }

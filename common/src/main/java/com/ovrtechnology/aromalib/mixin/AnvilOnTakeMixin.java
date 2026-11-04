@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AnvilOnTakeMixin {
 
     @Inject(method = "onTake", at = @At("TAIL"))
-    private void aromaaffect$onAnvilResultTaken(Player player, ItemStack stack, CallbackInfo ci) {
+    private void aromalib$onAnvilResultTaken(Player player, ItemStack stack, CallbackInfo ci) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
         if (stack == null || stack.isEmpty()) return;
         ServerEventBusHandler.fireSimpleEvent(serverPlayer, ServerEventBusHandler.TT_ANVIL_USED);

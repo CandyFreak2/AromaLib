@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AnimalTameServerMixin {
 
     @Inject(method = "tame", at = @At("TAIL"))
-    private void aromaaffect$onTame(Player player, CallbackInfo ci) {
+    private void aromalib$onTame(Player player, CallbackInfo ci) {
         ServerEventBusHandler.onAnimalTamed((Animal) (Object) this, player);
     }
 }

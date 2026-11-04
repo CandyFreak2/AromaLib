@@ -34,7 +34,13 @@
     "OldMinecartBehaviorServerMixin",
     "NewMinecartBehaviorServerMixin",
     "LeverUseServerMixin",
-    "ButtonPressServerMixin"
+    "ButtonPressServerMixin",
+    "TntPrimeServerMixin",
+    "ExplosionServerMixin",
+    "BlockPlaceServerMixin",
+    "WaterBottleMudServerMixin",
+    "ConcreteHardenServerMixin",
+    "WolfAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -12,6 +12,8 @@ import com.ovrtechnology.aromalib.definition.FlowerDefinition;
 import com.ovrtechnology.aromalib.definition.loader.FlowerDefinitionLoader;
 import com.ovrtechnology.aromalib.definition.MobDefinition;
 import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
+import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
+import com.ovrtechnology.aromalib.definition.variant.Variant;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.definition.StructureDefinition;
 import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
@@ -329,6 +331,7 @@ public final class ScentTriggerConfigLoader {
             trigger.setIntensity(mob.getIntensity());
             trigger.setPerception(mob.getPerception());
             trigger.setSound(mob.getSound());
+            trigger.setVariants(resolveVariants(mob));
 
             validateScentName(scentName, "mob", mob.getId());
             mobTriggerMap.put(mob.getId(), trigger);
@@ -347,6 +350,25 @@ public final class ScentTriggerConfigLoader {
                     scentName, triggerType, triggerId);
         }
     }
+
+    private static List<AbstractVariant> resolveVariants(MobDefinition def) {
+        if (def.getVariants() == null || def.getVariants().isEmpty()) return List.of();
+
+        List<AbstractVariant> variants = new ArrayList<>();
+        for (AbstractVariant variant : def.getVariants()) {
+            String variantScent = resolveScentName(variant.getScentId());
+            if (variantScent == null || "Unknown Scent".equals(variantScent)) {
+                AromaLib.LOGGER.warn("Could not resolve scent_id '{}' in a variant of mob '{}'",
+                        variant.getScentId(), def.getId());
+                continue;
+            }
+            validateScentName(variantScent, "mob variant", def.getId());
+            String perception = variant.getPerception() != null ? variant.getPerception() : def.getPerception();
+            variants.add(new Variant(variant.getConditions(), variantScent, perception));
+        }
+        return List.copyOf(variants);
+    }
+
 
     // ========================================
     // Lookup Methods

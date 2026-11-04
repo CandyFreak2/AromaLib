@@ -28,20 +28,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class FurnaceIgniteServerMixin implements FurnaceLitAccess {
 
-    @Unique private boolean aromaaffect$wasLit = false;
+    @Unique private boolean aromalib$wasLit = false;
 
     @Override
     public boolean aromalib$wasLit() {
-        return aromaaffect$wasLit;
+        return aromalib$wasLit;
     }
 
     @Override
     public void aromalib$setWasLit(boolean wasLit) {
-        this.aromaaffect$wasLit = wasLit;
+        this.aromalib$wasLit = wasLit;
     }
 
     @Inject(method = "serverTick", at = @At("TAIL"), require = 0)
-    private static void aromaaffect$onServerTick(
+    private static void aromalib$onServerTick(
             ServerLevel level,
             BlockPos pos,
             BlockState state,

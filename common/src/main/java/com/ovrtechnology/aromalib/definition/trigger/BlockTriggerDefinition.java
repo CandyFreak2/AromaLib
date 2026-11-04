@@ -46,6 +46,11 @@ public class BlockTriggerDefinition extends DefinitionTrigger {
     }
 
     @Override
+    public String getFallbackName() {
+        return "block";
+    }
+
+    @Override
     protected String getDefaultMode() {
         return null;
     }

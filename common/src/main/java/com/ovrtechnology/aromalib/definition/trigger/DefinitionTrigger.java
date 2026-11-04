@@ -1,11 +1,14 @@
 package com.ovrtechnology.aromalib.definition.trigger;
 
 import com.google.gson.annotations.SerializedName;
+import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import com.ovrtechnology.aromalib.util.SoundRef;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -73,11 +76,15 @@ public abstract class DefinitionTrigger {
     @SerializedName("_comment")
     protected String comment;
 
+    protected List<AbstractVariant> variants = List.of();
+
     /**
      * Default constructor for GSON.
      */
     public DefinitionTrigger() {
     }
+
+    public abstract String getFallbackName();
 
     /**
      * Checks if this is a proximity-based trigger.

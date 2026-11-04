@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ButtonPressServerMixin {
 
     @Inject(method = "press", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onButtonPressed(
+    private void aromalib$onButtonPressed(
             BlockState state, Level level, BlockPos pos, Player player, CallbackInfo ci) {
         ServerEventBusHandler.onRedstoneActivated(player, level, pos, state);
     }

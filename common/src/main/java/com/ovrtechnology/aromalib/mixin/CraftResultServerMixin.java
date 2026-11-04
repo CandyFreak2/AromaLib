@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CraftResultServerMixin {
 
     @Inject(method = "onTake", at = @At("HEAD"))
-    private void aromaaffect$onCraft(Player player, ItemStack stack, CallbackInfo ci) {
+    private void aromalib$onCraft(Player player, ItemStack stack, CallbackInfo ci) {
         ServerEventBusHandler.onItemCrafted(player, stack);
     }
 }

@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerPlayerDeathServerMixin {
 
     @Inject(method = "die", at = @At("HEAD"))
-    private void aromaaffect$onPlayerDie(DamageSource source, CallbackInfo ci) {
+    private void aromalib$onPlayerDie(DamageSource source, CallbackInfo ci) {
         ServerEventBusHandler.onLivingDeath((ServerPlayer) (Object) this, source);
     }
 }

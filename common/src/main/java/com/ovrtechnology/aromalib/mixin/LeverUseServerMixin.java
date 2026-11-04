@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LeverUseServerMixin {
 
     @Inject(method = "useWithoutItem", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onLeverUsed(
+    private void aromalib$onLeverUsed(
             BlockState state,
             Level level,
             BlockPos pos,

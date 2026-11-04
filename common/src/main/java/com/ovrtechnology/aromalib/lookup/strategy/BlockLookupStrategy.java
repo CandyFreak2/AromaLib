@@ -1,8 +1,10 @@
 package com.ovrtechnology.aromalib.lookup.strategy;
 
+import com.ovrtechnology.aromalib.definition.variant.BlockVariant;
 import com.ovrtechnology.aromalib.lookup.LookupResult;
 import com.ovrtechnology.aromalib.lookup.LookupTarget;
 import com.ovrtechnology.aromalib.lookup.LookupType;
+import com.ovrtechnology.aromalib.tags.TagInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -206,7 +208,7 @@ public class BlockLookupStrategy implements LookupStrategy {
                     mutablePos.set(chunkMinX + x, y, chunkMinZ + z);
                     
                     BlockState state = chunk.getBlockState(mutablePos);
-                    if (state.is(targetBlock)
+                    if (BlockVariant.matches(state, targetBlock)
                             && (excludedPositions.isEmpty() || !excludedPositions.contains(mutablePos))) {
                         double distSq = origin.distSqr(mutablePos);
                         if (distSq < closestDistSq) {

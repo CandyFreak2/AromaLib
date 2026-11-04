@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ShoulderRidingEntity.class)
 public class ShoulderRidingServerMixin {
     @Inject(method = "setEntityOnShoulder", at = @At("RETURN"))
-    private void aromaaffect$onSitOnShoulder(ServerPlayer player, CallbackInfoReturnable<Boolean> cir) {
+    private void aromalib$onSitOnShoulder(ServerPlayer player, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValueZ()) {
             ServerEventBusHandler.fireSimpleEvent(player, ServerEventBusHandler.TT_ENTITY_RIDE_SHOULDER);
         }

@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface CopperWeatherMixin {
 
     @Inject(method = "getNextState", at = @At("HEAD"))
-    private void aromaaffect$onGetNextState(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfoReturnable<Optional<BlockState>> cir) {
+    private void aromalib$onGetNextState(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfoReturnable<Optional<BlockState>> cir) {
         if (this instanceof WeatheringCopper) {
             for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
                 if (player.blockPosition().distSqr(pos) <= 15.0) {

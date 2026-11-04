@@ -38,4 +38,9 @@ public class BiomeTriggerDefinition extends DefinitionTrigger {
     protected ScentPriority getDefaultPriority() {
         return ScentPriority.MEDLOW;
     }
+
+    @Override
+    public String getFallbackName() {
+        return "biome";
+    }
 }

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FishingHookRetrieveMixin {
 
     @Inject(method = "retrieve", at = @At("HEAD"))
-    private void aromaaffect$onRetrieve(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private void aromalib$onRetrieve(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         FishingHook self = (FishingHook) (Object) this;
         Player owner = self.getPlayerOwner();
         if (!(owner instanceof ServerPlayer serverPlayer)) return;

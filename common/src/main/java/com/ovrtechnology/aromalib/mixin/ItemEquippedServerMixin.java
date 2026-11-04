@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemEquippedServerMixin {
 
     @Inject(method = "onEquipItem", at = @At("HEAD"))
-    private void aromaaffect$onEquipItem(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
+    private void aromalib$onEquipItem(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
         if (!(self instanceof ServerPlayer sPlayer)) return;
         ServerEventBusHandler.onEquippedItem(sPlayer, stack);

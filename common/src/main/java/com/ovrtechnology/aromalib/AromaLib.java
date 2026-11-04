@@ -23,6 +23,7 @@ import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;

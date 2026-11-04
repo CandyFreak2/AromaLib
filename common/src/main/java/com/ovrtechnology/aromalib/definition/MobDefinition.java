@@ -1,10 +1,14 @@
 package com.ovrtechnology.aromalib.definition;
 
+import com.google.gson.annotations.SerializedName;
+import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * Represents a trackable mob/entity definition loaded from JSON.
@@ -19,6 +23,9 @@ import lombok.experimental.Accessors;
 public class MobDefinition extends ScentedDefinition {
     public MobDefinition() {
     }
+
+    @SerializedName("variants")
+    private List<AbstractVariant> variants = List.of();
 
     @Override
     protected int getDefaultRange() {

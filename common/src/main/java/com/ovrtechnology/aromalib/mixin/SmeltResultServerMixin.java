@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SmeltResultServerMixin {
 
     @Inject(method = "onTake", at = @At("HEAD"))
-    private void aromaaffect$onSmelt(Player player, ItemStack stack, CallbackInfo ci) {
+    private void aromalib$onSmelt(Player player, ItemStack stack, CallbackInfo ci) {
         ServerEventBusHandler.onItemSmelted(player, stack);
     }
 }

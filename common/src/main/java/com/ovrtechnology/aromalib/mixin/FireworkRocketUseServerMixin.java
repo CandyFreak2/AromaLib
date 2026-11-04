@@ -18,14 +18,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FireworkRocketUseServerMixin {
 
     @Inject(method = "useOn", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onRocketUseOn(UseOnContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
+    private void aromalib$onRocketUseOn(UseOnContext ctx, CallbackInfoReturnable<InteractionResult> cir) {
         if (ctx.getPlayer() instanceof ServerPlayer player) {
             ServerEventBusHandler.fireSimpleEvent(player, ServerEventBusHandler.TT_FIREWORK_USED_ON);
         }
     }
 
     @Inject(method = "use", at = @At("HEAD"), require = 0)
-    private void aromaaffect$onRocketUse(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void aromalib$onRocketUse(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (player instanceof ServerPlayer sPlayer) {
             ServerEventBusHandler.fireSimpleEvent(sPlayer, ServerEventBusHandler.TT_FIREWORK_USED);
         }
