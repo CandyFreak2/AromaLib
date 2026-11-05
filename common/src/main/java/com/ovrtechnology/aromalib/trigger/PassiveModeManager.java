@@ -4,15 +4,12 @@ import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.client.config.AromaConfig;
 import com.ovrtechnology.aromalib.client.config.PassiveModeConfig;
 import com.ovrtechnology.aromalib.condition.EntityConditions;
-import com.ovrtechnology.aromalib.definition.AbstractDefinition;
-import com.ovrtechnology.aromalib.definition.ScentedDefinition;
 import com.ovrtechnology.aromalib.definition.trigger.*;
-import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
 import com.ovrtechnology.aromalib.definition.variant.BlockVariant;
-import com.ovrtechnology.aromalib.tags.TagInit;
-import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
+import com.ovrtechnology.aromalib.definition.variant.Variant;
 import com.ovrtechnology.aromalib.menu.screen.ScentPuffOverlay;
 import com.ovrtechnology.aromalib.menu.screen.SoundTrigger;
+import com.ovrtechnology.aromalib.tracking.ActiveTrackingState;
 import com.ovrtechnology.aromalib.trigger.event.EventTriggersConfig;
 import com.ovrtechnology.aromalib.websocket.OvrWebSocketClient;
 import net.minecraft.core.BlockPos;
@@ -64,39 +61,20 @@ public final class PassiveModeManager {
      * Checking every 20 ticks (~1 second).
      */
     private static final int CHECK_INTERVAL_TICKS = 20;
-
-    /**
-     * Gets the activation range for mob triggers from user config.
-     */
-    private static double getMobActivationRange() {
-        return AromaConfig.getConfig().passiveSettings.passiveMobRange;
-    }
-
-    /**
-     * Gets the activation range for block triggers from user config.
-     */
-    private static double getBlockActivationRange() {
-        return AromaConfig.getConfig().passiveSettings.blockRange;
-    }
-
     /**
      * Angle threshold for look-at detection (degrees).
      * Blocks and non-hostile mobs only trigger if the player is looking within this cone.
      */
     private static final double LOOK_AT_ANGLE_DEGREES = 30.0;
-
     /**
      * Pre-computed cosine of the look-at angle for efficient dot product comparison.
      */
     private static final double LOOK_AT_COS_THRESHOLD = Math.cos(Math.toRadians(LOOK_AT_ANGLE_DEGREES));
-
     /**
      * Number of ticks to wait after first tick before starting scans.
      * Allows the world to finish loading chunks before adding scan overhead.
      */
     private static final int STARTUP_DELAY_TICKS = 100; // ~5 seconds
-
-
     /**
      * Hostile mob entity types that can use MOB INTERRUPT.
      * Only these mobs can interrupt other triggers immediately (player safety).
@@ -110,33 +88,36 @@ public final class PassiveModeManager {
             "minecraft:wither_skeleton", "minecraft:ender_dragon", "minecraft:wither",
             "minecraft:warden", "minecraft:elder_guardian"
     );
-
-    /**
-     * Currently active passive trigger (for change detection).
-     */
-    private static ScentTrigger currentPassiveTrigger = null;
-
-    /**
-     * Source description for logging (e.g., "block:minecraft:lava").
-     */
-    private static String currentTriggerSource = null;
-
-    /**
-     * Type of the currently active trigger (for cooldown display).
-     */
-    private static TriggerType currentTriggerType = null;
-
-    /**
-     * Last biome the player was in (for detecting biome changes).
-     */
-    private static String lastBiomeId = null;
-
     /**
      * Tracks the last trigger timestamp for each trigger type (BLOCK, MOB, etc.).
      * Enforces the user-configured per-type cooldown between any triggers of the same type.
      */
     private static final Map<TriggerType, Long> typeTriggerTimes = new HashMap<>();
-
+    /**
+     * Minimum intensity value (at maximum range).
+     */
+    private static final double MIN_INTENSITY = 0.3;
+    /**
+     * Distance threshold for maximum intensity (100%).
+     * If player is within this distance, intensity is always 100%.
+     */
+    private static final double FULL_INTENSITY_DISTANCE = 1.5;
+    /**
+     * Currently active passive trigger (for change detection).
+     */
+    private static ScentTrigger currentPassiveTrigger = null;
+    /**
+     * Source description for logging (e.g., "block:minecraft:lava").
+     */
+    private static String currentTriggerSource = null;
+    /**
+     * Type of the currently active trigger (for cooldown display).
+     */
+    private static TriggerType currentTriggerType = null;
+    /**
+     * Last biome the player was in (for detecting biome changes).
+     */
+    private static String lastBiomeId = null;
     /**
      * Last structure the player was inside (for one-time structure triggers).
      * Structures only trigger once on entry, like biomes.
@@ -154,6 +135,20 @@ public final class PassiveModeManager {
     private static boolean startupComplete = false;
 
     private PassiveModeManager() {
+    }
+
+    /**
+     * Gets the activation range for mob triggers from user config.
+     */
+    private static double getMobActivationRange() {
+        return AromaConfig.getConfig().passiveSettings.passiveMobRange;
+    }
+
+    /**
+     * Gets the activation range for block triggers from user config.
+     */
+    private static double getBlockActivationRange() {
+        return AromaConfig.getConfig().passiveSettings.blockRange;
     }
 
     /**
@@ -265,29 +260,6 @@ public final class PassiveModeManager {
     }
 
     /**
-     * Types of passive triggers for cooldown selection.
-     */
-    private enum TriggerType {
-        BLOCK,
-        MOB,
-        STRUCTURE,
-        BIOME
-    }
-
-    /**
-     * Represents a candidate trigger with its source information.
-     */
-    private record TriggerCandidate(
-            ScentTrigger trigger,
-            String source,
-            String displayName,
-            TriggerType type,
-            int range,
-            double distance
-    ) {
-    }
-
-    /**
      * Checks if a scent can be activated (respects cooldowns with special bypass rules).
      *
      * <p>Special rules:</p>
@@ -356,17 +328,6 @@ public final class PassiveModeManager {
         }
         return getCooldownForType(candidate.type);
     }
-
-    /**
-     * Minimum intensity value (at maximum range).
-     */
-    private static final double MIN_INTENSITY = 0.3;
-
-    /**
-     * Distance threshold for maximum intensity (100%).
-     * If player is within this distance, intensity is always 100%.
-     */
-    private static final double FULL_INTENSITY_DISTANCE = 1.5;
 
     /**
      * Calculates intensity based on distance from trigger source.
@@ -479,7 +440,7 @@ public final class PassiveModeManager {
         String entityTypeId, scentName, perception;
         double distance, intensity;
         Optional<Entity> foundEntity;
-        AbstractVariant variant;
+        Variant variant;
 
         for (MobTriggerDefinition trigger : ScentTriggerConfigLoader.getAllMobTriggers()) {
             if (!trigger.isValid()) {
@@ -528,11 +489,11 @@ public final class PassiveModeManager {
         return null;
     }
 
-    private static AbstractVariant handleVariant(DefinitionTrigger definition, Entity found, Player player) {
+    private static Variant handleVariant(DefinitionTrigger definition, Entity found, Player player) {
         String source = definition.getFallbackName() + definition.getId();
-        List<AbstractVariant> variants = definition.getVariants();
+        List<Variant> variants = definition.getVariants();
 
-        for (AbstractVariant variant : variants) {
+        for (Variant variant : variants) {
             if (EntityConditions.matches(variant.getConditions(), found, player)) {
                 source = source + "#" + variants.indexOf(variant);
                 return variant;
@@ -916,7 +877,7 @@ public final class PassiveModeManager {
         if (source == null || !source.startsWith("mob:")) return false;
         String entityType = source.substring(4);
         int variant = entityType.indexOf('#');
-        if (variant >= 0) entityType = entityType.substring(0, variant) ;// Remove "mob:" prefix
+        if (variant >= 0) entityType = entityType.substring(0, variant);// Remove "mob:" prefix
         return HOSTILE_MOBS.contains(entityType);
     }
 
@@ -935,7 +896,6 @@ public final class PassiveModeManager {
         double dot = viewDir.dot(toTarget);
         return dot >= LOOK_AT_COS_THRESHOLD;
     }
-
 
     /**
      * Clears any active passive-mode scents.
@@ -1043,5 +1003,28 @@ public final class PassiveModeManager {
      */
     public static String getCurrentTriggerTypeName() {
         return currentTriggerType != null ? currentTriggerType.name().toLowerCase() : null;
+    }
+
+    /**
+     * Types of passive triggers for cooldown selection.
+     */
+    private enum TriggerType {
+        BLOCK,
+        MOB,
+        STRUCTURE,
+        BIOME
+    }
+
+    /**
+     * Represents a candidate trigger with its source information.
+     */
+    private record TriggerCandidate(
+            ScentTrigger trigger,
+            String source,
+            String displayName,
+            TriggerType type,
+            int range,
+            double distance
+    ) {
     }
 }

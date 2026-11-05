@@ -1,7 +1,7 @@
 package com.ovrtechnology.aromalib.definition.trigger;
 
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
+import com.ovrtechnology.aromalib.definition.variant.Variant;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import com.ovrtechnology.aromalib.util.SoundRef;
 import lombok.Getter;
@@ -76,7 +76,7 @@ public abstract class DefinitionTrigger {
     @SerializedName("_comment")
     protected String comment;
 
-    protected List<AbstractVariant> variants = List.of();
+    protected List<Variant> variants = List.of();
 
     /**
      * Default constructor for GSON.

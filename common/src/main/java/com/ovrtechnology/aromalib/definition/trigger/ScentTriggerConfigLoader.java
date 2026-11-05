@@ -4,19 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.data.DataSourceInfo;
-import com.ovrtechnology.aromalib.definition.BiomeDefinition;
-import com.ovrtechnology.aromalib.definition.loader.BiomeDefinitionLoader;
-import com.ovrtechnology.aromalib.definition.BlockDefinition;
-import com.ovrtechnology.aromalib.definition.loader.BlockDefinitionLoader;
-import com.ovrtechnology.aromalib.definition.FlowerDefinition;
-import com.ovrtechnology.aromalib.definition.loader.FlowerDefinitionLoader;
-import com.ovrtechnology.aromalib.definition.MobDefinition;
-import com.ovrtechnology.aromalib.definition.loader.MobDefinitionLoader;
-import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
+import com.ovrtechnology.aromalib.definition.*;
+import com.ovrtechnology.aromalib.definition.loader.*;
 import com.ovrtechnology.aromalib.definition.variant.Variant;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
-import com.ovrtechnology.aromalib.definition.StructureDefinition;
-import com.ovrtechnology.aromalib.definition.loader.StructureDefinitionLoader;
 import lombok.Getter;
 
 import java.io.InputStream;
@@ -47,23 +38,20 @@ public final class ScentTriggerConfigLoader {
      * Only these names are supported by the OVR hardware bridge.
      */
     public static final Set<String> VALID_OVR_SCENTS = Set.of(
-        "Beach", "Evergreen", "Desert", "Floral", "Barnyard",
-        "Smoky", "Winter", "Terra Silva", "Savory Spice", "Timber",
-        "Petrichor", "Sweet", "Machina", "Marine", "Kindred", "Citrus"
+            "Beach", "Evergreen", "Desert", "Floral", "Barnyard",
+            "Smoky", "Winter", "Terra Silva", "Savory Spice", "Timber",
+            "Petrichor", "Sweet", "Machina", "Marine", "Kindred", "Citrus"
     );
 
     private static final Gson GSON = new GsonBuilder()
             .setLenient()
             .create();
-
-    private static TriggerSettings settings;
-
     private static final Map<String, ItemTriggerDefinition> itemTriggerMap = new HashMap<>();
     private static final Map<String, BiomeTriggerDefinition> biomeTriggerMap = new HashMap<>();
     private static final Map<String, BlockTriggerDefinition> blockTriggerMap = new HashMap<>();
     private static final Map<String, MobTriggerDefinition> mobTriggerMap = new HashMap<>();
     private static final Map<String, StructureTriggerDefinition> structureTriggerMap = new HashMap<>();
-
+    private static TriggerSettings settings;
     @Getter
     private static boolean initialized = false;
 
@@ -346,16 +334,16 @@ public final class ScentTriggerConfigLoader {
     private static void validateScentName(String scentName, String triggerType, String triggerId) {
         if (!VALID_OVR_SCENTS.contains(scentName)) {
             AromaLib.LOGGER.warn("Unknown OVR scent '{}' in {} trigger '{}'. " +
-                    "This scent may not be supported by the hardware.",
+                            "This scent may not be supported by the hardware.",
                     scentName, triggerType, triggerId);
         }
     }
 
-    private static List<AbstractVariant> resolveVariants(MobDefinition def) {
+    private static List<Variant> resolveVariants(MobDefinition def) {
         if (def.getVariants() == null || def.getVariants().isEmpty()) return List.of();
 
-        List<AbstractVariant> variants = new ArrayList<>();
-        for (AbstractVariant variant : def.getVariants()) {
+        List<Variant> variants = new ArrayList<>();
+        for (Variant variant : def.getVariants()) {
             String variantScent = resolveScentName(variant.getScentId());
             if (variantScent == null || "Unknown Scent".equals(variantScent)) {
                 AromaLib.LOGGER.warn("Could not resolve scent_id '{}' in a variant of mob '{}'",
