@@ -126,7 +126,7 @@ public final class PlayerStateTickHandler {
         Long lastTime = lastFiredAtMs.get(def.getId());
         boolean alreadyActive = activeContinuous.contains(def.getId());
 
-        String scentName = ScentRegistry.getDisplayName(def.getScentId());
+        String scentName = ScentRegistry.INSTANCE.getDisplayName(def.getScentId());
         if (scentName == null || "Unknown Scent".equals(scentName)) {
             return;
         }
@@ -177,7 +177,7 @@ public final class PlayerStateTickHandler {
     private static void stopContinuous(EventDefinition def) {
         if (!activeContinuous.remove(def.getId())) return;
 
-        String scentName = ScentRegistry.getDisplayName(def.getScentId());
+        String scentName = ScentRegistry.INSTANCE.getDisplayName(def.getScentId());
         if (scentName == null) return;
 
         ScentTrigger active = ScentTriggerManager.getInstance().getActiveScent();
@@ -331,7 +331,7 @@ public final class PlayerStateTickHandler {
             long cooldown = effectiveCooldownMs(def, config);
             Long lastTime = lastFiredAtMs.get(def.getId());
             if (lastTime == null || (now - lastTime) >= cooldown) {
-                String scentName = ScentRegistry.getDisplayName(def.getScentId());
+                String scentName = ScentRegistry.INSTANCE.getDisplayName(def.getScentId());
                 if (scentName != null
                         && !"Unknown Scent".equals(scentName)
                         && EventThrottle.tryConsume()) {
@@ -449,7 +449,7 @@ public final class PlayerStateTickHandler {
             Long lastTime = lastFiredAtMs.get(def.getId());
             if (lastTime != null && (now - lastTime) < cooldown) return false;
 
-            String scentName = ScentRegistry.getDisplayName(def.getScentId());
+            String scentName = ScentRegistry.INSTANCE.getDisplayName(def.getScentId());
             if (scentName == null || "Unknown Scent".equals(scentName)) return false;
 
             if (!EventThrottle.tryConsume()) return false;

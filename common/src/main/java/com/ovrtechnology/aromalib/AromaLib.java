@@ -23,7 +23,6 @@ import com.ovrtechnology.aromalib.trigger.event.ServerEventBusHandler;
 import lombok.experimental.UtilityClass;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ public final class AromaLib {
         Balm.config().registerConfig(AromaConfig.class);
 
         AbilityDefinitionLoader.INSTANCE.loadAll();
-        ScentRegistry.init();
+        ScentRegistry.INSTANCE.init();
         BiomeDefinitionLoader.INSTANCE.loadAll();
         BlockDefinitionLoader.INSTANCE.loadAll();
         FlowerDefinitionLoader.INSTANCE.loadAll();
@@ -53,7 +52,7 @@ public final class AromaLib {
 
         registrars.registrar(Registries.ITEM, TrackerRegistry::register);
 
-        TrackerRegistry.init();
+        TrackerRegistry.INSTANCE.init();
         AbilityRegistry.init();
 
         PathScentNetworking.init();
@@ -69,7 +68,7 @@ public final class AromaLib {
                                 MOD_ID + "_data_reload",
                                 (ResourceManager rm) -> {
                                     var ds = new ResourceManagerDataSource(rm);
-                                    ScentRegistry.reload(ds);
+                                    ScentRegistry.INSTANCE.reload(ds);
                                     AbilityDefinitionLoader.INSTANCE.loadAll(ds);
                                     BiomeDefinitionLoader.INSTANCE.loadAll(ds);
                                     BlockDefinitionLoader.INSTANCE.loadAll(ds);

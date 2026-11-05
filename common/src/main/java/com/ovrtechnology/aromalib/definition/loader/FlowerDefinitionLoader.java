@@ -19,7 +19,7 @@ public class FlowerDefinitionLoader extends AbstractDefinitionLoader<FlowerDefin
 
         if (def.hasScentId()) {
             String scentId = def.getScentId();
-            if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(scentId)) {
+            if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(scentId)) {
                 addWarning("[" + id + "] Referenced scent_id '" + scentId + "' does not exist in ScentRegistry");
             }
         } else {

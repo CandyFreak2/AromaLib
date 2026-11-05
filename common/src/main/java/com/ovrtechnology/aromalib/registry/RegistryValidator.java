@@ -135,7 +135,7 @@ public final class RegistryValidator {
      * Validates all block definitions against Minecraft's block registry.
      */
     private static void validateBlocks() {
-        if (!BlockRegistry.isInitialized()) {
+        if (!BlockRegistry.INSTANCE.isInitialized()) {
             AromaLib.LOGGER.warn("BlockRegistry not initialized, skipping block validation");
             return;
         }
@@ -144,7 +144,7 @@ public final class RegistryValidator {
         int checked = 0;
         int invalid = 0;
         
-        for (BlockDefinition block : BlockRegistry.getAllBlocks()) {
+        for (BlockDefinition block : BlockRegistry.INSTANCE.getAllAsList()) {
             checked++;
             String blockId = block.getId();
             Identifier resourceLocation = Identifier.tryParse(blockId);
@@ -173,7 +173,7 @@ public final class RegistryValidator {
      * Validates all biome definitions against Minecraft's biome registry.
      */
     private static void validateBiomes(Registry<Biome> biomeRegistry) {
-        if (!BiomeRegistry.isInitialized()) {
+        if (!BiomeRegistry.INSTANCE.isInitialized()) {
             AromaLib.LOGGER.warn("BiomeRegistry not initialized, skipping biome validation");
             return;
         }
@@ -181,7 +181,7 @@ public final class RegistryValidator {
         int checked = 0;
         int invalid = 0;
         
-        for (BiomeDefinition biome : BiomeRegistry.getAllBiomes()) {
+        for (BiomeDefinition biome : BiomeRegistry.INSTANCE.getAllAsList()) {
             checked++;
             String biomeId = biome.getId();
             Identifier resourceLocation = Identifier.tryParse(biomeId);
@@ -218,7 +218,7 @@ public final class RegistryValidator {
      * Validates all structure definitions against Minecraft's structure registry.
      */
     private static void validateStructures(Registry<Structure> structureRegistry) {
-        if (!StructureRegistry.isInitialized()) {
+        if (!StructureRegistry.INSTANCE.isInitialized()) {
             AromaLib.LOGGER.warn("StructureRegistry not initialized, skipping structure validation");
             return;
         }
@@ -230,7 +230,7 @@ public final class RegistryValidator {
         AromaLib.LOGGER.debug("Available structures in world: {}",
                 structureRegistry.keySet().stream().map(Identifier::toString).toList());
         
-        for (StructureDefinition structure : StructureRegistry.getAllStructures()) {
+        for (StructureDefinition structure : StructureRegistry.INSTANCE.getAllAsList()) {
             checked++;
             String structureId = structure.getId();
             Identifier resourceLocation = Identifier.tryParse(structureId);
@@ -337,11 +337,11 @@ public final class RegistryValidator {
      */
     public static List<StructureDefinition> getValidStructures() {
         if (!validated || invalidStructureIds.isEmpty()) {
-            return StructureRegistry.getAllStructuresAsList();
+            return StructureRegistry.INSTANCE.getAllAsList();
         }
         
         List<StructureDefinition> valid = new ArrayList<>();
-        for (StructureDefinition structure : StructureRegistry.getAllStructures()) {
+        for (StructureDefinition structure : StructureRegistry.INSTANCE.getAllAsIterable()) {
             if (!invalidStructureIds.contains(structure.getId())) {
                 valid.add(structure);
             }
@@ -356,11 +356,11 @@ public final class RegistryValidator {
      */
     public static List<BiomeDefinition> getValidBiomes() {
         if (!validated || invalidBiomeIds.isEmpty()) {
-            return BiomeRegistry.getAllBiomesAsList();
+            return BiomeRegistry.INSTANCE.getAllAsList();
         }
         
         List<BiomeDefinition> valid = new ArrayList<>();
-        for (BiomeDefinition biome : BiomeRegistry.getAllBiomes()) {
+        for (BiomeDefinition biome : BiomeRegistry.INSTANCE.getAllAsIterable()) {
             if (!invalidBiomeIds.contains(biome.getId())) {
                 valid.add(biome);
             }
@@ -375,11 +375,11 @@ public final class RegistryValidator {
      */
     public static List<BlockDefinition> getValidBlocks() {
         if (!validated || invalidBlockIds.isEmpty()) {
-            return BlockRegistry.getAllBlocksAsList();
+            return BlockRegistry.INSTANCE.getAllAsList();
         }
         
         List<BlockDefinition> valid = new ArrayList<>();
-        for (BlockDefinition block : BlockRegistry.getAllBlocks()) {
+        for (BlockDefinition block : BlockRegistry.INSTANCE.getAllAsList()) {
             if (!invalidBlockIds.contains(block.getId())) {
                 valid.add(block);
             }

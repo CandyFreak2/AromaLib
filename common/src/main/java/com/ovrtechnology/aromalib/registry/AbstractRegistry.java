@@ -2,38 +2,41 @@ package com.ovrtechnology.aromalib.registry;
 
 import com.ovrtechnology.aromalib.AromaLib;
 import com.ovrtechnology.aromalib.definition.AbstractDefinition;
+import com.ovrtechnology.aromalib.definition.AbstractTriggerDefinition;
+import com.ovrtechnology.aromalib.definition.ScentDefinition;
+import com.ovrtechnology.aromalib.definition.ScentedDefinition;
 import com.ovrtechnology.aromalib.definition.loader.AbstractDefinitionLoader;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
-public abstract class AbstractRegistry<T extends AbstractDefinition, E extends AbstractDefinitionLoader<T>> {
-    @Getter
-    private static boolean initialized = false;
+public abstract class AbstractRegistry<T extends AbstractDefinition> {
     @Getter
     protected final Map<String, T> definitions = new LinkedHashMap<>();
-    private final Class<T> definition;
     @Getter
     private final String name;
+    @Getter
+    @Setter
+    protected boolean initialized = false;
 
-    protected AbstractRegistry(Class<T> definition, String name) {
-        this.definition = definition;
+    public AbstractRegistry(String name) {
         this.name = name;
     }
 
-    protected void init() {
+    public void init() {
         if (initialized) {
             AromaLib.LOGGER.warn("{} Registry has been initialized more than once", name);
             return;
         }
 
-        if (!ScentRegistry.isInitialized()) {
+        if (!ScentRegistry.INSTANCE.isInitialized()) {
             AromaLib.LOGGER.warn("{} Registry has been called before ScentRegistry! Scent validation may fail.", name);
         }
 
         AromaLib.LOGGER.info("Initializing {} Registry...", name);
 
-        List<T> defs = getInstance().loadAll();
+        List<T> defs = getLoader().loadAll();
 
         for (T def : defs) {
             register(def);
@@ -55,7 +58,9 @@ public abstract class AbstractRegistry<T extends AbstractDefinition, E extends A
         AromaLib.LOGGER.debug("Registered {}}: {}", name, id);
     }
 
-    protected abstract E getInstance();
+    protected abstract AbstractRegistry<T> getInstance();
+
+    protected abstract AbstractDefinitionLoader<T> getLoader();
 
     public Optional<T> getDefinition(String id) {
         return Optional.ofNullable(definitions.get(id));
@@ -67,6 +72,16 @@ public abstract class AbstractRegistry<T extends AbstractDefinition, E extends A
             throw new IllegalArgumentException("Unknown " + name + " ID: " + id);
         }
         return def;
+    }
+
+    public <T extends AbstractTriggerDefinition> String getDisplayName(String id) {
+        T def = (T) getDefinitionOrThrow(id);
+        if (def == null) {
+            return "Unknown Scent";
+        }
+        // TODO: Integrate with Minecraft's localization system
+        // For now, return the fallback name
+        return def.getFallbackName();
     }
 
     public boolean exists(String id) {
@@ -85,7 +100,7 @@ public abstract class AbstractRegistry<T extends AbstractDefinition, E extends A
         return new ArrayList<>(definitions.values());
     }
 
-    public int getStructureCount() {
+    public int getCount() {
         return definitions.size();
     }
 
@@ -144,7 +159,7 @@ public abstract class AbstractRegistry<T extends AbstractDefinition, E extends A
         AromaLib.LOGGER.info("Reloading {} Registry...", name);
         definitions.clear();
 
-        List<T> definitions = getInstance().reload();
+        List<T> definitions = getLoader().reload();
         for (T definition : definitions) {
             register(definition);
         }
@@ -153,7 +168,7 @@ public abstract class AbstractRegistry<T extends AbstractDefinition, E extends A
     }
 
 
-    void clear() {
+    public void clear() {
         definitions.clear();
         initialized = false;
     }

@@ -3,10 +3,9 @@ package com.ovrtechnology.aromalib.definition.loader;
 import com.ovrtechnology.aromalib.definition.CategoryDefinition;
 
 public class CategoryDefinitionLoader extends AbstractDefinitionLoader<CategoryDefinition> {
-
     public static final CategoryDefinitionLoader INSTANCE = new CategoryDefinitionLoader();
 
-    private CategoryDefinitionLoader() {
+    public CategoryDefinitionLoader() {
         super("category", CategoryDefinition.class, "categories");
     }
 

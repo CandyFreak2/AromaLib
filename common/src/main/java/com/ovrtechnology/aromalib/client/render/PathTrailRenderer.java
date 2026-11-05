@@ -794,14 +794,14 @@ public final class PathTrailRenderer {
         TrackingCategory cat = ActiveTrackingState.getCategory();
 
         if (targetId != null) {
-            var blockDef = BlockRegistry.getBlock(targetId);
+            var blockDef = BlockRegistry.INSTANCE.getDefinition(targetId);
             if (blockDef.isPresent()) {
                 return blockDef.get().getColorAsFloats();
             }
 
             var blockTrigger = ScentTriggerConfigLoader.getBlockTrigger(targetId);
             if (blockTrigger.isPresent()) {
-                var scent = ScentRegistry.getScentByName(blockTrigger.get().getScentName());
+                var scent = ScentRegistry.INSTANCE.getScentByName(blockTrigger.get().getScentName());
                 if (scent.isPresent()) {
                     int[] rgb = scent.get().getColorRGB();
                     return new float[]{rgb[0] / 255.0f, rgb[1] / 255.0f, rgb[2] / 255.0f};
@@ -810,7 +810,7 @@ public final class PathTrailRenderer {
 
             var biomeTrigger = ScentTriggerConfigLoader.getBiomeTrigger(targetId);
             if (biomeTrigger.isPresent()) {
-                var scent = ScentRegistry.getScentByName(biomeTrigger.get().getScentName());
+                var scent = ScentRegistry.INSTANCE.getScentByName(biomeTrigger.get().getScentName());
                 if (scent.isPresent()) {
                     int[] rgb = scent.get().getColorRGB();
                     return new float[]{rgb[0] / 255.0f, rgb[1] / 255.0f, rgb[2] / 255.0f};
@@ -819,7 +819,7 @@ public final class PathTrailRenderer {
 
             var structureTrigger = ScentTriggerConfigLoader.getStructureTrigger(targetId);
             if (structureTrigger.isPresent()) {
-                var scent = ScentRegistry.getScentByName(structureTrigger.get().getScentName());
+                var scent = ScentRegistry.INSTANCE.getScentByName(structureTrigger.get().getScentName());
                 if (scent.isPresent()) {
                     int[] rgb = scent.get().getColorRGB();
                     return new float[]{rgb[0] / 255.0f, rgb[1] / 255.0f, rgb[2] / 255.0f};

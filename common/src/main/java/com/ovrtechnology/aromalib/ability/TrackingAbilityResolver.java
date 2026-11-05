@@ -39,7 +39,7 @@ public final class TrackingAbilityResolver {
         AromaLib.LOGGER.info("Initializing TrackerAbilityResolver...");
         
         // Resolve abilities for each built-in tracker
-        for (String id : TrackerRegistry.getAllIds()) {
+        for (String id : TrackerRegistry.INSTANCE.getIds()) {
             resolveAbilities(id);
         }
 
@@ -152,7 +152,7 @@ public final class TrackingAbilityResolver {
      * Get all resolved abilities for a tracker (including inherited)
      */
     private static ItemUnlock lookupUnlock(String id) {
-        Optional<TrackerDefinition> defOpt = TrackerRegistry.getDefinition(id);
+        Optional<TrackerDefinition> defOpt = TrackerRegistry.INSTANCE.getDefinition(id);
         if (defOpt.isPresent()) {
             return defOpt.get().getUnlock();
         }

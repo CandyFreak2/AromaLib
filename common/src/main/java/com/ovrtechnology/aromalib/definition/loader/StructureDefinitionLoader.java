@@ -10,17 +10,17 @@ import java.util.List;
 public class StructureDefinitionLoader extends AbstractDefinitionLoader<StructureDefinition> {
     public static final StructureDefinitionLoader INSTANCE = new StructureDefinitionLoader();
 
-    private StructureDefinitionLoader() {
+    public StructureDefinitionLoader() {
         super("structures", StructureDefinition.class, "structures");
     }
 
     private void validateBlocks(String id, List<String> blockIds) {
-        if (!BlockRegistry.isInitialized()) {
+        if (!BlockRegistry.INSTANCE.isInitialized()) {
             AromaLib.LOGGER.debug("[{}] BlockRegistry not initialized, skipping block validation", id);
             return;
         }
 
-        List<String> invalidBlocks = BlockRegistry.validateBlockIds(blockIds);
+        List<String> invalidBlocks = BlockRegistry.INSTANCE.validateIds(blockIds);
         for (String invalidBlock : invalidBlocks) {
             AromaLib.LOGGER.debug("[{}] Block '{}' not found in BlockRegistry (may still be valid Minecraft block)", id, invalidBlock);
         }
@@ -49,7 +49,7 @@ public class StructureDefinitionLoader extends AbstractDefinitionLoader<Structur
 
         if (def.hasScentId()) {
             String scentId = def.getScentId();
-            if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(scentId)) {
+            if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(scentId)) {
                 addWarning("[" + id + "] Referenced scent_id '" + scentId + "' does not exist in ScentRegistry");
             }
         } else {

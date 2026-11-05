@@ -61,8 +61,8 @@ public class TrackerDefinitionLoader extends AbstractDefinitionLoader<TrackerDef
                 }
             }
 
-            if (unlock.hasBlockUnlocks() && BlockRegistry.isInitialized()) {
-                List<String> invalidBlocks = BlockRegistry.validateBlockIds(unlock.getBlocks());
+            if (unlock.hasBlockUnlocks() && BlockRegistry.INSTANCE.isInitialized()) {
+                List<String> invalidBlocks = BlockRegistry.INSTANCE.validateIds(unlock.getBlocks());
                 if (!invalidBlocks.isEmpty()) {
                     for (String invalidBlock : invalidBlocks) {
                         AromaLib.LOGGER.warn("[{}] Skipping unregistered block: '{}' - block must be defined in blocks.json", id, invalidBlock);
@@ -74,8 +74,8 @@ public class TrackerDefinitionLoader extends AbstractDefinitionLoader<TrackerDef
                 }
             }
 
-            if (unlock.hasStructureUnlocked() && StructureRegistry.isInitialized()) {
-                List<String> invalidStructures = StructureRegistry.validateStructureIds(unlock.getStructures());
+            if (unlock.hasStructureUnlocked() && StructureRegistry.INSTANCE.isInitialized()) {
+                List<String> invalidStructures = StructureRegistry.INSTANCE.validateIds(unlock.getStructures());
                 if (!invalidStructures.isEmpty()) {
                     for (String invalidStructure : invalidStructures) {
                         AromaLib.LOGGER.warn("[{}] Skipping unregistered structure: '{}' - structure must be defined in structures.json", id, invalidStructure);
@@ -87,8 +87,8 @@ public class TrackerDefinitionLoader extends AbstractDefinitionLoader<TrackerDef
                 }
             }
 
-            if (unlock.hasBiomeUnlocked() && BiomeRegistry.isInitialized()) {
-                List<String> invalidBiomes = BiomeRegistry.validateBiomeIds(unlock.getBiomes());
+            if (unlock.hasBiomeUnlocked() && BiomeRegistry.INSTANCE.INSTANCE.isInitialized()) {
+                List<String> invalidBiomes = BiomeRegistry.INSTANCE.validateIds(unlock.getBiomes());
                 if (!invalidBiomes.isEmpty()) {
                     for (String invalidBiome : invalidBiomes) {
                         AromaLib.LOGGER.warn("[{}] Skipping unregistered biome: '{}' - biome must be defined in biomes.json", id, invalidBiome);

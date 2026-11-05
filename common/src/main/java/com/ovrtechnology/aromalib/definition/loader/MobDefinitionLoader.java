@@ -19,7 +19,7 @@ public class MobDefinitionLoader extends AbstractDefinitionLoader<MobDefinition>
 
         if (def.hasScentId()) {
             String scentId = def.getScentId();
-            if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(scentId)) {
+            if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(scentId)) {
                 addWarning("[" + type + "] Referenced scent_id '" + scentId + "' does not exist in ScentRegistry");
             }
         } else {

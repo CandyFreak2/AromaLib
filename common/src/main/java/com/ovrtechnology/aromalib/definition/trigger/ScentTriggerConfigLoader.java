@@ -166,7 +166,7 @@ public final class ScentTriggerConfigLoader {
         if (scentId == null || scentId.isEmpty()) {
             return null;
         }
-        return ScentRegistry.getDisplayName(scentId);
+        return ScentRegistry.INSTANCE.getDisplayName(scentId);
     }
 
     /**

@@ -139,7 +139,7 @@ public final class BlockOutlineRenderer {
         if (targetId == null) return null;
 
         // Try BlockRegistry first (for BLOCKS category)
-        var blockDef = BlockRegistry.getBlock(targetId);
+        var blockDef = BlockRegistry.INSTANCE.getDefinition(targetId);
         if (blockDef.isPresent()) {
             return blockDef.get().getColorAsFloats();
         }
@@ -148,7 +148,7 @@ public final class BlockOutlineRenderer {
         var trigger = ScentTriggerConfigLoader.getBlockTrigger(targetId);
         if (trigger.isPresent()) {
             String scentName = trigger.get().getScentName();
-            var scent = ScentRegistry.getScentByName(scentName);
+            var scent = ScentRegistry.INSTANCE.getScentByName(scentName);
             if (scent.isPresent()) {
                 int[] rgb = scent.get().getColorRGB();
                 return new float[]{rgb[0] / 255.0f, rgb[1] / 255.0f, rgb[2] / 255.0f};

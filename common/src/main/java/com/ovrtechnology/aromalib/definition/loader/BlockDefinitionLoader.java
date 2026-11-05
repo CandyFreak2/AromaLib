@@ -39,7 +39,7 @@ public class BlockDefinitionLoader extends AbstractDefinitionLoader<BlockDefinit
 
     public static final BlockDefinitionLoader INSTANCE = new BlockDefinitionLoader();
 
-    private BlockDefinitionLoader() {
+    public BlockDefinitionLoader() {
         super("blocks", BlockDefinition.class, "blocks");
     }
 
@@ -68,7 +68,7 @@ public class BlockDefinitionLoader extends AbstractDefinitionLoader<BlockDefinit
         // Validate scent_id reference
         if (def.hasScentId()) {
             String scentId = def.getScentId();
-            if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(scentId)) {
+            if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(scentId)) {
                 addWarning("[" + blockId + "] Referenced scent_id '" + scentId + "' does not exist in ScentRegistry");
             }
         } else {

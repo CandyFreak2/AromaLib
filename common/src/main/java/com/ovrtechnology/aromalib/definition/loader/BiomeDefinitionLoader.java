@@ -38,7 +38,7 @@ public class BiomeDefinitionLoader extends AbstractDefinitionLoader<BiomeDefinit
 
     public static final BiomeDefinitionLoader INSTANCE = new BiomeDefinitionLoader();
 
-    private BiomeDefinitionLoader() {
+    public BiomeDefinitionLoader() {
         super("biomes", BiomeDefinition.class, "biome");
     }
 
@@ -62,7 +62,7 @@ public class BiomeDefinitionLoader extends AbstractDefinitionLoader<BiomeDefinit
         // Validate scent_id reference
         if (def.hasScentId()) {
             String scentId = def.getScentId();
-            if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(scentId)) {
+            if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(scentId)) {
                 addWarning("[" + id + "] Referenced scent_id '" + scentId + "' does not exist in ScentRegistry");
             }
         } else {

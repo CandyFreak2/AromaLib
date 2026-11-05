@@ -9,6 +9,7 @@ import com.ovrtechnology.aromalib.registry.BlockRegistry;
 import com.ovrtechnology.aromalib.command.SubCommand;
 import com.ovrtechnology.aromalib.registry.ScentRegistry;
 import com.ovrtechnology.aromalib.registry.StructureRegistry;
+import lombok.Getter;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -93,22 +94,22 @@ public class RegistrySubCommand implements SubCommand {
         
         switch (type) {
             case STRUCTURE -> {
-                for (String id : StructureRegistry.getAllStructureIds()) {
+                for (String id : StructureRegistry.INSTANCE.getIds()) {
                     ids.add(id);
                 }
             }
             case BLOCK -> {
-                for (String id : BlockRegistry.getAllBlockIds()) {
+                for (String id : BlockRegistry.INSTANCE.getIds()) {
                     ids.add(id);
                 }
             }
             case BIOME -> {
-                for (String id : BiomeRegistry.getAllBiomeIds()) {
+                for (String id : BiomeRegistry.INSTANCE.getIds()) {
                     ids.add(id);
                 }
             }
             case SCENT -> {
-                for (String id : ScentRegistry.getAllScentIds()) {
+                for (String id : ScentRegistry.INSTANCE.getIds()) {
                     ids.add(id);
                 }
             }
@@ -120,6 +121,7 @@ public class RegistrySubCommand implements SubCommand {
     /**
      * Enum for registry types.
      */
+    @Getter
     private enum RegistryType {
         STRUCTURE("structures"),
         BLOCK("blocks"),
@@ -130,10 +132,6 @@ public class RegistrySubCommand implements SubCommand {
         
         RegistryType(String displayName) {
             this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
         }
     }
 }

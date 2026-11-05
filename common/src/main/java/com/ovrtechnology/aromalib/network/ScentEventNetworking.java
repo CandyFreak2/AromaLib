@@ -82,7 +82,7 @@ public final class ScentEventNetworking {
             return;
         }
 
-        String scentName = ScentRegistry.getDisplayName(def.getScentId());
+        String scentName = ScentRegistry.INSTANCE.getDisplayName(def.getScentId());
         if (scentName == null || "Unknown Scent".equals(scentName)) {
             AromaLib.LOGGER.warn(
                     "Event '{}' references unresolvable scent '{}'", eventId, def.getScentId());

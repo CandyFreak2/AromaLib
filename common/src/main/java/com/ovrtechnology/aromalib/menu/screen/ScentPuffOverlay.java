@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 
+import java.util.Locale;
+
 /**
  * Fullscreen scent mask overlay for non-tracking puffs (Omara Device, etc.).
  *
@@ -174,7 +176,7 @@ public final class ScentPuffOverlay {
     }
 
     static Identifier resolveScentMask(String scentName) {
-        return ScentRegistry.getScentByName(scentName)
+        return ScentRegistry.INSTANCE.getScentByName(scentName)
                 .map(ScentDefinition::getMask)
                 .filter(mask -> !mask.isBlank())
                 .map(mask -> Identifier.tryParse(mask + ".png"))

@@ -1,7 +1,6 @@
 package com.ovrtechnology.aromalib.definition;
 
 import com.google.gson.annotations.SerializedName;
-import com.ovrtechnology.aromalib.definition.variant.AbstractVariant;
 import com.ovrtechnology.aromalib.definition.variant.Variant;
 import com.ovrtechnology.aromalib.trigger.ScentPriority;
 import lombok.Getter;
@@ -22,11 +21,11 @@ import java.util.List;
 @Accessors(chain = true)
 @ToString
 public class MobDefinition extends ScentedDefinition {
-    public MobDefinition() {
-    }
-
     @SerializedName("variants")
     private List<Variant> variants = List.of();
+
+    public MobDefinition() {
+    }
 
     @Override
     protected int getDefaultRange() {

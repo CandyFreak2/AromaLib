@@ -1,6 +1,7 @@
 package com.ovrtechnology.aromalib.registry;
 
 import com.ovrtechnology.aromalib.AromaLib;
+import com.ovrtechnology.aromalib.definition.loader.AbstractDefinitionLoader;
 import com.ovrtechnology.aromalib.definition.loader.TrackerDefinitionLoader;
 import com.ovrtechnology.aromalib.ability.TrackingAbilityResolver;
 import com.ovrtechnology.aromalib.definition.TrackerDefinition;
@@ -14,20 +15,33 @@ import net.minecraft.world.item.Item;
 
 import java.util.*;
 
-public class TrackerRegistry {
-    @Getter
-    private static final Map<String, Holder<Item>> items = new LinkedHashMap<>();
+public class TrackerRegistry extends AbstractRegistry<TrackerDefinition> {
+    @Getter private static final Map<String, Holder<Item>> items = new LinkedHashMap<>();
 
-    @Getter
-    private static final Map<String, TrackerDefinition> trackDefinitions = new LinkedHashMap<>();
+    public static final TrackerRegistry INSTANCE = new TrackerRegistry();
+    public static final TrackerDefinitionLoader LOADER = new TrackerDefinitionLoader();
 
-    @Getter
-    private static boolean initialized = false;
+    public TrackerRegistry() {
+        super("tracker");
+    }
 
-    private TrackerRegistry() {}
+    @Override
+    public void init() {
+        TrackingAbilityResolver.init();
+    }
+
+    @Override
+    protected AbstractRegistry<TrackerDefinition> getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    protected AbstractDefinitionLoader<TrackerDefinition> getLoader() {
+        return LOADER;
+    }
 
     public static void register(BalmRegistrar.Scoped<Item> items) {
-        if (initialized) {
+        if (INSTANCE.isInitialized()) {
             AromaLib.LOGGER.warn("TrackerRegistry.register() called multiple times!");
             return;
         }
@@ -39,12 +53,8 @@ public class TrackerRegistry {
             register(items, definition);
         }
 
-        initialized = true;
+        INSTANCE.initialized = true;
         AromaLib.LOGGER.info("TrackerRegistry initialized with {} trackers", TrackerRegistry.items.size());
-    }
-
-    public static void init() {
-        TrackingAbilityResolver.init();
     }
 
     private static void register(BalmRegistrar.Scoped<Item> items, TrackerDefinition definition) {
@@ -55,7 +65,7 @@ public class TrackerRegistry {
             return;
         }
 
-        trackDefinitions.put(id, definition);
+        INSTANCE.definitions.put(id, definition);
 
         final String itemId = id;
         final EquipmentSlot slot = EquipmentSlot.byName(definition.getSlot());
@@ -65,7 +75,7 @@ public class TrackerRegistry {
         AromaLib.LOGGER.debug("Registered tracker item: {}", id);
     }
 
-    public static Optional<ITrackableItem> getItem(String id) {
+    public Optional<ITrackableItem> getItem(String id) {
         Holder<Item> holder = items.get(id);
         if (holder != null && holder.isBound() && holder.value() instanceof ITrackableItem trackerItem) {
             return Optional.of(trackerItem);
@@ -75,14 +85,6 @@ public class TrackerRegistry {
 
     public static Optional<Holder<Item>> getHolder(String id) {
         return Optional.ofNullable(items.get(id));
-    }
-
-    public static Optional<TrackerDefinition> getDefinition(String id) {
-        return Optional.ofNullable(trackDefinitions.get(id));
-    }
-
-    public static Iterable<String> getAllIds() {
-        return items.keySet();
     }
 
     public static Iterable<Holder<Item>> getAllItems() {
@@ -97,13 +99,5 @@ public class TrackerRegistry {
             }
         }
         return result;
-    }
-
-    public static int getCount() {
-        return items.size();
-    }
-
-    public static boolean contains(String id) {
-        return items.containsKey(id);
     }
 }

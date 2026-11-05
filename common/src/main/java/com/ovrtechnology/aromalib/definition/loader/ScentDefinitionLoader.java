@@ -44,7 +44,7 @@ import java.util.Set;
 public class ScentDefinitionLoader extends AbstractDefinitionLoader<ScentDefinition> {
     public static final ScentDefinitionLoader INSTANCE = new ScentDefinitionLoader();
 
-    private ScentDefinitionLoader() {
+    public ScentDefinitionLoader() {
         super("scents", ScentDefinition.class, "scents");
     }
 

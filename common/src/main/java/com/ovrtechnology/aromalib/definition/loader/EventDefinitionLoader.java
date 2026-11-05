@@ -135,7 +135,7 @@ public final class EventDefinitionLoader {
             }
         }
 
-        if (ScentRegistry.isInitialized() && !ScentRegistry.hasScent(event.getScentId())) {
+        if (ScentRegistry.INSTANCE.isInitialized() && !ScentRegistry.INSTANCE.exists(event.getScentId())) {
             addWarning(
                     "["
                             + eventId
